@@ -1,0 +1,150 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+html,
+body {
+  background: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  /* flex: 0 0 50px; */
+  font-family: "Rubik", sans-serif;
+  background: #04284a;
+  color: white;
+  padding: 15px;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
+nav {
+  flex: 0 0 32px;
+  top: 0;
+  left: 0;
+  background-color: #04284a;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 10px;
+}
+
+.nav-expand {
+  font-size: 27px;
+  cursor: pointer;
+  /* background-color: #111; */
+  color: white;
+  height: 32px;
+  width: 32px;
+  border: none;
+}
+
+.nav-expand:hover {
+  background-color: #444;
+}
+
+.nav-expand-animation {
+    animation-name: spin;
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+
+.nav-expand-animation-backwards {
+    animation-name: spin;
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-direction: reverse;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(180deg);
+    }
+}
+
+nav li {
+  display: block;
+  /* background: black; */
+  white-space: nowrap;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+nav li > span {
+  color: white;
+  margin-left: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+nav a {
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 32px;
+  width: 32px;
+  color: #818181;
+  /* transition: 0.3s; */
+  vertical-align: middle;
+  padding-bottom: 5px;
+}
+
+nav a:hover {
+  color: #f1f1f1;
+}
+
+nav li:hover {
+  color: #f1f1f1;
+  background-color: #444;
+}
+
+main {
+  flex: 1;
+  background: #04284a radial-gradient(closest-corner, #095bab, #04284a);
+  margin: 0px;
+  /* height: 100%; */
+  padding: 0px;
+}
+
+footer {
+  flex: 0 0 32px;
+  height: 32px;
+  padding: 10px;
+}
+
+.menu-item-timeband-container {
+  display: flex;
+  flex-direction: row;
+  color: white;
+  align-items: center;
+}
+
+.menu-item-timeband-container-left {
+  flex: 0 0 42px;
+}
+
+.menu-item-timeband-container-right {
+  flex: 1;
+}
+
+.menu-item-timeband-with-period-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item-timeband-with-period-container-bottom {
+  font-size: 0.7em;
+}

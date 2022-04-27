@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="timeline/Observable.js"></script>
+    <script src="timeline/Color.js"></script>
+    <!-- <script src="js/ColorScheme.js"></script> -->
+    <script src="timeline/Event.js"></script>
+    <script src="timeline/TimeCoordinates.js"></script>
+    <script src="timeline/TimePoint.js"></script>
+    <script src="timeline/TimeAxis.js"></script>
+    <script src="timeline/TimeAxisCollection.js"></script>
+    <script src="timeline/AxisChooser.js"></script>
+    <script src="timeline/Scrollbar.js"></script>
+    <script src="timeline/TimeBand.js"></script>
+    <script src="timeline/TimeBandCollection.js"></script>
+    <script src="timeline/EventBand.js"></script>
+    <script src="timeline/Splitter.js"></script>
+    <script src="timeline/EventBandCollection.js"></script>
+    <script src="timeline/Viewport.js"></script>
+    <script src="timeline/ViewportRect.js"></script>
+    <script src="timeline/Timeline.js"></script>
+
+    <script src="sidebar/Sidebar.js"></script>
+    <script src="example-timeline.js"></script>
+
+    
+
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/timeline.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap" rel="stylesheet"> 
+    <title>Timeline Demo</title>
+  </head>
+  <body onload="main()">
+    <header>
+      <h1>Hopeman History Timeline</h1>
+    </header>
+    <div class="main-container">
+      <nav id="sidebar"></nav>
+      <main>
+        <div class="timeline_container">
+          <div id="timeline1"></div>
+        </div>
+      </main>
+    </div>
+    <footer>
+      &copy; 2022 Tom McCallum - This is a hobby project for educational value only.
+      Code can be found at 
+    </footer>
+    <script>
+      
+      
+    </script>
+    <script>
+      // These need to be global otherwise the onClicks won't find the objects
+      var t1 = null;
+      var t2 = null;
+      var sidebar = new Sidebar(document.getElementById("sidebar"))
+
+      var which = example_from_javascript_object
+
+
+      function example_blank() {
+        t1 = new Timeline()
+        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
+        t1.draw()
+      }
+
+      function example_single_band() {
+        t1 = new Timeline("timeline1");
+        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
+        let timeBandCollection = TimeBandCollection.createRandom(1)
+        t1.setTimeBandCollection(timeBandCollection)
+        let timeAxisCollection = new TimeAxisCollection()
+        timeAxisCollection.add( new TimeAxis(-500,500) )
+        t1.setTimeAxisCollection(timeAxisCollection)
+        t1.draw()
+      }
+
+      function example_two_bands() {
+        t1 = new Timeline("timeline1");
+        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
+        let timeBandCollection = TimeBandCollection.createRandom(2)
+        t1.setTimeBandCollection(timeBandCollection)
+        let timeAxisCollection = new TimeAxisCollection()
+        timeAxisCollection.add( new TimeAxis(-500,500) )
+        t1.setTimeAxisCollection(timeAxisCollection)
+        t1.draw()
+      }
+
+      function example_three_bands() {
+        t1 = new Timeline("timeline1");
+        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
+        let timeBandCollection = TimeBandCollection.createRandom(3)
+        t1.setTimeBandCollection(timeBandCollection)
+        let timeAxisCollection = new TimeAxisCollection()
+        timeAxisCollection.add( new TimeAxis(-500,500) )
+        t1.setTimeAxisCollection(timeAxisCollection)
+        t1.draw()
+      }
+
+      function example_four_bands() {
+        t1 = new Timeline("timeline1");
+        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
+        let timeBandCollection = TimeBandCollection.createRandom(4)
+        t1.setTimeBandCollection(timeBandCollection)
+        let timeAxisCollection = new TimeAxisCollection()
+        timeAxisCollection.add( new TimeAxis(-500,500) )
+        t1.setTimeAxisCollection(timeAxisCollection)
+        t1.draw()
+      }
+
+      function example_from_javascript_object() {
+        
+        let timeline = new Timeline("timeline1")
+        timeline.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
+        let data = exampleTimeline
+        timeline.title = data.name
+        timeline.zoom = data.zoom
+        timeline.initialTimePoint = data.start
+
+        let axisShades = null
+        if ( data.hasOwnProperty("axisScrollBackgroundShades") ) {
+            axisShades = createColorRange(data.axes.length)
+        }
+
+        const timeAxisCollection = new TimeAxisCollection()
+        let index = 0
+        for( let axisData of data.axes) {
+            const axis = new TimeAxis(0,0,axisData)
+            if ( axisShades && !axisData.hasOwnProperty("scrollBackgroundColor") ) {
+                axis.scrollBackgroundColor = axisShades[index]
+            }
+            if ( !timeAxisCollection.add(axis) ) {
+                alert(`An axis was not added ${axisData.start}-${axisData.end}`)
+            }
+            index++
+        }
+        timeline.setTimeAxisCollection(timeAxisCollection)
+
+        timeBandCollection = new TimeBandCollection()
+        for( let tbdata of data.timebands ) {
+            const tb = new TimeBand(tbdata)
+            timeBandCollection.add(tb)
+        }
+        timeline.setTimeBandCollection(timeBandCollection)
+        
+        // timeline.timeAxisCollection.log()
+
+        timeline.draw();
+      }
+
+      // called when loaded
+      function main() {
+        sidebar.build()
+        which()
+      }
+    </script>
+  </body>
+</html>
