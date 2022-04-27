@@ -252,8 +252,7 @@ var exampleTimeline = {
             events: [
                 {
                     name: "Village of Hopeman Founded",
-                    start: "1805AD",
-                    iamge
+                    start: "1805AD"
                 }
             ]
         }
