@@ -41,7 +41,7 @@ class TimeBand extends Observable {
                 this.events = []
                 for ( let evData of this.data.events ) {
                     let ev = new Event(evData)
-                    this.events.push(ev)
+                    this.addEvent(ev)
                 }
             }
         } 
@@ -85,7 +85,13 @@ class TimeBand extends Observable {
         }
     }
 
+
     addEvent(event) {
+        // MUST use this function to add events otherwise we will miss out on listeners
+        const self = this
+        if ( event.isObservable() ) {
+            event.addListener(function(a,b,c) { self.forward(a,b,c) })
+        }
         this.events.push(event)
     }
 

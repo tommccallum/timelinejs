@@ -80,6 +80,11 @@ class ScrollBar {
         return parseInt(scrollBarStyle.width) + parseInt(scrollBarStyle.paddingLeft) + parseInt(scrollBarStyle.paddingRight)
     }
 
+    getScrollBarHeight() {
+        const scrollBarStyle = window.getComputedStyle(this.scrollBar)
+        return parseInt(scrollBarStyle.height) + parseInt(scrollBarStyle.paddingTop) + parseInt(scrollBarStyle.paddingBottom)
+    }
+
     getScrollBarMin() {
         return 0 
     }

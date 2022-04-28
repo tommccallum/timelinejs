@@ -31,6 +31,9 @@ class Timeline extends Observable {
         this.timeaxisElement = null
         this.canvasElement = null
         this.eventCanvasElement = null
+        this.modalDialog = null         // background to absorb clicks
+        this.eventDetailsElement = null
+
         this.timeBandCollection = null //TimeBandCollection.createRandom()
         this.eventBandCollection = null // new EventBandCollection(this, this.timeBandCollection)
         this.axisChooser = null
@@ -91,6 +94,44 @@ class Timeline extends Observable {
         // console.log(`updated scroll ${value} ${this.currentScrollAxisIndex} ${oldp} => ${this.currentScrollBarButtonFraction} ${old} => ${tp.relativeValue}`)
     }
 
+    timeBandCollection_onEvent(eventName, obj, data ) {
+        // console.log(`timeline::timeBandCollection_onEvent ${eventName}`)
+        if ( eventName == "show-event-details" ) {
+            // data in this case is the more details panel which should be above
+            // everything else in the timeline
+            // console.log(data)
+            if ( this.modalDialog == null) {
+                this.modalDialog = document.createElement("div")
+                this.modalDialog.classList.add("modal-dialog")
+                this.element.appendChild(this.modalDialog)
+            } else {
+                this.element.appendChild(this.modalDialog)
+            }
+            
+            // we don't add our details box to modalDialog as we don't want it to take on the modal dialogs opacity
+            this.element.appendChild(data)
+
+            const timelineStyle = window.getComputedStyle(this.canvasElement)
+            const belowCanvasHeight = this.scrollBar.getScrollBarHeight() + this.axisChooser.getHeight()
+            const detailsHeight = (parseInt(timelineStyle.height) - belowCanvasHeight - 25)
+            data.style.height = detailsHeight + "px"
+            data.style.width = (parseInt(timelineStyle.width) * 0.75) + "px"
+            data.style.top = (parseInt(timelineStyle.height) * 0.1) + "px"
+            data.style.left = (parseInt(timelineStyle.width) * 0.25/2) + "px"
+            
+            const credits = data.getElementsByClassName("event-details-description-credits")
+            const creditsStyle = window.getComputedStyle(credits[0])
+            const creditsFullHeight = parseInt(creditsStyle.height) + parseInt(creditsStyle.paddingTop) + parseInt(creditsStyle.paddingBottom) + parseInt(creditsStyle.marginTop) + parseInt(creditsStyle.marginBottom)
+            const description = data.getElementsByClassName("event-details-content-description")
+            description[0].style.height = detailsHeight - 50 - creditsFullHeight + "px"
+            this.eventDetailsElement = data
+
+        } else if ( eventName === "hide-event-details" ) {
+            this.element.removeChild(this.modalDialog)
+            this.element.removeChild(data)
+            this.eventDetailsElement = null
+        }
+    }
     
     resizeMainElements() {
         const currentWindowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -102,11 +143,30 @@ class Timeline extends Observable {
         this.onElementResize()
     }
 
+    resizeEventDetailsPanel() {
+        if ( this.eventDetailsElement === null ) return
+        const timelineStyle = window.getComputedStyle(this.canvasElement)
+        const belowCanvasHeight = this.scrollBar.getScrollBarHeight() + this.axisChooser.getHeight()
+        const detailsHeight = (parseInt(timelineStyle.height) - belowCanvasHeight - 25)
+        this.eventDetailsElement.style.height = detailsHeight + "px"
+        this.eventDetailsElement.style.width = (parseInt(timelineStyle.width) * 0.75) + "px"
+        this.eventDetailsElement.style.top = (parseInt(timelineStyle.height) * 0.1) + "px"
+        this.eventDetailsElement.style.left = (parseInt(timelineStyle.width) * 0.25/2) + "px"
+        
+        const credits = this.eventDetailsElement.getElementsByClassName("event-details-description-credits")
+        const creditsStyle = window.getComputedStyle(credits[0])
+        const creditsFullHeight = parseInt(creditsStyle.height) + parseInt(creditsStyle.paddingTop) + parseInt(creditsStyle.paddingBottom) + parseInt(creditsStyle.marginTop) + parseInt(creditsStyle.marginBottom)
+        const description = this.eventDetailsElement.getElementsByClassName("event-details-content-description")
+        description[0].style.height = detailsHeight - 50 - creditsFullHeight + "px"
+    }
+
     onElementResize() {
         // This is called every AnimationFrame in the browser
         // console.log("onElementResize")
         this.currentViewport.updateViewportWidth()
         this.axisChooser.onResize()
+        this.resizeEventDetailsPanel()
+        // TODO(tm) need to resize the event bands
     }
 
     setTitleVisible(b) {
@@ -137,6 +197,8 @@ class Timeline extends Observable {
             this.eventBandCollection.setElement(this.eventCanvasElement)
         }
 
+        const self = this
+        this.timeBandCollection.addListener(function(a,b,c) { self.timeBandCollection_onEvent(a,b,c); })
         for( let t of this.timeBandCollection.timebands ) {
             this.sendEvent("add-timeband", t)
         }
@@ -265,7 +327,7 @@ class Timeline extends Observable {
                 self.eventBandCollection.stopDragging()
                 return
             }
-            self.scrollBar._onMouseClick(e.clientX)
+            self.scrollBar._onMouseClick(e)
         })
 
         this.eventCanvasElement.addEventListener("mouseleave", function(e) {

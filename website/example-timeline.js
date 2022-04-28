@@ -4,7 +4,7 @@ var exampleTimeline = {
     // the user can see more at a time, but it will show
     // few events based on some level of importance.
     zoom: 0,
-    start: "1000AD",
+    start: "1800AD",
     // how to represent large distances in time
     // how to represent BC vs AD
     // we don't really want equally spaced we want proportional to numbers of events
@@ -251,8 +251,56 @@ var exampleTimeline = {
             image: null,
             events: [
                 {
-                    name: "Village of Hopeman Founded",
-                    start: "1805AD"
+                    name: "Lands owned by Lord Duffus",
+                    start: "1300AD",
+                    end: "1704",
+                    historyCredit: "Hopeman History Website",
+                    historyCreditLink: "https://hopemanhistory.org/timeline"
+                },
+                {
+                    name: "Inverugie estates purchased by Sir Archibald Dunbar of Thunderton",
+                    start: "1705AD",
+                    end: "1797AD",
+                    historyCredit: "Hopeman History Website",
+                    historyCreditLink: "https://hopemanhistory.org/timeline"
+                },
+                {
+                    name: "Inverugue estate purchased by Mr Young of Burghead",
+                    start: "1803AD",
+                    end: "1804AD",
+                    historyCredit: "Hopeman History Website",
+                    historyCreditLink: "https://hopemanhistory.org/timeline",
+                    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vulputate tellus vel elit lobortis convallis. Sed arcu ante, malesuada faucibus lectus vel, gravida posuere ipsum. Vivamus et faucibus ligula, eget ullamcorper nunc. Aliquam erat volutpat. Donec eget congue metus. Proin ultricies odio sed leo feugiat venenatis. Phasellus in vulputate metus. Sed pellentesque pulvinar sodales. Curabitur sagittis aliquet faucibus. Curabitur faucibus nunc metus, a cursus elit ullamcorper nec. Morbi sit amet sagittis turpis, eget accumsan est. Praesent elit tellus, porta non odio euismod, dictum lobortis metus. Curabitur non sem vehicula, facilisis augue at, blandit erat. Praesent molestie tellus velit, in tristique nisi faucibus id.\n\n\
+                    Aliquam hendrerit bibendum orci vel convallis. Nunc vulputate ultricies posuere. Nulla fermentum ligula vitae libero porttitor mattis. Etiam id posuere magna. Pellentesque tincidunt finibus tellus at ornare. Phasellus luctus urna ligula, a vehicula nulla imperdiet in. Etiam facilisis, nibh eu imperdiet dignissim, turpis diam congue dolor, nec ultrices odio felis at leo. Integer vehicula lectus eu odio vulputate feugiat. Vestibulum ut pretium mi. Sed sed neque eu erat vestibulum ultrices. In hac habitasse platea dictumst. Integer eget sapien nec felis vulputate semper. Cras porttitor viverra accumsan.\n\n\
+                    Donec iaculis dapibus mi vitae feugiat. Fusce ac leo eget magna auctor bibendum. Pellentesque gravida tincidunt dictum. Donec pulvinar libero at lacus laoreet dignissim. Vestibulum pulvinar sagittis felis vitae mollis. Fusce accumsan id ligula eget aliquet. Curabitur non feugiat turpis.\n\n\
+                    Pellentesque molestie justo quis dapibus ultricies. Curabitur id faucibus nisi. Etiam finibus neque sagittis, placerat mauris vitae, maximus sapien. Nulla sapien arcu, cursus et dui sed, hendrerit hendrerit sem. Aenean quis neque enim. Sed sed metus eget dolor consequat rutrum at nec massa. In non enim id dui rutrum aliquam. Vestibulum pharetra id odio hendrerit suscipit. Integer at eros sed quam mattis tristique ac non ante. Suspendisse potenti. Duis ornare quis odio at luctus. Nam ut justo dui. Sed vel consectetur arcu, sodales sodales ipsum.\n\n\
+                    Sed pellentesque nisl arcu, ac semper dolor euismod vel. Aenean pellentesque interdum orci sit amet molestie. Nulla vestibulum nisi et dictum dictum. Aenean quis felis dui. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas interdum, eros ut sodales pulvinar, metus tellus commodo nunc, at posuere diam nulla non felis. Aenean nec tempor tortor, non dignissim dui.\n\n\
+                    Vivamus ultricies erat ac diam viverra eleifend. Praesent sagittis lorem non lacus lacinia, at elementum nunc interdum. Aliquam et venenatis purus. Aenean pulvinar porta orci a rhoncus. Integer ex velit, fringilla ac urna eget, rhoncus aliquet massa. Donec libero quam, feugiat at commodo non, ultrices sit amet felis. Proin mi tortor, dapibus ac tellus at, dapibus egestas orci. Proin finibus pellentesque mauris non volutpat. Quisque semper, odio vitae semper dignissim, tellus ipsum imperdiet orci, vitae sodales quam sapien nec tortor. Quisque ultricies nulla et dolor feugiat efficitur. Nullam tempus tristique risus, ac tincidunt lectus porttitor id. Sed accumsan, sapien eleifend porttitor maximus, metus felis pharetra massa, eu laoreet tellus velit non massa. Curabitur tincidunt vulputate consequat.\n\n\
+                    Praesent at arcu id est tempus accumsan non fermentum libero. Duis lorem diam, egestas id sem sagittis, gravida volutpat lectus. Sed orci nibh, dictum at arcu vitae, cursus vulputate nulla. Fusce rhoncus at orci at euismod. Suspendisse potenti. Praesent purus turpis, viverra varius convallis nec, egestas id ipsum. Fusce accumsan, ipsum quis maximus feugiat, ante tellus vestibulum risus, eget condimentum metus tortor in turpis. Quisque vel ullamcorper ex, fermentum convallis ex. Cras viverra ultrices eleifend. Vestibulum hendrerit lacus ac turpis pretium vestibulum. Duis tristique hendrerit ornare. Aliquam erat volutpat.\n\n\
+                    Nam id dictum enim, at iaculis justo. Curabitur metus lectus, porttitor in nisl ut, rhoncus dapibus diam. Mauris bibendum ipsum eu rutrum rhoncus. Donec vehicula ante bibendum velit fringilla laoreet. Sed aliquam tempus elementum. Fusce magna sapien, iaculis eget mi sit amet, venenatis aliquet lectus. Suspendisse vitae dui quam. Sed egestas vitae lorem nec facilisis. Nulla at lectus nunc. Nam a tristique libero, eget aliquet magna. Curabitur dui risus, placerat non ullamcorper ultricies, bibendum ut eros. Ut rutrum consequat nunc, ac pellentesque magna dignissim vitae. Maecenas purus leo, tempor ut aliquet at, fringilla quis diam.\n\n\
+                    Donec eu urna sit amet risus scelerisque iaculis. Sed ut ex ut tortor posuere congue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus a justo vel libero bibendum fringilla nec a eros. Nunc tempus dui nec placerat tincidunt. Cras vel tempor risus, sit amet lobortis eros. Proin in lectus aliquam, elementum ipsum quis, efficitur orci. Mauris sagittis nibh in pretium pharetra. Fusce a varius risus. Praesent ornare nunc lacus. Vestibulum egestas accumsan ipsum eget malesuada. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi ligula nibh, euismod sit amet cursus eget, hendrerit sit amet lectus. Suspendisse rhoncus massa scelerisque nunc posuere venenatis.\n\n\
+                    In ante quam, finibus in fringilla ut, gravida a est. Ut sodales dignissim nibh eget faucibus. Donec eleifend velit neque, non accumsan arcu scelerisque at. Praesent sodales sodales eleifend. Vivamus non sodales orci. Curabitur volutpat, justo ac elementum aliquam, ex nulla tristique magna, vel maximus dolor nunc non leo. Vivamus dapibus vulputate elit et tempus. Cras ullamcorper ornare sem at tristique. Praesent ac fermentum tellus. Nullam mauris odio, blandit eu dolor et, rhoncus hendrerit urna. Morbi sed iaculis lorem."
+                },
+                {
+                    name: "Village of Hopeman founded",
+                    start: "1805AD",
+                    description: "Village of Hopeman founded by Mr Young with land rented out to both farmers and fishermen. Colony of Fishermen from Ardersier/Cambeltown (Inverness area) settled in Hopeman. (McPherson; Moir/More; Davidson; Ralph; Young; etc )  First settlers included Mr Thomas Moir and Mr Donald Davidson (Peep)  First house - South West corner “Heatherhills” & Harbour House built on a rock",
+                    historyCredit: "Hopeman History Website",
+                    historyCreditLink: "https://hopemanhistory.org/timeline"
+                },
+                {
+                    name: "Inverugie lime works founded",
+                    description: "Inverugie lime works founded by Mr Young of Inverugie. Used a rail track down to harbour which may have been one of the first railways in Scotland.",
+                    start: "1810AD",
+                    historyCredit: "Hopeman History Website",
+                    historyCreditLink: "https://hopemanhistory.org/timeline"
+                },
+                {
+                    name: "Hopeman purchased",
+                    description: "Hopeman purchased by William Stuart as part of Inverugie estate. Mr Stuart owned plantations on Granada in the West Indies",
+                    historyCredit: "Hopeman History Website",
+                    historyCreditLink: "https://hopemanhistory.org/timeline",
+                    start: "1820"
                 }
             ]
         }

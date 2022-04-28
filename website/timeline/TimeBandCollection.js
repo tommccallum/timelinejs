@@ -1,8 +1,9 @@
 // TimeBands are behind the axis and therefore do not receive user events
 // therefore to adjust height we add the splitter handles to the eventbands and
 // listen to any changes.
-class TimeBandCollection {
+class TimeBandCollection extends Observable {
     constructor() {
+        super()
         this.timebands = []
         this.element =null
     }
@@ -19,9 +20,14 @@ class TimeBandCollection {
     }
 
     add(timeband) {
+        const self = this
+
         if ( timeband.hasOwnProperty("index") === false ) {
             timeband.index = 0
         }
+
+        timeband.addListener(function(a,b,c) { self.forward(a,b,c); })
+
         // the higher the index the nearer to the top it is, its like z index
         // indices could be negative in which case the nearer to the bottom it would be
         for( let ii=0; ii < this.timebands.length; ii++ ) {

@@ -12,4 +12,10 @@ class Observable {
             l(eventName, this, data)
         }
     }
+
+    forward(eventName, obj, data) {
+        for( let l of this.listeners ) {
+            l(eventName, obj, data)
+        }
+    }
 }

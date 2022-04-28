@@ -37,8 +37,7 @@ class EventBand {
     }
 
     addEvent(event) {
-        event.eventband = this
-        this.timeband.events.push(event)
+        this.timeband.addEvent(event)
     }
 
     getTop() {
