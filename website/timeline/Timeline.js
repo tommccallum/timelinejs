@@ -395,9 +395,20 @@ class Timeline extends Observable {
             // center the current axis
             let date = prompt("Please enter date, if AD/BC is not given date is assumed to be AD.")
             if ( date != null ) {
-                this.currentViewport.set(date, this.currentScrollAxisIndex)
-                let proportionOfTimePeriod = this.getProportionOfTimePeriod()
-                this.scrollBar.setProportion(proportionOfTimePeriod)    
+                try {
+                    const tp = new TimePoint(date)
+                    const axisIndex = this.timeAxisCollection.getAxisIndex(tp)
+                    if ( axisIndex ) {
+                        this.currentScrollAxisIndex = axisIndex
+                        this.currentViewport.set(date, this.currentScrollAxisIndex)
+                        let proportionOfTimePeriod = this.getProportionOfTimePeriod()
+                        this.scrollBar.setProportion(proportionOfTimePeriod)    
+                    } else {
+                        alert("Date was outwith range of any axis.")
+                    }
+                } catch(ex) { 
+                    alert("Invalid date format. Examples are 1000BC or 1200AD.")
+                 }
             }
             return
         }
