@@ -20,7 +20,7 @@ class TimeAxis {
         this.minorStyle = "minor-vertical-axis"
         // space between each minor "tick"
         this.minorGap = 100
-        this.showEnd = true
+        this.showEnd = false
 
         this.scrollBackgroundColor = "pink"
 
@@ -29,6 +29,9 @@ class TimeAxis {
         this.majorVerticalLineHeightValue = "100%"
 
         if ( axisData != null ) {
+            if ( axisData.hasOwnProperty("showEnd")) {
+                this.showEnd = axisData.showEnd
+            }
             if ( axisData.hasOwnProperty("name") ) {
                 this.name = axisData.name
             }

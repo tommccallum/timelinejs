@@ -83,7 +83,8 @@ var exampleTimeline = {
             end: 2100,
             majorEvery: 100,
             minorEvery: 10,
-            gap: 100
+            gap: 100,
+            showEnd: true
         }
     ],
     timebands: [
