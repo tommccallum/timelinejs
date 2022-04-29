@@ -1,0 +1,37 @@
+/**
+ Children of the main timeline div
+ - title
+ - workspace (where the timeline will live)
+ - scrollbar
+ */
+
+
+
+ .workspace {
+    background: hsl(30, 30%, 30%);
+    position: relative;
+    width: 100%;
+}
+
+.canvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: hsl(30, 30%, 30%);
+    width: 100%;
+    height: 100%;
+    z-index: var(--timeline-canvas-zIndex);
+    opacity: 50%;
+    overflow: hidden;
+}
+
+.event-canvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: var(--event-canvas-zIndex);
+    background: transparent;
+    overflow: hidden;
+}

@@ -1,0 +1,7 @@
+.timeline-title {
+    /* display: block; */
+    font-size: 2em;
+    background: hsl(60, 70%, 50%);
+    /* position: absolute; */
+    z-index: var(--timeline-title-zIndex);
+}

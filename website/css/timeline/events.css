@@ -1,0 +1,65 @@
+.event-default {
+    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline-block;
+    color: white;
+    background: purple;
+    border: 1px solid orange;
+    margin: 5px;
+    padding: 5px;
+    z-index: var(--event-zIndex);
+    border-radius: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.event-title {
+    position: absolute;
+    font-family: "Rubik", sans-serif;
+    font-size: 5em;
+    color: white;
+    opacity: 30%;
+    height: 100%;
+    padding-left: 10px;
+    z-index: var(--event-title-zIndex);
+    user-select: none;
+    cursor: normal;
+}
+
+.event-image64-and-label-container {
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.event-image64-and-label-image {
+    display: flex;
+    justify-content: center;
+}
+
+.event-image64-and-label-label {
+    font-size: 0.7em;
+    padding: 0px 5px 5px 5px;
+}
+
+.event-selected {
+    background-color: rgb(231, 2, 231);
+    z-index: var(--event-selected-zIndex);
+}
+
+.event-external-link {
+    text-decoration: none;
+}
+
+.event-icon {
+    display: inline-block;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.event-icon:hover {
+    background: white;
+}
+

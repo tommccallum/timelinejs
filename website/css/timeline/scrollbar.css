@@ -1,0 +1,87 @@
+.timeline-scrollbar {
+    display: block;
+    /* height: 100px; */
+    background: blue;
+    position: relative;
+    /* overflow: hidden; hide the additional glow of the light sabre */
+    z-index: var(--timeline-scrollbar-zIndex);
+}
+
+.timeline-scrollbar-hidden {
+    background: transparent;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.timeline-scrollbar-button {
+    position: absolute;
+    border: 5px solid rgb(31, 156, 194);
+    top: -5px; 
+    left: 0px;
+    height: 100%;
+    background: #FFFFFF radial-gradient(closest-corner,#095bab,#b8ebf1);
+    color: white;
+    white-space:nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 15px;
+    z-index: var(--timeline-scrollbar-button-zIndex);
+    /* animation-duration: 10s;
+    animation-iteration-count: infinite; */
+    
+}
+
+.timeline-scrollbar-button-right-transition {
+    content: '';
+    position: absolute;
+    height: 100%;
+    z-index: var(--timeline-scrollbar-button-right-transition-zIndex);
+    padding-left: 10px;
+    padding-right: 10px;
+    background: yellow;
+    cursor: pointer;
+    user-select: none;
+    animation: lightsabre-right 10s infinite;
+}
+
+.timeline-scrollbar-button-left-transition {
+    content: '';
+    height: 100%;
+    position: absolute;
+    z-index: --timeline-scrollbar-button-left-transition-zIndex;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: green;
+    cursor: pointer;
+    user-select: none;
+    animation: lightsabre-left 10s infinite;
+    /* opacity: 10%; */
+}
+
+/* box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit; */
+@keyframes lightsabre-left {
+    from {
+        box-shadow: 0px 0px 100px 10px #FFFFFF;
+    }
+    to {
+        box-shadow: -100vw 0px 100px 10px #FFFFFF;
+    }
+}
+
+/* box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit; */
+@keyframes lightsabre-right {
+    from {
+        box-shadow: 0px 0px 100px 10px #FFFFFF;
+    }
+    to {
+        box-shadow: 100vw 0px 100px 10px #FFFFFF;
+    }
+}

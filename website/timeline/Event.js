@@ -10,7 +10,7 @@ class Event extends Observable {
         this.imageCreditLink = null
         this.imageBackgroundColor = null
 
-        this.description = "some description"
+        this.description = null
         this.gallery = null       // multiple images to show in the detail box
         
         this.style = "event-default"
@@ -28,6 +28,11 @@ class Event extends Observable {
             }
             if ( data.hasOwnProperty("imageCredit")) {
                 this.imageCredit = data.imageCredit
+            }
+            if ( data.hasOwnProperty("gallery")) {
+                // a gallery item can have the following properties
+                // thumbnail, image, imageCreditLink
+                this.gallery = data.gallery
             }
             if ( data.hasOwnProperty("imageCreditLink")) {
                 this.imageCreditLink = data.imageCreditLink
@@ -88,7 +93,7 @@ class Event extends Observable {
     }
 
     isObservable() {
-        if ( this.style === "title" ) {
+        if ( this.style === "event-title" ) {
             return false
         }
         return true
@@ -164,52 +169,54 @@ class Event extends Observable {
             event.appendChild(textDiv)
         }
 
-        // add a magnifying glass icon if there is a description
-        // UTF-8: &#128270;
-        if ( this.description != null ) {
-            textDiv.innerHTML += `&nbsp;`
-            let moreDiv = document.createElement("div")
-            moreDiv.classList.add("event-icon")
-            moreDiv.classList.add("event-more-icon")
-            moreDiv.innerHTML = "&#128270;"
-            moreDiv.addEventListener("click", function(e) { 
-                self._onShowMoreLink(e)
-            })
-            textDiv.appendChild(moreDiv)
-        }
-        if ( this.historyCredit != null && this.historyCreditLink === null ) {
-            let linkDiv = document.createElement("div")
-            linkDiv.classList.add("event-icon")
-            linkDiv.classList.add("event-thanks-icon")
-            linkDiv.innerHTML = "&#128591;"
-            linkDiv.title = this.historyCredit
-            textDiv.appendChild(linkDiv)
-        } else {
-            if ( this.historyCredit ) {
-                let a = document.createElement("a")
-                a.title = this.historyCredit
-                a.href = this.historyCreditLink
-                a.classList.add("event-external-link")
-                a.classList.add("event-icon")
-                a.classList.add("event-link-icon")
-                a.innerHTML = "&#128279;"
-                a.target = "_blank"
-                textDiv.appendChild(a)
-            } else {
-                let a = document.createElement("a")
-                a.title = this.historyCreditLink
-                a.href = this.historyCreditLink
-                a.classList.add("event-external-link")
-                a.classList.add("event-icon")
-                a.classList.add("event-link-icon")
-                a.innerHTML = "&#128279;"
-                a.target = "_blank"
-                textDiv.appendChild(a)
+        if ( this.isObservable() ) {
+            // add a magnifying glass icon if there is a description
+            // UTF-8: &#128270;
+            if ( this.description != null || this.gallery != null) {
+                textDiv.innerHTML += `&nbsp;`
+                let moreDiv = document.createElement("div")
+                moreDiv.classList.add("event-icon")
+                moreDiv.classList.add("event-more-icon")
+                moreDiv.innerHTML = "&#128270;"
+                moreDiv.addEventListener("click", function(e) { 
+                    self._onShowMoreLink(e)
+                })
+                textDiv.appendChild(moreDiv)
             }
+            if ( this.historyCredit != null && this.historyCreditLink === null ) {
+                let linkDiv = document.createElement("div")
+                linkDiv.classList.add("event-icon")
+                linkDiv.classList.add("event-thanks-icon")
+                linkDiv.innerHTML = "&#128591;"
+                linkDiv.title = this.historyCredit
+                textDiv.appendChild(linkDiv)
+            } else {
+                if ( this.historyCredit ) {
+                    let a = document.createElement("a")
+                    a.title = this.historyCredit
+                    a.href = this.historyCreditLink
+                    a.classList.add("event-external-link")
+                    a.classList.add("event-icon")
+                    a.classList.add("event-link-icon")
+                    a.innerHTML = "&#128279;"
+                    a.target = "_blank"
+                    textDiv.appendChild(a)
+                } else {
+                    let a = document.createElement("a")
+                    a.title = this.historyCreditLink
+                    a.href = this.historyCreditLink
+                    a.classList.add("event-external-link")
+                    a.classList.add("event-icon")
+                    a.classList.add("event-link-icon")
+                    a.innerHTML = "&#128279;"
+                    a.target = "_blank"
+                    textDiv.appendChild(a)
+                }
+            }
+            event.addEventListener("mousedown", function(e) { self._onMouseDown(e) })
+            event.addEventListener("mousemove", function(e) { self._onMouseMove(e) })
+            event.addEventListener("click", function(e) { self._onClick(e) })
         }
-        event.addEventListener("mousedown", function(e) { self._onMouseDown(e) })
-        event.addEventListener("mousemove", function(e) { self._onMouseMove(e) })
-        event.addEventListener("click", function(e) { self._onClick(e) })
         this.element = event
 
         if ( this.image ) {
@@ -224,6 +231,7 @@ class Event extends Observable {
         // console.log(`show more for this event: ${this.name}`)
 
         if ( !this.moreDetailsDialogElement ) {
+            // this is made PER EVENT
             this.moreDetailsDialogElement = document.createElement("div")
             this.moreDetailsDialogElement.classList.add("event-details")
             this.moreDetailsDialogElement.style.display = null
@@ -237,7 +245,10 @@ class Event extends Observable {
             contentDiv.classList.add("event-details-content")
             containerDiv.appendChild( contentDiv ) 
             let descriptionDiv = contentDiv
-            if ( this.galleryImages != null ) {
+            console.log(`${this.name}`)
+            console.log(this.gallery)
+            console.log(this.description)
+            if ( this.gallery !== null && this.description !== null ) {
                 let leftDiv = document.createElement("div")
                 leftDiv.classList.add("event-details-content-left")
                 containerDiv.appendChild( leftDiv ) 
@@ -247,6 +258,43 @@ class Event extends Observable {
                 rightDiv.classList.add("event-details-description")
                 containerDiv.appendChild( rightDiv ) 
                 let descriptionDiv = rightDiv
+            } else if ( this.gallery != null ) {
+                let centerDiv = document.createElement("div")
+                centerDiv.classList.add("event-details-content-gallery")
+                contentDiv.appendChild( centerDiv ) 
+
+                for( let g of this.gallery ) {
+                    console.log(g)
+                    let imageSrc = null
+                    if ( g.hasOwnProperty("thumbnail") ) {
+                        imageSrc = g.thumbnail
+                    } else if ( g.hasOwnProperty("image") ) {
+                        imageSrc = g.image
+                    } else {
+                        imageSrc = "images/no_image_128x128.png"
+                    }
+
+                    const img = document.createElement("img")
+                    img.src = imageSrc
+                    if ( g.hasOwnProperty("alt") ) {
+                        img.alt = g.alt
+                    } 
+                    img.classList.add("gallery-thumbnail")
+                    if ( g.alt && g.imageCredit ) {
+                        img.title = g.alt + "\nCredit: " + g.imageCredit
+                    } else if ( g.alt ) {
+                        img.title = g.alt
+                    } else if ( g.imageCredit ) {
+                        img.title = g.imageCredit
+                    } else {
+                        // no title
+                    }
+                    const thisG = g
+                    img.addEventListener("click", function(e) { self._makeBigImage(e, thisG) })
+                    centerDiv.appendChild(img)
+                }
+
+
             } else {
                 let centerDiv = document.createElement("div")
                 centerDiv.classList.add("event-details-content-description")
@@ -256,6 +304,7 @@ class Event extends Observable {
 
             let creditDiv = document.createElement("div")
             creditDiv.classList.add("event-details-description-credits")
+            creditDiv.innerHTML = "Source(s):&nbsp;"
             if ( this.historyCreditLink !== null ) {
                 let a = document.createElement("a")
                 a.classList.add("event-details-description-credit-link")
@@ -264,7 +313,7 @@ class Event extends Observable {
                 a.innerHTML = this.historyCredit
                 creditDiv.appendChild(a)
             } else {
-                creditDiv.innerHTML = this.historyCredit
+                creditDiv.innerHTML += this.historyCredit 
             }
             descriptionDiv.appendChild(creditDiv)
 
@@ -283,6 +332,14 @@ class Event extends Observable {
         }
         e.stopPropagation()
     }
+
+    _makeBigImage(e, imageDetails) {
+        // We pass this through to the timeline which can handle this as its the same
+        // for all images.
+        // This differs for the event which might differ by which event we are exploring.
+        this.sendEvent("show-big-image", imageDetails)
+    }
+
     getEventsThatIntersectOnScreen(viewportRect) {
         let events = []
         const thisStyle = window.getComputedStyle(this.element)

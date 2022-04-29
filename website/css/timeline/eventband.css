@@ -1,0 +1,20 @@
+.eventband {
+    position: absolute;
+    /* display: inline-block; */
+    width: 100%;
+    /* height: 20px; */
+    background-color: transparent;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: var(--eventband-zIndex);
+}
+
+.eventband-splitter {
+    position: absolute;
+    width: 100%;
+    background: gray;
+    height: 3px;    
+    cursor: ns-resize;
+    user-select: none;
+    z-index: var(--eventband-splitter-zIndex);
+}

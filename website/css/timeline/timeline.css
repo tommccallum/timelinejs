@@ -1,0 +1,14 @@
+/* The div that is passed to contain the timeline */
+.timeline {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 4fr 25px 25px;
+    flex-direction: column;
+    background:transparent;
+    position: relative;
+    height: 100%;
+    margin: 0px;
+    padding: 10px;
+    box-sizing: border-box;
+    /* overflow: hidden; */
+}

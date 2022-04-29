@@ -1,0 +1,11 @@
+.timeline-axis-picker {
+    display: block;
+    /* height: 100px; */
+    background: red;
+    position: relative;
+    z-index: var(--axis-picker-zIndex);
+}
+
+.timeline-axis-selected {
+    background: #04284a radial-gradient(closest-corner,#095bab,#04284a);
+}

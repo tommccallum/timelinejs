@@ -1,0 +1,28 @@
+.bigimagepanel-container {
+    position: absolute;
+    background: purple;
+    border-radius: 15px;
+    border: 1px solid orange;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    z-index: var(--bigimagepanel-container-zIndex)
+}
+
+.bigimagepanel-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bigimagepanel-credit {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.bigimagepanel-credit a {
+    color: white;
+}

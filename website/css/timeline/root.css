@@ -1,0 +1,24 @@
+:root {
+    /* z-Index values going from bottom to op */
+    --axis-picker-zIndex: 200;
+    --timeaxis-zIndex: 10;
+    --timeaxis-divider-zIndex: 10;
+    --timeband-canvas-zIndex: 500;
+    --timeline-canvas-zIndex: 5;
+    --timeline-title-zIndex: 999;
+    --timeline-scrollbar-zIndex: 200;
+    --timeline-scrollbar-button-zIndex: 50;
+    --timeline-scrollbar-button-right-transition-zIndex: 49;
+    --timeline-scrollbar-button-left-transition-zIndex: 48;
+    --eventband-zIndex: 50;
+    --eventband-splitter-zIndex: 52;
+    --event-zIndex: 50;
+    --event-title-zIndex: 0;
+    --event-canvas-zIndex: 25;
+    --event-selected-zIndex: 100;
+
+    --modal-dialog-zIndex: 800;
+
+    --event-details-zIndex: 850;
+    --bigimagepanel-container-zIndex: 900;
+}

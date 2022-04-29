@@ -255,14 +255,43 @@ var exampleTimeline = {
                     start: "1300AD",
                     end: "1704",
                     historyCredit: "Hopeman History Website",
-                    historyCreditLink: "https://hopemanhistory.org/timeline"
+                    historyCreditLink: "https://hopemanhistory.org/timeline",
+                    gallery: [
+                        {
+                            image: "images/Hopeman_Sandstone_-_geograph.org.uk_-_2602068.jpg",
+                            imageCredit: "Hopeman Sandstone by Anne Burgess, CC BY-SA 2.0 <https://creativecommons.org/licenses/by-sa/2.0>, via Wikimedia Commons",
+                            imageCreditLink: "https://commons.wikimedia.org/wiki/File:Hopeman_Sandstone_-_geograph.org.uk_-_2602068.jpg",
+                            alt: "Hopeman Sandstone"
+                        },
+                        {
+                            image: "images/800px-Hopeman_18_06_19_railway_station.jpg",
+                            thumbnail: "images/Hopeman_railway_station_128x96.png",
+                            imageCredit: "Jan Grabarek, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons",
+                            imageCreditLink: "https://commons.wikimedia.org/wiki/File:Hopeman_18_06_19.jpg"
+                        }
+                    ]
                 },
                 {
                     name: "Inverugie estates purchased by Sir Archibald Dunbar of Thunderton",
                     start: "1705AD",
                     end: "1797AD",
                     historyCredit: "Hopeman History Website",
-                    historyCreditLink: "https://hopemanhistory.org/timeline"
+                    historyCreditLink: "https://hopemanhistory.org/timeline",
+                    gallery: [
+                        {
+                            image: "images/Hopeman_Sandstone_-_geograph.org.uk_-_2602068.jpg",
+                            imageCredit: "Hopeman Sandstone by Anne Burgess, CC BY-SA 2.0 <https://creativecommons.org/licenses/by-sa/2.0>, via Wikimedia Commons",
+                            imageCreditLink: "https://commons.wikimedia.org/wiki/File:Hopeman_Sandstone_-_geograph.org.uk_-_2602068.jpg"
+                        },
+                        {
+                            image: "images/800px-Hopeman_18_06_19_railway_station.jpg",
+                            thumbnail: "images/Hopeman_railway_station_128x96.png",
+                            imageCredit: "Jan Grabarek, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons",
+                            imageCreditLink: "https://commons.wikimedia.org/wiki/File:Hopeman_18_06_19.jpg"
+                        }
+                    ],
+                    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vulputate tellus vel elit lobortis convallis. Sed arcu ante, malesuada faucibus lectus vel, gravida posuere ipsum. Vivamus et faucibus ligula, eget ullamcorper nunc. Aliquam erat volutpat. Donec eget congue metus. Proin ultricies odio sed leo feugiat venenatis. Phasellus in vulputate metus. Sed pellentesque pulvinar sodales. Curabitur sagittis aliquet faucibus. Curabitur faucibus nunc metus, a cursus elit ullamcorper nec. Morbi sit amet sagittis turpis, eget accumsan est. Praesent elit tellus, porta non odio euismod, dictum lobortis metus. Curabitur non sem vehicula, facilisis augue at, blandit erat. Praesent molestie tellus velit, in tristique nisi faucibus id.\n\n\
+                    Aliquam hendrerit bibendum orci vel convallis. Nunc vulputate ultricies posuere. Nulla fermentum ligula vitae libero porttitor mattis. Etiam id posuere magna. Pellentesque tincidunt finibus tellus at ornare. Phasellus luctus urna ligula, a vehicula nulla imperdiet in. Etiam facilisis, nibh eu imperdiet dignissim, turpis diam congue dolor, nec ultrices odio felis at leo. Integer vehicula lectus eu odio vulputate feugiat. Vestibulum ut pretium mi. Sed sed neque eu erat vestibulum ultrices. In hac habitasse platea dictumst. Integer eget sapien nec felis vulputate semper. Cras porttitor viverra accumsan."
                 },
                 {
                     name: "Inverugue estate purchased by Mr Young of Burghead",

@@ -31,8 +31,9 @@ class Timeline extends Observable {
         this.timeaxisElement = null
         this.canvasElement = null
         this.eventCanvasElement = null
-        this.modalDialog = null         // background to absorb clicks
+        this.modalDialog = new ModalBackgroundPanel(this)         // background to absorb clicks
         this.eventDetailsElement = null
+        this.bigImagePanel = null
 
         this.timeBandCollection = null //TimeBandCollection.createRandom()
         this.eventBandCollection = null // new EventBandCollection(this, this.timeBandCollection)
@@ -100,13 +101,7 @@ class Timeline extends Observable {
             // data in this case is the more details panel which should be above
             // everything else in the timeline
             // console.log(data)
-            if ( this.modalDialog == null) {
-                this.modalDialog = document.createElement("div")
-                this.modalDialog.classList.add("modal-dialog")
-                this.element.appendChild(this.modalDialog)
-            } else {
-                this.element.appendChild(this.modalDialog)
-            }
+            this.modalDialog.show()
             
             // we don't add our details box to modalDialog as we don't want it to take on the modal dialogs opacity
             this.element.appendChild(data)
@@ -123,13 +118,25 @@ class Timeline extends Observable {
             const creditsStyle = window.getComputedStyle(credits[0])
             const creditsFullHeight = parseInt(creditsStyle.height) + parseInt(creditsStyle.paddingTop) + parseInt(creditsStyle.paddingBottom) + parseInt(creditsStyle.marginTop) + parseInt(creditsStyle.marginBottom)
             const description = data.getElementsByClassName("event-details-content-description")
-            description[0].style.height = detailsHeight - 50 - creditsFullHeight + "px"
+            if ( description != null && description.length > 0 ) {
+                description[0].style.height = detailsHeight - 50 - creditsFullHeight + "px"
+            }
             this.eventDetailsElement = data
 
         } else if ( eventName === "hide-event-details" ) {
-            this.element.removeChild(this.modalDialog)
+            this.modalDialog.hide()
             this.element.removeChild(data)
             this.eventDetailsElement = null
+        } else if ( eventName == "show-big-image" ) {
+            this.modalDialog.show()
+            if ( this.bigImagePanel === null ) {
+                this.bigImagePanel = new BigImagePanel(this)
+                this.bigImagePanel.addListener(function(a,b,c) { self.bigImagePanel_onEvent(a,b,c) })
+                this.bigImagePanel.setUsingEvent(data)
+                this.bigImagePanel.show()
+            } else {
+                this.bigImagePanel.show()
+            }
         }
     }
     
@@ -144,6 +151,7 @@ class Timeline extends Observable {
     }
 
     resizeEventDetailsPanel() {
+        // TODO(tm) tidy this up into a separate component with resize
         if ( this.eventDetailsElement === null ) return
         const timelineStyle = window.getComputedStyle(this.canvasElement)
         const belowCanvasHeight = this.scrollBar.getScrollBarHeight() + this.axisChooser.getHeight()
@@ -157,7 +165,9 @@ class Timeline extends Observable {
         const creditsStyle = window.getComputedStyle(credits[0])
         const creditsFullHeight = parseInt(creditsStyle.height) + parseInt(creditsStyle.paddingTop) + parseInt(creditsStyle.paddingBottom) + parseInt(creditsStyle.marginTop) + parseInt(creditsStyle.marginBottom)
         const description = this.eventDetailsElement.getElementsByClassName("event-details-content-description")
-        description[0].style.height = detailsHeight - 50 - creditsFullHeight + "px"
+        if ( description != null && description.length > 0 ) {
+            description[0].style.height = detailsHeight - 50 - creditsFullHeight + "px"
+        }
     }
 
     onElementResize() {
@@ -167,6 +177,7 @@ class Timeline extends Observable {
         this.axisChooser.onResize()
         this.draw()
         this.resizeEventDetailsPanel()
+        if ( this.bigImagePanel) this.bigImagePanel.onResize()
         // TODO(tm) need to resize the event bands
         
     }
