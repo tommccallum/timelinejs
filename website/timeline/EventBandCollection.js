@@ -90,6 +90,10 @@ class EventBandCollection {
         return visibleBands
     }
 
+    onResize(viewportRect) {
+        this.draw(viewportRect)
+    }
+
     draw(viewportRect, modifiedEventbandIndex) {
         // console.log(`EventBandCollection::draw modified:${modifiedEventbandIndex}`)
         // console.log(viewportRect)
@@ -114,6 +118,10 @@ class EventBandCollection {
         const visibleBandCount = this.getVisibleBandCount()
         totalSplitterHeight = Math.max(0,(visibleBandCount-1)) * splitterHeight
         const equalHeight = (availableHeight - totalSplitterHeight) / visibleBandCount
+
+
+        // if the availableHeight < expectedBandHeight then 
+        // 
 
         // console.log(`EventBandCollection ${totalSplitterHeight} ${availableHeight} ${equalHeight}`)
 

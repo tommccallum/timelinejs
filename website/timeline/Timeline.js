@@ -165,8 +165,10 @@ class Timeline extends Observable {
         // console.log("onElementResize")
         this.currentViewport.updateViewportWidth()
         this.axisChooser.onResize()
+        this.draw()
         this.resizeEventDetailsPanel()
         // TODO(tm) need to resize the event bands
+        
     }
 
     setTitleVisible(b) {
