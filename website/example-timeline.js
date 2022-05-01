@@ -246,6 +246,133 @@ var exampleTimeline = {
             ]
         },
         {
+            name: "Scottish Kings",
+            backgroundColor: '#999999',
+            events: [
+                {
+                    name: "House of Alpin",
+                    style: "default",
+                    start: "848AD",
+                    end: "1034AD"
+                },
+                {
+                    name: "Kenneth I MacAlpin",
+                    description: "The start of Kenneth's reign is placed 843 or 848AD.",
+                    style: "default",
+                    start: "843AD",
+                    end: "858AD"
+                },
+                {
+                    name: "Donald I MacAlpin",
+                    style: "default",
+                    start: "858AD",
+                    end: "862AD"
+                },
+                {
+                    name: "Constantine I MacAlpin",
+                    style: "default",
+                    start: "862AD",
+                    end: "877AD"
+                },
+                {
+                    name: "&#193;ed I MacAlpin",
+                    style: "default",
+                    start: "877AD",
+                    end: "878AD"
+                },
+                {
+                    name: "Giric",
+                    style: "default",
+                    start: "878AD",
+                    end: "889AD"
+                },
+                {
+                    name: "Eochaid",
+                    style: "default",
+                    start: "878AD",
+                    end: "889AD"
+                },
+                {
+                    name: "Donald II",
+                    style: "default",
+                    start: "889AD",
+                    end: "900AD"
+                },
+                {
+                    name: "Constantine II",
+                    style: "default",
+                    start: "900AD",
+                    end: "943AD"
+                },
+                {
+                    name: "Malcolm I",
+                    style: "default",
+                    start: "943AD",
+                    end: "954AD"
+                },
+                {
+                    name: "House of Dunkeld",
+                    style: "default",
+                    start: "1034AD",
+                    end: "1286AD"
+                },
+                {
+                    name: "House of Sverre",
+                    style: "default",
+                    start: "1286AD",
+                    end: "1290AD"
+                },
+                {
+                    name: "First Interregnum",
+                    style: "default",
+                    start: "1290AD",
+                    end: "1292AD"
+                },
+                {
+                    name: "House of Balliol",
+                    style: "default",
+                    start: "1292AD",
+                    end: "1296AD"
+                },
+                {
+                    name: "Second Interregnum",
+                    style: "default",
+                    start: "1296AD",
+                    end: "1306AD"
+                },
+                {
+                    name: "House of Bruce",
+                    style: "default",
+                    start: "13060AD",
+                    end: "1371AD"
+                },
+                {
+                    name: "House of Balliol",
+                    style: "default",
+                    start: "1332AD",
+                    end: "1356AD"
+                },
+                {
+                    name: "House of Stewart/Stuart",
+                    style: "default",
+                    start: "1371AD",
+                    end: "1651AD"
+                },
+                {
+                    name: "Third Interregnum",
+                    style: "default",
+                    start: "1651AD",
+                    end: "1660AD"
+                },
+                {
+                    name: "House of Stuart",
+                    style: "default",
+                    start: "1660AD",
+                    end: "1707AD"
+                },
+            ]
+        },
+        {
             name: "Hopeman History",
             backgroundColor: '#cccccc',
             style: "dots",

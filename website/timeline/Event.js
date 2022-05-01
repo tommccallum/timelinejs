@@ -144,7 +144,8 @@ class Event extends Observable {
             this.internalDiv.classList.add("event-internal-container")
             event.appendChild(this.internalDiv)
 
-            this.internalDiv.innerText = this.name
+            // Need to set HTML rather than text due to HTML UTF-8 characters.
+            this.internalDiv.innerHTML = this.name 
             this.internalDiv.title = this.internalDiv.innerText 
             if ( this.isPeriod() ) {
                 this.internalDiv.title += " (" + this.start.toString() + "-" + this.end.toString()+")"
@@ -369,7 +370,7 @@ class Event extends Observable {
                     const thatTop = parseInt(style.top)
                     const thatBottom = parseInt(style.top) + parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
                     
-                    if ( thatRight < thisLeft || thatLeft > thisRight || thisBottom < thatTop || thisTop > thatBottom ) {
+                    if ( thatRight <= thisLeft || thatLeft >= thisRight || thisBottom <= thatTop || thisTop >= thatBottom ) {
                         // does not intersect
                     } else {
                         events.push(ev)
@@ -408,8 +409,10 @@ class Event extends Observable {
     }
 
     isVisibleOnScreen(viewportRect) {
-        // console.log(viewportRect)
-        // console.log(`Event::isVisibleOnScreen ${this.end} ${this.name}`)
+        //console.log(viewportRect)
+        // if ( this.style === "event-title" && this.name === "History" ) {
+        //     console.log(`${this.name} Event::isVisibleOnScreen ${this.start} -> ${this.end} ${viewportRect.timepointLeft.toString()} ${viewportRect.timepointRight.toString()}`)
+        // }
         if ( viewportRect.timepointLeft.isAfter(this.end) ) {
             return false
         }
@@ -437,14 +440,29 @@ class Event extends Observable {
     }
 
     setWidth(viewportRect) {
-        if ( this.start.isEqual(this.end) ) return // this is an event point
+        // if ( this.start.isEqual(this.end) ) return // this is an event point
+
+        // this gets the width in terms of time but we need to max this with the length of the name
+
+
         const start = viewportRect.timeAxisCollection.getVirtualX(this.start.relativeValue)
         const end = viewportRect.timeAxisCollection.getVirtualX(this.end.relativeValue)
         // assume its shown we don't test for that
-        let w = end - start
+        let virtualWidth = end - start
+        this.element.style.width = null // we want to refresh this
+        this.element.offsetWidth // force recalculate
         const style = window.getComputedStyle(this.element)
-        w -= parseInt(style.paddingRight) + parseInt(style.paddingLeft) + parseInt(style.marginLeft) + parseInt(style.marginRight)
-        this.element.style.width = w + "px"
+        const internalStyle = window.getComputedStyle(this.internalDiv)
+        let renderedWidth = 0;
+        if ( style.width === "auto" ) {
+            renderedWidth = this.element.offsetWidth
+        } else {
+            renderedWidth = parseInt(style.width)
+        }
+        let w = Math.max(virtualWidth, renderedWidth)
+        if ( !isNaN(w)) {
+            this.element.style.width = w + "px"
+        }
     }
 
     getPaddedHeight() {
@@ -459,7 +477,7 @@ class Event extends Observable {
     
     arrange(viewportRect) {
         if ( !this.isVisibleOnScreen(viewportRect) ) return;
-        if ( this.style === "title" ) return; // no need to arrange this as it should be in the background
+        if ( !this.isObservable() ) return; // no need to arrange this as it should be in the background
 
         // how many events cover us
         // strategy 1 we have vertical space, we can move the covering events down
