@@ -53,6 +53,11 @@ class Timeline extends Observable {
         this.ready = false
     }
 
+    makeFullScreen() {
+        openFullscreen(this.workspaceElement)
+        this.onElementResize()
+    }
+
     getAxisPeriodDuration() {
         return this.timeAxisCollection.timeaxes[this.currentScrollAxisIndex].end - this.timeAxisCollection.timeaxes[this.currentScrollAxisIndex].start
     }

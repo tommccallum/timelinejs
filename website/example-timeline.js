@@ -33,7 +33,7 @@ var exampleTimeline = {
             end: -2500000,
             majorEvery: 1000000,
             minorEvery: 500000,
-            gap: 100
+            gap: 200
         },
         // early man era (Paleolithic)
         {

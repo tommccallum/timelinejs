@@ -5,3 +5,10 @@
     /* position: absolute; */
     z-index: var(--timeline-title-zIndex);
 }
+
+.timeline-title-buttons {
+    position: absolute;
+    right: 10px;
+    margin-right: 50px;
+    top: 10px;
+}

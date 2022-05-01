@@ -2,6 +2,9 @@ class Event extends Observable {
 
     constructor(data = null) {
         super()
+        this.element = null;
+        this.internalDiv = null;
+
         this.name = "New Event"
         this.historyCredit = null
         this.historyCreditLink = null
@@ -131,18 +134,25 @@ class Event extends Observable {
         let event = null
         let image = null
         let textDiv = null
+        
         if ( this.image == null ) {
             event = document.createElement("div")
             event.classList.add("event")
             event.classList.add(this.style)
-            event.innerText = this.name
-            event.title = event.innerText 
+
+            this.internalDiv = document.createElement("div")
+            this.internalDiv.classList.add("event-internal-container")
+            event.appendChild(this.internalDiv)
+
+            this.internalDiv.innerText = this.name
+            this.internalDiv.title = this.internalDiv.innerText 
             if ( this.isPeriod() ) {
-                event.title += " (" + this.start.toString() + "-" + this.end.toString()+")"
+                this.internalDiv.title += " (" + this.start.toString() + "-" + this.end.toString()+")"
             } else {
-                event.title += " (" + this.start.toString() + ")"
+                this.internalDiv.title += " (" + this.start.toString() + ")"
             }
-            textDiv = event
+            textDiv = this.internalDiv
+
         } else {
             event = document.createElement("div")
             event.classList.add("event")
@@ -223,6 +233,8 @@ class Event extends Observable {
             const img = document.createElement("img")
             this.element.appendChild(img)
         }
+
+        
     }
 
     _onShowMoreLink(e) {
@@ -491,12 +503,48 @@ class Event extends Observable {
             this.createElement()
         }
         if ( this.isVisibleOnScreen(viewportRect) ) {
+            // if ( this.name === "Lower Paleolithic") console.log("Lower Paleolithic: ON")
             // console.log(`Add event ${this.name}`)
             this.setPosition(viewportRect)
             this.setWidth(viewportRect)
             this.setVisible(true)
+
+            // Here we are controlling the position of the event text within a long event period.
+            // If the event is long enough we can end with empty partial event bars on left side of
+            // screen.  This is annoying when reading as it makes the user scroll back and forth.
+            // This piece of code makes sure the text is visible (if possible) given the space.
+            // When the left of the event is visible then content is placed there.
+            // As the user scrolls right, the text moves right as well.
+            // When the text hits the end of the event it will stop.
+            if ( this.internalDiv && this.isObservable() && this.isPeriod() ) {
+                // Move the internal text to be near end of period
+                const iw = parseInt(this.internalDiv.offsetWidth)
+                const eventDivStyle = window.getComputedStyle(this.element)
+                const eventLeft = parseInt(eventDivStyle.left) + parseInt(eventDivStyle.paddingLeft)
+                const eventWidth = parseInt(eventDivStyle.width)
+                const eventRight = eventLeft + eventWidth
+                const remainingSpace = eventWidth + Math.min(0,eventLeft)
+                // console.log(`${this.name} ${left}`)
+                if ( eventLeft < 0 ) {
+                    const rightPadding = parseInt(eventDivStyle.paddingRight)
+                    // should be around 288
+                    const rightmost = eventWidth -  iw
+                    const delta = remainingSpace - iw
+                    // console.log(`${iw} ${ew} ${right} ${parseInt(eventDivStyle.left)}`)
+                    // console.log(`Required:${iw} Space: ${remainingSpace} RPad:${rightPadding} RM:${rightmost} L:${eventLeft} W:${eventWidth} R:${eventRight} dW:${delta}`)
+                    if ( remainingSpace > iw ) {
+                        this.internalDiv.style.left = Math.abs(eventLeft) + "px"
+                    } else {
+                        this.internalDiv.style.left = rightmost + "px"
+                    }
+                } else {
+                    this.internalDiv.style.left = null
+                }
+            }
+
             return this.element
         } else {
+            // if ( this.name === "Lower Paleolithic") console.log("Lower Paleolithic: OFF")
             this.setVisible(false)
             return null
         }
