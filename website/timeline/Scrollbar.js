@@ -250,7 +250,7 @@ class ScrollBar {
             self.stopDrag()
         })
 
-        this.scrollBar.addEventListener("toucnmove", function(e) {
+        this.scrollBar.addEventListener("touchmove", function(e) {
             // this still receives events for child elements
             // console.log("scrollBar::mousemove")
             e.preventDefault()
