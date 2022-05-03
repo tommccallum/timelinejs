@@ -212,21 +212,40 @@ class TimeAxis {
 
                     // we want to add a wee label on there
                     if ( this.showLabelsOnMajorAxis ) {
-                        const majorLineLabel = document.createElement("div")
-                        majorLineLabel.classList.add("major-vertical-label")
-                        majorLineLabel.innerText = (new TimePoint(yearVertical)).toString()
-                        canvas.append(majorLineLabel) // this has to happen before we know the browser thought our label width would be
-                        const style = window.getComputedStyle(majorLineLabel)
-                        majorLineLabel.title = (new TimePoint(yearVertical)).toString()
-                        majorLineLabel.style.left = (canvasLeft - (parseInt(style.width))/2) + "px"
-                        //majorLineLabel.style.left = (canvasLeft + 10) + "px"
+                        const majorLineLabelLower = document.createElement("div")
+                        majorLineLabelLower.classList.add("major-vertical-label")
+                        majorLineLabelLower.classList.add("major-vertical-label-lower")
+                        majorLineLabelLower.innerText = (new TimePoint(yearVertical)).toString()
+                        canvas.append(majorLineLabelLower) // this has to happen before we know the browser thought our label width would be
+                        const styleMajorLineLabelLower = window.getComputedStyle(majorLineLabelLower)
+                        majorLineLabelLower.title = (new TimePoint(yearVertical)).toString()
+                        majorLineLabelLower.style.left = (canvasLeft - (parseInt(styleMajorLineLabelLower.width))/2) + "px"
+
+                        // add a top label as well
+                        const majorLineLabelUpper = document.createElement("div")
+                        majorLineLabelUpper.classList.add("major-vertical-label")
+                        majorLineLabelUpper.classList.add("major-vertical-label-upper")
+                        majorLineLabelUpper.innerText = (new TimePoint(yearVertical)).toString()
+                        canvas.append(majorLineLabelUpper) // this has to happen before we know the browser thought our label width would be
+                        const styleMajorLineLabelUpper = window.getComputedStyle(majorLineLabelUpper)
+                        majorLineLabelUpper.title = (new TimePoint(yearVertical)).toString()
+                        majorLineLabelUpper.style.left = (canvasLeft - (parseInt(styleMajorLineLabelUpper.width))/2) + "px"
 
                         const canvasStyle = window.getComputedStyle(canvas)
-                        majorLine.style.height = ( parseInt(canvasStyle.height) - parseInt(style.height) - parseInt(style.bottom) * 2 ) + "px"
-                        this.majorVerticalLineHeightValue = parseInt(majorLine.style.height)
+
+                        const offsetTop = (parseInt(styleMajorLineLabelUpper.marginBottom) * 2) + parseInt(styleMajorLineLabelUpper.height)
+                        majorLine.style.top = offsetTop + "px"
+
+                        const offsetBottom = parseInt(styleMajorLineLabelLower.height) + parseInt(styleMajorLineLabelLower.marginTop) * 2
+
+                        const lineHeight = ( parseInt(canvasStyle.height) - offsetTop - offsetBottom )
+                        majorLine.style.height = lineHeight + "px"
+                        this.majorVerticalLineHeightValue = lineHeight
+
                         if ( axisDivider ) {
-                            axisDivider.style.height = ( parseInt(canvasStyle.height) - parseInt(style.height) - parseInt(style.bottom) * 2 ) + "px"
+                            axisDivider.style.height = ( lineHeight ) + "px"
                         }
+
                     }
                     axisDivider = null // we null again as we only want to add this to the FIRST line it covers
                 }

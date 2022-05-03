@@ -30,9 +30,18 @@
     background-color:transparent;
     color: cornflowerblue;
     position: absolute;
-    bottom: 10px;
+    
     white-space: nowrap;
     z-index: var(--timeaxis-major-zIndex);
+}
+.major-vertical-label-upper {
+    top: 15px;
+    margin-bottom: 15px;
+}
+
+.major-vertical-label-lower {
+    margin-top: 15px;
+    bottom: 15px;
 }
 
 .timeaxis-divider {
