@@ -52,7 +52,7 @@ class Timeline extends Observable {
         this.firstDrawComplete = false
         this.ready = false
 
-        this.updateEachFrame = false
+        this.updateEachFrame = true
     }
 
     makeFullScreen() {
@@ -187,6 +187,7 @@ class Timeline extends Observable {
         this.draw()
         this.resizeEventDetailsPanel()
         if ( this.bigImagePanel) this.bigImagePanel.onResize()
+        this.axisChooser.setPincerPosition(this.currentViewport.timepoint)
         // TODO(tm) need to resize the event bands
         
     }
