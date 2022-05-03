@@ -353,7 +353,7 @@ class Timeline extends Observable {
             }
         })
         this.eventCanvasElement.addEventListener("touchmove", function(e) {
-            e.preventDefault()
+            // e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 // console.log("eventCanvasElement::mousemove eventBandCollection::isDragging")
                 self.eventBandCollection._onMouseMove(e)
