@@ -116,7 +116,7 @@
         if ( isTouchAvailable() ) {
             area.style.backgroundColor = "blue";    
             area.addEventListener("touchstart", function(e) {
-                reportStatus(encodeURIComponent)
+                reportStatus(e)
                 handleAction("touchstart")
                 area.innerHTML = ""
             })
