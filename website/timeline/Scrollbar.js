@@ -166,14 +166,15 @@ class ScrollBar {
     }
 
     _getRelativeScrollBarMouseX(clientX) {
-        if ( typeof(e) == "object" ) {
+        if ( typeof(clientX) == "object" ) {
+            const e = clientX
             if ( e.clientX ) {
                 clientX = e.clientX
             } else if ( e.touches ) {
                 clientX =e.touches[0].clientX
             }
         }
-        
+        console.log(`scrollbar:_getRElativeScrollBarMouseX clientX=${clientX}`)
         let x = clientX // relative to browser window
         const style = window.getComputedStyle(this.scrollBar)
         const rect = this.scrollBar.getBoundingClientRect()
@@ -266,7 +267,7 @@ class ScrollBar {
     }
 
     _onMouseClick(e) {
-        // console.log("scrollBar::click also fired on mouseup")
+        console.log(`scrollBar::_onMouseClick ${this.isDrag()}`)
         if ( this.isDrag() ) {
             let x = this._getRelativeScrollBarMouseX(e)
             this._onMouseMove(x)
@@ -306,13 +307,26 @@ class ScrollBar {
             this.draw()
         }
     }
-    _onMouseMove(clientX) {
-        if (!this.isDrag()) return
+
+    moveTo(clientX) {
         const value = Math.max(this.getScrollBarMin(),Math.min(this.getScrollBarMax(),clientX))
         // console.log(`mousedrag ${value} ${this.getPixelPosition()} ${this.getScrollBarMax()} ${this.getScrollBarMin()}`)
         this.value = value
         this.notify(value / this.getScrollBarRulerLength())
         this.draw()
+    }
+
+    _onMouseMove(e) {
+        let clientX = e
+        if ( typeof(e) === "object") {
+            if ( e.touches ) {
+                e = e.touches[0]
+            }
+            if ( !e.hasOwnProperty("clientX")) return
+            clientX = e.clientX
+        }
+        if (!this.isDrag()) return
+        this.moveTo(clientX)
     }
 
     setBackgroundColor(backgroundColor) {

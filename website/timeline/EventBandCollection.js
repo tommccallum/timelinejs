@@ -312,6 +312,8 @@ class EventBandCollection {
         }
     }
 
+   
+
     _onMouseDown(e) {
         const index = e.target.dataset.index
         this.draggingSplitterIndex = index
