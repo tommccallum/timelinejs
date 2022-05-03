@@ -100,7 +100,7 @@
             btn.classList.add("last-mouse-action")
         }
         function addHit(el, event, name ) {
-            const area = document.getElementById("panel")
+            const area = document.getElementById("area")
             const aStyle = window.getComputedStyle(area)
             const left = parseInt(aStyle.left) 
             const width = parseInt(aStyle.width) 
@@ -110,8 +110,9 @@
             const bottom = top + height
 
             if ( event.clientY < top || event.clientY > bottom || event.clientX < left || event.clientX > right) {
-                return false;
+                return;
             }
+
             const circle = document.createElement("div")
             circle.classList.add("circle")
             if ( name == "touchend" ) {
@@ -170,7 +171,7 @@
             area.innerText = "No touch available"
             area.classList.add("notouch")
 
-            if ( false ) {
+            if ( true ) {
                 // allow in here to test with mouse.
                 area.innerHTML = ""
                 area.style.backgroundColor = "blue";
