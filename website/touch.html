@@ -64,6 +64,12 @@
         <div id="touchmove" class="action">Touch Move</div>
         <div id="touchend" class="action">Touch End</div>
         <div id="touchcancel" class="action">Touch Cancel</div>
+
+        <div id="mouseclick" class="action">Mouse Click</div>
+        <div id="mousedown" class="action">Mouse Down</div>
+        <div id="mousemove" class="action">Mouse Move</div>
+        <div id="mouseup" class="action">Mouse Up</div>
+        <div id="mouseleave" class="action">Mouse Leave</div>
         <div id="status"></div>
     </div>
     <div class='panel' id="area">
@@ -78,6 +84,14 @@
             const btn = document.getElementById(name)
             btn.classList.add("last-action")
         }
+        function handleMouseAction(name) {
+            const selected = document.getElementsByClassName("last-mouse-action")
+            for( let s of selected  ) {
+                s.classList.remove("last-mouse-action")
+            }
+            const btn = document.getElementById(name)
+            btn.classList.add("last-mouse-action")
+        }
         function addHit(el, event, name ) {
             const circle = document.createElement("div")
             circle.classList.add("circle")
@@ -90,7 +104,7 @@
         }
         function reportStatus(e) {
             const status = document.getElementById("status")
-            status.innerText = `target=${e.target} X,Y=(${e.clientX},${e.clientY})`
+            status.innerText = `target=${e.touches[0].target} X,Y=(${e.touches[0].clientX},${e.touches[0].clientY})`
         }
 
         const area = document.getElementById("area")
@@ -114,6 +128,22 @@
             area.addEventListener("touchcancel", function(e) {
                 reportStatus(e.touches[0])
                 handleAction("touchcancel")
+            })
+            
+            area.addEventListener("mousedown", function(e) {
+                handleMouseAction("mousedown")
+            })
+            area.addEventListener("mousemove", function(e) {
+                handleMouseAction("mousemove")
+            })
+            area.addEventListener("mouseup", function(e) {
+                handleMouseAction("mouseup")
+            })
+            area.addEventListener("mouseleave", function(e) {
+                handleMouseAction("mouseleave")
+            })
+            area.addEventListener("click", function(e) {
+                handleMouseAction("mouseclick")
             })
         } else {
             area.innerText = "No touch available"
