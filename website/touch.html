@@ -20,13 +20,14 @@
             /* width: 100%;
             height: 100%; */
             background: gray;
-            display: flex;
-            flex-wrap: wrap;
+            
         }
         .touchpanel {
             padding: 15px;
-            flex: 1; /* 0 0 30px; */
+            /* flex: 1 1 10%;  */
             display: flex;
+            flex-wrap: wrap; 
+            flex-direction: row;
         }
         .notouch {
             display: flex;
@@ -39,7 +40,8 @@
             border: 1px solid black;
             border-radius: 5px;
             padding: 5px;
-            margin-right: 15px;
+            /* margin-right: 15px; */
+            margin: 5px;
         }
         .last-action {
             background: green;
@@ -104,12 +106,16 @@
                 circle.classList.add(name)
             }
             el.appendChild(circle)
-            circle.style.left = event.clientX + "px"
-            circle.style.top = event.clientY + "px"
+            circle.style.left = Math.round(event.clientX,2) + "px"
+            circle.style.top = Math.round(event.clientY,2) + "px"
         }
         function reportStatus(e) {
             const status = document.getElementById("status")
-            status.innerText = `target=${e.touches[0].target} X,Y=(${e.touches[0].clientX},${e.touches[0].clientY})`
+            if ( e.touches ) {
+                status.innerText = `target=${e.touches[0].target} X,Y=(${e.touches[0].clientX},${e.touches[0].clientY})`
+            } else {
+                status.innerText = `target=${e.target} X,Y=(${e.clientX},${e.clientY})`
+            }
         }
 
         const area = document.getElementById("area")
@@ -154,7 +160,7 @@
             area.innerText = "No touch available"
             area.classList.add("notouch")
 
-            if ( true ) {
+            if ( false ) {
                 // allow in here to test with mouse.
                 area.innerHTML = ""
                 area.style.backgroundColor = "blue";
