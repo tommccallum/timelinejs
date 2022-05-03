@@ -8,6 +8,7 @@ class TimeAxisCollection {
     constructor() {
         // console.log("Creating new TimeAxisCollection")
         this.timeaxes = []
+        this.arrow = null
     }
 
     add(timeaxis) {
@@ -74,6 +75,10 @@ class TimeAxisCollection {
             return this.timeaxes[restrictToSingleAxis].endAsTimepoint()
         }
         return this.timeaxes[this.timeaxes.length-1].endAsTimepoint()
+    }
+
+    getProportion(axis, tp) {
+        return this.timeaxes[axis].getProportion(tp.relativeValue)
     }
 
     find(name) {
@@ -203,6 +208,21 @@ class TimeAxisCollection {
         return width
     }
 
+    drawUpArrow(canvas) {
+        this.arrow = document.createElement("div")
+        this.arrow.classList.add("arrow-up")
+        canvas.appendChild(this.arrow)
+        const arrowStyle = window.getComputedStyle(this.arrow)
+        const arrowWidth = parseInt(arrowStyle.borderBottomWidth)
+        const arrowHeight = parseInt(arrowStyle.borderLeftWidth)
+        const canvasStyle = window.getComputedStyle(canvas)
+        const arrowMiddle = parseInt(canvasStyle.width) / 2 - 5
+        const arrowLeft = arrowMiddle - arrowWidth/2
+        this.arrow.style.left = arrowLeft + "px"
+        this.arrow.style.top = parseInt(canvasStyle.height) - arrowHeight + "px"
+        
+    }
+
     draw(canvas, viewport) {
         
         const canvasStyle = window.getComputedStyle(canvas)
@@ -236,6 +256,8 @@ class TimeAxisCollection {
                 majorVerticalLineHeight = ta.majorVerticalLineHeight()
             }
         }
+
+        this.drawUpArrow(canvas)
 
         // this establishing our new viewport for all the other items
         const viewportRect = new ViewportRect()

@@ -247,7 +247,8 @@ var exampleTimeline = {
         },
         {
             name: "Scottish Kings",
-            backgroundColor: '#999999',
+            backgroundColor: 'transparent',
+            visible: true,
             events: [
                 {
                     name: "House of Alpin",

@@ -1,15 +1,29 @@
 :root {
     /* z-Index values going from bottom to op */
-    --axis-picker-zIndex: 200;
-    --timeaxis-zIndex: 10;
-    --timeaxis-divider-zIndex: 10;
-    --timeband-canvas-zIndex: 500;
-    --timeline-canvas-zIndex: 5;
+
+    --timeline-canvas-zIndex: 0;
     --timeline-title-zIndex: 999;
-    --timeline-scrollbar-zIndex: 200;
+    
+    /* The axis picker should be the same or more than the timeaxis-zIndex otherwise the
+       vertical lines will be on top of the pincers */
+    /* For the pincer and the scrollbar button to both overlap, both the outer divs (axis-picker-zIndex and timeline-scrollbar-zIndex)
+       must both be set to auto.  If either has a zIndex then either one or other of the divs takes precedence and the overlapping does
+       not work. */
+    --axis-picker-zIndex: auto;
+    --axis-picker-pincer-zIndex: 7;
+
+    --timeaxis-zIndex: 5;
+    --timeaxis-divider-zIndex: 10;
+    --timeaxis-minor-zIndex: 0;
+    --timeaxis-major-zIndex: 0;
+
+    --timeline-scrollbar-zIndex: auto;
     --timeline-scrollbar-button-zIndex: 50;
     --timeline-scrollbar-button-right-transition-zIndex: 49;
     --timeline-scrollbar-button-left-transition-zIndex: 48;
+    
+    --timeband-canvas-zIndex: 500;
+    
     --eventband-zIndex: 50;
     --eventband-splitter-zIndex: 52;
     --event-zIndex: 50;

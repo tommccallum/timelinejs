@@ -111,6 +111,13 @@ class TimeAxis {
         return year
     }
 
+    getProportion(relativeTimepoint) {
+        const nominator = (relativeTimepoint - this.start)
+        const denominator = this.duration()
+        // console.log(`${nominator} ${denominator} ${nominator/denominator} ${this.getTotalWidthRequired()}`)
+        return ( nominator / denominator ) 
+    }
+
     _getTotalWidthRequired() {
         // This gives us the total virtual space that this would take up
         // if we had an infinite canvas.
@@ -135,7 +142,7 @@ class TimeAxis {
         // canvasLeft is in the coordinates of the div that we see and is the start from the previous axis if any
         // virtual* is in the virtual coordinates of an infinite canvas of our timeline
         // *Timepoint are the associated ends of the timeline visible
-
+        
         // The canvasLeft > 0 stops us from showing the first axis which we know is there, we are only interested
         // in showing when the axis changes after the initial entry point.
         let axisDivider = null
@@ -170,7 +177,14 @@ class TimeAxis {
                     break   
                 }
             }
+            
             const yearVertical = Math.floor(nearestYear / this.minorEvery) * this.minorEvery
+            if ( nearestYear % this.minorEvery != 0  ) {
+                // this will stop the first item always being drawn at canvasLeft = 0 
+                // unless the year really is supposed to be there.
+                lastVerticalDrawn = yearVertical
+            }
+
             // console.log(`AXIS: ${tp} ${this.end} ${nearestYear} ${yearVertical}`)
             // so that our axis don't fall between transitions e.g. 179.67, 180.50
             // we 
@@ -179,11 +193,12 @@ class TimeAxis {
             // We may want to round to the nearest modulo minorEvery otherwise we miss a lot when we are fitting 
             // a lot of values in to a smaller space.
             if ( lastVerticalDrawn != yearVertical ) {
+                
                 lastVerticalDrawn = yearVertical
                 if ( yearVertical % this.majorEvery == 0 ) {
                     const majorLine = document.createElement("div")
                     majorLine.classList.add(this.majorStyle)
-                    majorLine.style.left = Math.max(1,canvasLeft - (this.majorWidth/2))  + "px"
+                    majorLine.style.left = canvasLeft - (this.majorWidth/2)  + "px"
                     majorLine.style.width = this.majorWidth + "px"
                     majorLine.title = (new TimePoint(yearVertical)).toString()
                     canvas.append(majorLine)
@@ -214,7 +229,7 @@ class TimeAxis {
                 if ( yearVertical % this.minorEvery == 0 && yearVertical % this.majorEvery != 0) {
                     const minorLine = document.createElement("div")
                     minorLine.classList.add(this.minorStyle)
-                    minorLine.style.left = Math.max(1,canvasLeft - this.minorWidth/2)  + "px"
+                    minorLine.style.left = canvasLeft - this.minorWidth/2  + "px"
                     minorLine.style.width = this.minorWidth + "px"
                     minorLine.title = (new TimePoint(yearVertical)).toString()
                     canvas.append(minorLine)

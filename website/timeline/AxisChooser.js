@@ -12,6 +12,9 @@ class AxisChooser {
         this.widths = []
         this.axisWidthProportions = []
         this.axisBlockElements = []
+        this.leftPincer = null
+        this.rightPincer = null
+        
     }
 
     addListener(item) {
@@ -80,13 +83,25 @@ class AxisChooser {
                 self.onClick(e)
             });
             
-            this.axisPickerElement.append(axisDiv)
+            this.axisPickerElement.appendChild(axisDiv)
             left += w
             ii++
         }
         if ( Math.round(left) > this.getWidth() ) {
             alert(`[AxisChooser] WARNING bounds blasted ${left}`)
         }
+
+        this.leftPincer = document.createElement("div")
+        this.rightPincer = document.createElement("div")
+        
+        this.leftPincer.classList.add("axispicker-pincer")
+        this.leftPincer.classList.add("axispicker-left-pincer")
+        
+        this.rightPincer.classList.add("axispicker-pincer")
+        this.rightPincer.classList.add("axispicker-right-pincer")
+
+        this.axisPickerElement.appendChild(this.leftPincer)
+        this.axisPickerElement.appendChild(this.rightPincer)
     }
 
     setCurrentAxis(index) {
@@ -106,6 +121,25 @@ class AxisChooser {
         this.axisBlockElements[index].classList.add("timeline-axis-selected")
     }
 
+    setPincerPosition(timepoint) {
+        if ( this.timeAxisCollection ) {
+            const p = this.timeAxisCollection.getProportion(this.currentScrollAxisIndex, timepoint)
+            const blockStyle = window.getComputedStyle(this.axisBlockElements[this.currentScrollAxisIndex]) 
+            const blockLeft = parseInt(blockStyle.left)
+            const l = parseInt(blockStyle.left) + p * parseInt(blockStyle.width)
+            const minp = blockLeft;
+            const leftPincerStyle = window.getComputedStyle(this.leftPincer)
+            const leftWidth = parseInt(leftPincerStyle.width)
+            
+            const rightPincerStyle = window.getComputedStyle(this.rightPincer)
+            const maxp = parseInt(blockStyle.left) + parseInt(blockStyle.width) - parseInt(rightPincerStyle.width)
+
+            this.leftPincer.style.left = Math.max(minp,Math.min(maxp-leftWidth-5,(l - 5))) + "px"
+            this.rightPincer.style.left = Math.min(maxp, Math.max(blockLeft + leftWidth + 5, l + 5)) + "px"
+        }
+    }
+
+
     onResize() {
         // This is called from Timeline::onElementResize every AnimationFrame
         // If you add a console.log it will spew out a lot of info!!
@@ -119,7 +153,7 @@ class AxisChooser {
 
             let ii=0;
             let left = 0
-            for( let ch of this.axisPickerElement.children ) {
+            for( let ch of this.axisBlockElements ) {
                 ch.style.width = widths[ii] + "px"
                 ch.style.left = left + "px"
                 left += widths[ii]

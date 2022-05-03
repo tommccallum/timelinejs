@@ -18,7 +18,7 @@ class TimeBand extends Observable {
         this.height = -1
         this.top = -1
         this.element = null
-        this.visible = true
+        this.visible = false
         
         // while the events are here as they are loaded with the data
         // they are shown in the EventBandCollection which controls the timeband
@@ -27,6 +27,9 @@ class TimeBand extends Observable {
         if ( this.data ) {
             if ( this.data.hasOwnProperty("name") ) {
                 this.name = this.data.name
+            }
+            if ( this.data.hasOwnProperty("visible") ) {
+                this.visible = this.data.visible
             }
             if ( this.data.hasOwnProperty("backgroundColor") ) {
                 this.backgroundColor = this.data.backgroundColor
@@ -67,6 +70,11 @@ class TimeBand extends Observable {
     setVisible(b) {
         this.visible = b
         this.sendEvent('timeband-visible', this)
+    }
+
+    onFirstDraw() {
+        // force a redraw and update connected components
+        this.setVisible(this.visible)
     }
 
     getEventsThatIntersect(start, end) {

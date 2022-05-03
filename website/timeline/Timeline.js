@@ -51,6 +51,8 @@ class Timeline extends Observable {
         // listeners to the state of the timeline
         this.firstDrawComplete = false
         this.ready = false
+
+        this.updateEachFrame = false
     }
 
     makeFullScreen() {
@@ -86,6 +88,7 @@ class Timeline extends Observable {
         this.currentViewport.setTimePoint(tp)
         this.scrollBar.setText()
         this.draw()
+        this.axisChooser.setPincerPosition(this.currentViewport.timepoint)
         // console.log(`selected new axis ${this.currentScrollAxisIndex} ${this.currentScrollBarButtonFraction} ${tp.relativeValue}`)
     }
 
@@ -97,6 +100,7 @@ class Timeline extends Observable {
         const tp = this.getRelativeTimepoint()
         this.currentViewport.setTimePoint(tp)
         this.draw()
+        this.axisChooser.setPincerPosition(this.currentViewport.timepoint)
         // console.log(`updated scroll ${value} ${this.currentScrollAxisIndex} ${oldp} => ${this.currentScrollBarButtonFraction} ${old} => ${tp.relativeValue}`)
     }
 
@@ -377,7 +381,9 @@ class Timeline extends Observable {
             this.lastKnownHeight = h 
             this.lastKnownWidth = w
         //}
-        window.requestAnimationFrame(function(t) { self._onNextAnimationFrame(t) })
+        if ( this.updateEachFrame ) {
+            window.requestAnimationFrame(function(t) { self._onNextAnimationFrame(t) })
+        }
     }
 
     changeByAxisTicks(key, ctrlKey=false, shiftKey=false) {
@@ -499,10 +505,13 @@ class Timeline extends Observable {
         if ( this.ready ) return
         const self = this
         this.timeBandCollection.setTimeAxisCollection(this.timeAxisCollection)
+        this.timeBandCollection.onFirstDraw()
         this.addMainElements()
         this.addEventHandlers()
         this.saveElementDimensions();
-        window.requestAnimationFrame(function(t) { self._onNextAnimationFrame(t) })
+        if ( this.updateEachFrame ) {
+            window.requestAnimationFrame(function(t) { self._onNextAnimationFrame(t) })
+        }
         this.ready = true
         this.initialPosition()
     }

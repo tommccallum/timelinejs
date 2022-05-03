@@ -17,7 +17,7 @@
     /** this should be the same size as the internal value */
     display: inline;
     position: relative;
-    background: gray;
+    /* background: gray; */
 }
 
 .event-title {

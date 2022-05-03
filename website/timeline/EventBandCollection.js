@@ -105,6 +105,7 @@ class EventBandCollection {
         }
         if ( viewportRect === null ) return
 
+        
         // console.log("EventBandCollection::draw")
         // draw the bands that group events together
         const self = this

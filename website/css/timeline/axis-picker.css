@@ -9,3 +9,44 @@
 .timeline-axis-selected {
     background: #04284a radial-gradient(closest-corner,#095bab,#04284a);
 }
+
+.axispicker-pincer {
+    position: absolute;
+    height: 35px;
+    width: 5px;
+    top: -8px;
+    background: transparent;
+    z-index: var(--axis-picker-pincer-zIndex);
+}
+
+.axispicker-left-pincer {
+    left: 0px;
+    border-left-style: solid;
+    border-left-color: black;
+    border-right-style: solid;
+    border-right-color: black;
+    border-top-style: solid;
+    border-top-color: black;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    border-left-width: 3px;
+    border-right-width: 0px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+}
+
+.axispicker-right-pincer {
+    right: 0px;
+    border-left-style: solid;
+    border-left-color: red;
+    border-right-style: solid;
+    border-right-color: red;
+    border-top-style: solid;
+    border-top-color: red;
+    border-bottom-style: solid;
+    border-bottom-color: red;
+    border-right-width: 3px;
+    border-left-width: 0px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+}

@@ -45,6 +45,11 @@ class TimeBandCollection extends Observable {
         }
     }
 
+    onFirstDraw() {
+        for( let tb of this.timebands ) {
+            tb.onFirstDraw()
+        }
+    }
 
     // Drawing is controlled from the event band
     // draw(canvasElement) {
