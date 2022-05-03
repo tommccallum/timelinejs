@@ -319,12 +319,16 @@ class ScrollBar {
     _onMouseMove(e) {
         let clientX = e
         if ( typeof(e) === "object") {
-            if ( e.touches ) {
+            if ( !!e.touches ) {
                 e = e.touches[0]
             }
-            if ( typeof(e.clientX) === "undefined") return
+            if ( typeof(e.clientX) === "undefined") {
+                alert(`e.clientX is undefined ${typeof(e)} ${e.clientX}`)
+                return
+            }
             clientX = e.clientX
         }
+        alert(`e.clientX ${typeof(e)} ${e.clientX}`)
         if (!this.isDrag()) return
         this.moveTo(clientX)
     }
