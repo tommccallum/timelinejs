@@ -346,6 +346,9 @@ class Timeline extends Observable {
             }
             if ( self.scrollBar.isDrag() ) {
                 // console.log("eventCanvasElement::mousemove scrollbar::isDragging")
+                if ( e.touches ) {
+                    e = e.touches[0]
+                }
                 self.scrollBar._onMouseMove(e.clientX)
             }
         })
@@ -357,6 +360,9 @@ class Timeline extends Observable {
             }
             if ( self.scrollBar.isDrag() ) {
                 // console.log("eventCanvasElement::mousemove scrollbar::isDragging")
+                if ( e.touches ) {
+                    e = e.touches[0]
+                }
                 self.scrollBar._onMouseMove(e.clientX)
             }
         })

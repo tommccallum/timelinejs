@@ -166,9 +166,14 @@ class ScrollBar {
     }
 
     _getRelativeScrollBarMouseX(clientX) {
-        if ( typeof(clientX) == "object" ) {
-            clientX = clientX.clientX
+        if ( typeof(e) == "object" ) {
+            if ( e.clientX ) {
+                clientX = e.clientX
+            } else if ( e.touches ) {
+                clientX =e.touches[0].clientX
+            }
         }
+        
         let x = clientX // relative to browser window
         const style = window.getComputedStyle(this.scrollBar)
         const rect = this.scrollBar.getBoundingClientRect()
@@ -186,7 +191,8 @@ class ScrollBar {
         })
 
         this.scrollBarButton.addEventListener("touchend", function(e) {
-            self._onMouseClick(e)
+            // e does now have any touches so no X,Y
+            self.stopDrag()
         })
 
         this.scrollBarButton.addEventListener("touchmove", function(e) {
@@ -194,6 +200,7 @@ class ScrollBar {
         })
 
         this.scrollBarButton.addEventListener("touchcancel", function(e) {
+            // not sure if this is actually ever called
             let x = self._getRelativeScrollBarMouseX(e)
             self._onMouseMove(x)
             self.stopDrag()
@@ -238,10 +245,13 @@ class ScrollBar {
     _onMouseClick(e) {
         // console.log("scrollBar::click also fired on mouseup")
         if ( this.isDrag() ) {
-            let x = this._getRelativeScrollBarMouseX(e.clientX)
+            let x = this._getRelativeScrollBarMouseX(e)
             this._onMouseMove(x)
             this.stopDrag()
         } else {
+            if ( e.touches ) {
+                e = e.touches[0]
+            }
             // did we click to the left or right of the button and 
             // were we holding down any special buttons
             const style = window.getComputedStyle(this.scrollBarButton)
