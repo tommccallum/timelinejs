@@ -157,7 +157,7 @@ class TimeAxis {
             canvas.append(axisDivider)
         }
 
-        let lastVerticalDrawn = -1
+        let lastVerticalDrawn = null
         let oldVirtualLeft = virtualLeft
         if ( leftmostTimepoint < this.start ) {
             leftmostTimepoint = this.start
@@ -179,12 +179,16 @@ class TimeAxis {
             }
             
             const yearVertical = Math.floor(nearestYear / this.minorEvery) * this.minorEvery
-            if ( nearestYear % this.minorEvery != 0  ) {
+            if ( lastVerticalDrawn === null ) {
                 // this will stop the first item always being drawn at canvasLeft = 0 
                 // unless the year really is supposed to be there.
-                lastVerticalDrawn = yearVertical
+                if ( nearestYear % this.minorEvery != 0 ) {
+                    lastVerticalDrawn = yearVertical
+                } else {
+                    lastVerticalDrawn = -1
+                }
             }
-
+            
             // console.log(`AXIS: ${tp} ${this.end} ${nearestYear} ${yearVertical}`)
             // so that our axis don't fall between transitions e.g. 179.67, 180.50
             // we 
