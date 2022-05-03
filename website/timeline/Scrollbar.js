@@ -269,8 +269,7 @@ class ScrollBar {
     _onMouseClick(e) {
         console.log(`scrollBar::_onMouseClick ${this.isDrag()}`)
         if ( this.isDrag() ) {
-            let x = this._getRelativeScrollBarMouseX(e)
-            this._onMouseMove(x)
+            this._onMouseMove(e)
             this.stopDrag()
         } else {
             if ( !!e.touches ) {
@@ -309,7 +308,8 @@ class ScrollBar {
     }
 
     moveTo(clientX) {
-        const value = Math.max(this.getScrollBarMin(),Math.min(this.getScrollBarMax(),clientX))
+        let x = this._getRelativeScrollBarMouseX(clientX)
+        const value = Math.max(this.getScrollBarMin(),Math.min(this.getScrollBarMax(),x))
         // console.log(`mousedrag ${value} ${this.getPixelPosition()} ${this.getScrollBarMax()} ${this.getScrollBarMin()}`)
         this.value = value
         this.notify(value / this.getScrollBarRulerLength())
