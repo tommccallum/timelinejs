@@ -331,6 +331,7 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("touchstart", function(e) {
+            e.preventDefault()
             if ( self.eventBandCollection.isDragging()) return
             self.scrollBar.startDrag()
         })
@@ -338,6 +339,7 @@ class Timeline extends Observable {
             if ( self.eventBandCollection.isDragging()) return
             self.scrollBar.startDrag()
         })
+        
         this.eventCanvasElement.addEventListener("mousemove", function(e) {
             if ( self.eventBandCollection.isDragging()) {
                 // console.log("eventCanvasElement::mousemove eventBandCollection::isDragging")
@@ -353,6 +355,7 @@ class Timeline extends Observable {
             }
         })
         this.eventCanvasElement.addEventListener("touchmove", function(e) {
+            e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 // console.log("eventCanvasElement::mousemove eventBandCollection::isDragging")
                 self.eventBandCollection._onMouseMove(e)
@@ -376,6 +379,7 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("touchend", function(e) {
+            e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
                 return
@@ -392,6 +396,7 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("touchcancel", function(e) {
+            e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
                 return
