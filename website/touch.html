@@ -23,7 +23,7 @@
         }
         .touchpanel {
             padding: 15px;
-            flex: 0 0 30px;
+            flex: 1; /* 0 0 30px; */
             display: flex;
         }
         .notouch {
@@ -41,6 +41,9 @@
         }
         .last-action {
             background: green;
+        }
+        .last-mouse-action {
+            background: orange;
         }
         .touchend {
             background: turquoise;
@@ -129,7 +132,7 @@
                 reportStatus(e.touches[0])
                 handleAction("touchcancel")
             })
-            
+
             area.addEventListener("mousedown", function(e) {
                 handleMouseAction("mousedown")
             })
