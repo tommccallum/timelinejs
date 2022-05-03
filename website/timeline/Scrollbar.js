@@ -323,12 +323,10 @@ class ScrollBar {
                 e = e.touches[0]
             }
             if ( typeof(e.clientX) === "undefined") {
-                alert(`e.clientX is undefined ${typeof(e)} ${e.clientX}`)
                 return
             }
             clientX = e.clientX
         }
-        alert(`e.clientX ${typeof(e)} ${e.clientX} ${clientX} ${this.isDrag()}`)
         if (!this.isDrag()) return
         this.moveTo(clientX)
     }
