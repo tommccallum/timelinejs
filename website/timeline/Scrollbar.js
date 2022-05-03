@@ -197,6 +197,8 @@ class ScrollBar {
 
         this.scrollBarButton.addEventListener("touchmove", function(e) {
             //console.log("scrollBarButton::mousemove")
+            let x = self._getRelativeScrollBarMouseX(e)
+            self._onMouseMove(x)
         })
 
         this.scrollBarButton.addEventListener("touchcancel", function(e) {
