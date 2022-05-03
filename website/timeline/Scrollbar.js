@@ -328,7 +328,7 @@ class ScrollBar {
             }
             clientX = e.clientX
         }
-        alert(`e.clientX ${typeof(e)} ${e.clientX} ${clientX} ${this.isDrag}`)
+        alert(`e.clientX ${typeof(e)} ${e.clientX} ${clientX} ${this.isDrag()}`)
         if (!this.isDrag()) return
         this.moveTo(clientX)
     }
