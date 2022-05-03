@@ -100,6 +100,18 @@
             btn.classList.add("last-mouse-action")
         }
         function addHit(el, event, name ) {
+            const area = document.getElementById("panel")
+            const aStyle = window.getComputedStyle(area)
+            const left = parseInt(aStyle.left) 
+            const width = parseInt(aStyle.width) 
+            const height = parseInt(aStyle.height) 
+            const top = parseInt(aStyle.top) 
+            const right = left + width
+            const bottom = top + height
+
+            if ( event.clientY < top || event.clientY > bottom || event.clientX < left || event.clientX > right) {
+                return false;
+            }
             const circle = document.createElement("div")
             circle.classList.add("circle")
             if ( name == "touchend" ) {
