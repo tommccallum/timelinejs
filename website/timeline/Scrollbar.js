@@ -180,6 +180,26 @@ class ScrollBar {
     addEventHandlers() {
         const self = this
 
+        this.scrollBarButton.addEventListener("touchstart", function(e) {
+            // console.log("scrollbutton::mousedown")
+            self.startDrag()
+        })
+
+        this.scrollBarButton.addEventListener("touchend", function(e) {
+            self._onMouseClick(e)
+        })
+
+        this.scrollBarButton.addEventListener("touchmove", function(e) {
+            //console.log("scrollBarButton::mousemove")
+        })
+
+        this.scrollBarButton.addEventListener("touchcancel", function(e) {
+            let x = self._getRelativeScrollBarMouseX(e)
+            self._onMouseMove(x)
+            self.stopDrag()
+        })
+
+
         this.scrollBarButton.addEventListener("mousedown", function(e) {
             // console.log("scrollbutton::mousedown")
             self.startDrag()

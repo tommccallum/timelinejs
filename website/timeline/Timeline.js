@@ -330,6 +330,10 @@ class Timeline extends Observable {
             self.draw()
         })
 
+        this.eventCanvasElement.addEventListener("touchstart", function(e) {
+            if ( self.eventBandCollection.isDragging()) return
+            self.scrollBar.startDrag()
+        })
         this.eventCanvasElement.addEventListener("mousedown", function(e) {
             if ( self.eventBandCollection.isDragging()) return
             self.scrollBar.startDrag()
@@ -345,7 +349,27 @@ class Timeline extends Observable {
                 self.scrollBar._onMouseMove(e.clientX)
             }
         })
+        this.eventCanvasElement.addEventListener("touchmove", function(e) {
+            if ( self.eventBandCollection.isDragging()) {
+                // console.log("eventCanvasElement::mousemove eventBandCollection::isDragging")
+                self.eventBandCollection._onMouseMove(e)
+                return
+            }
+            if ( self.scrollBar.isDrag() ) {
+                // console.log("eventCanvasElement::mousemove scrollbar::isDragging")
+                self.scrollBar._onMouseMove(e.clientX)
+            }
+        })
+
         this.eventCanvasElement.addEventListener("click", function(e) {
+            if ( self.eventBandCollection.isDragging()) {
+                self.eventBandCollection.stopDragging()
+                return
+            }
+            self.scrollBar._onMouseClick(e)
+        })
+
+        this.eventCanvasElement.addEventListener("touchend", function(e) {
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
                 return
@@ -361,7 +385,13 @@ class Timeline extends Observable {
             self.scrollBar.stopDrag()
         })
 
-        
+        this.eventCanvasElement.addEventListener("touchcancel", function(e) {
+            if ( self.eventBandCollection.isDragging()) {
+                self.eventBandCollection.stopDragging()
+                return
+            }
+            self.scrollBar._onMouseClick(e)
+        })
     }
 
     saveElementDimensions() {
