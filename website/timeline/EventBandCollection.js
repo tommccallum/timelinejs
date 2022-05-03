@@ -340,10 +340,13 @@ class EventBandCollection {
         if ( this.draggingSplitterIndex == null ) {
             return
         }
-        if ( e.touches ) {
+        if ( e.touches && e.touches.length > 0 ) {
             e = e.touches[0]
         }
-        
+        if ( !e.hasOwnProperty("clientX") ) {
+            return
+        }
+
         // Do not use e.target here as we may not always be over the relevant element so 
         // we process it as if its the top div.
         const splitterIndex = parseInt(this.draggingSplitterIndex)

@@ -339,7 +339,7 @@ class Timeline extends Observable {
             if ( self.eventBandCollection.isDragging()) return
             self.scrollBar.startDrag()
         })
-        
+
         this.eventCanvasElement.addEventListener("mousemove", function(e) {
             if ( self.eventBandCollection.isDragging()) {
                 // console.log("eventCanvasElement::mousemove eventBandCollection::isDragging")
@@ -384,7 +384,7 @@ class Timeline extends Observable {
                 self.eventBandCollection.stopDragging()
                 return
             }
-            self.scrollBar._onMouseClick(e)
+            // self.scrollBar._onMouseClick(e)
         })
 
         this.eventCanvasElement.addEventListener("mouseleave", function(e) {
@@ -401,7 +401,7 @@ class Timeline extends Observable {
                 self.eventBandCollection.stopDragging()
                 return
             }
-            self.scrollBar._onMouseClick(e)
+            // self.scrollBar._onMouseClick(e)
         })
     }
 
