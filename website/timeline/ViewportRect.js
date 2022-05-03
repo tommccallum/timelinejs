@@ -7,6 +7,7 @@ class ViewportRect {
         this.timepointLeft  = null
         this.timepointRight = null
         this.height = 0
+        this.top = 0
         this.timeAxisCollection = null
     }
 }

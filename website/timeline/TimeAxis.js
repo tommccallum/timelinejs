@@ -27,6 +27,7 @@ class TimeAxis {
         this.showLabelsOnMajorAxis = true
         this.showAxisBoundary = true
         this.majorVerticalLineHeightValue = "100%"
+        this.majorVerticalLineTopValue = 0
 
         if ( axisData != null ) {
             if ( axisData.hasOwnProperty("showEnd")) {
@@ -65,6 +66,10 @@ class TimeAxis {
 
     majorVerticalLineHeight() {
         return this.majorVerticalLineHeightValue
+    }
+
+    majorVerticalLineTop() {
+        return this.majorVerticalLineTopValue
     }
 
     duration() {
@@ -240,10 +245,13 @@ class TimeAxis {
 
                         const lineHeight = ( parseInt(canvasStyle.height) - offsetTop - offsetBottom )
                         majorLine.style.height = lineHeight + "px"
+                        
                         this.majorVerticalLineHeightValue = lineHeight
+                        this.majorVerticalLineTopValue = offsetTop
 
                         if ( axisDivider ) {
                             axisDivider.style.height = ( lineHeight ) + "px"
+                            axisDivider.style.top = offsetTop + "px"
                         }
 
                     }

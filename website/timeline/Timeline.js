@@ -579,7 +579,9 @@ class Timeline extends Observable {
         const viewportRect = this.timeAxisCollection.draw(this.timeaxisElement, this.currentViewport)
 
         // set the canvas elements so we do not cover the dates
+        this.canvasElement.style.top = viewportRect.top + "px"
         this.canvasElement.style.height = viewportRect.height + "px"
+        this.eventCanvasElement.style.top = viewportRect.top + "px"
         this.eventCanvasElement.style.height = viewportRect.height + "px"
 
         

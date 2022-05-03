@@ -250,10 +250,12 @@ class TimeAxisCollection {
         
         let left = pushRight                    // where to start the new axis
         let majorVerticalLineHeight = "100px"
+        let majorVerticalLineTop = 0
         for( let ta of this.timeaxes) {
             if ( ta.containsTimepoint(leftmostTimepoint, rightmostTimepoint) ) {
                 left = ta.draw(canvas, viewport, left, virtualLeft, virtualRight, leftmostTimepoint, rightmostTimepoint)
                 majorVerticalLineHeight = ta.majorVerticalLineHeight()
+                majorVerticalLineTop = ta.majorVerticalLineTop()
             }
         }
 
@@ -269,7 +271,7 @@ class TimeAxisCollection {
         viewportRect.timepointLeft = new TimePoint(leftmostTimepoint)
         viewportRect.timepointRight = new TimePoint(rightmostTimepoint)
         viewportRect.height = majorVerticalLineHeight
-
+        viewportRect.top = majorVerticalLineTop
         return viewportRect
     }
 
