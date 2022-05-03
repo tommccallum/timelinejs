@@ -170,7 +170,7 @@ class ScrollBar {
             const e = clientX
             if ( e.clientX ) {
                 clientX = e.clientX
-            } else if ( e.touches ) {
+            } else if ( !!e.touches ) {
                 clientX =e.touches[0].clientX
             }
         }
@@ -273,7 +273,7 @@ class ScrollBar {
             this._onMouseMove(x)
             this.stopDrag()
         } else {
-            if ( e.touches ) {
+            if ( !!e.touches ) {
                 e = e.touches[0]
             }
             // did we click to the left or right of the button and 

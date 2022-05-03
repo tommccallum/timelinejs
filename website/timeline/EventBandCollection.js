@@ -342,7 +342,7 @@ class EventBandCollection {
         if ( this.draggingSplitterIndex == null ) {
             return
         }
-        if ( e.touches && e.touches.length > 0 ) {
+        if ( !!e.touches && e.touches.length > 0 ) {
             e = e.touches[0]
         }
         if ( typeof(e.clientX) === "undefined" ) {
