@@ -132,9 +132,8 @@
                 addHit(area, e.touches[0], "touchmove")
             })
             area.addEventListener("touchend", function(e) {
-                reportStatus(e.touches[0])
+                // reportStatus(e)
                 handleAction("touchend")
-                addHit(area, e.touches[0], "touchend")
             })
             area.addEventListener("touchcancel", function(e) {
                 reportStatus(e.touches[0])
