@@ -335,6 +335,7 @@ class Timeline extends Observable {
             if ( self.eventBandCollection.isDragging()) return
             self.scrollBar.startDrag()
         })
+        
         this.eventCanvasElement.addEventListener("mousedown", function(e) {
             if ( self.eventBandCollection.isDragging()) return
             self.scrollBar.startDrag()

@@ -322,7 +322,7 @@ class ScrollBar {
             if ( e.touches ) {
                 e = e.touches[0]
             }
-            if ( !e.hasOwnProperty("clientX")) return
+            if ( typeof(e.clientX) === "undefined") return
             clientX = e.clientX
         }
         if (!this.isDrag()) return

@@ -345,7 +345,7 @@ class EventBandCollection {
         if ( e.touches && e.touches.length > 0 ) {
             e = e.touches[0]
         }
-        if ( !e.hasOwnProperty("clientX") ) {
+        if ( typeof(e.clientX) === "undefined" ) {
             return
         }
 
