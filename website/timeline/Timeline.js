@@ -331,7 +331,7 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("touchstart", function(e) {
-            e.preventDefault()
+            // e.preventDefault()
             if ( self.eventBandCollection.isDragging()) return
             self.scrollBar.startDrag()
         })
@@ -378,7 +378,7 @@ class Timeline extends Observable {
 
         this.eventCanvasElement.addEventListener("touchend", function(e) {
             console.log(`eventCanvasElement::touchend ${self.eventBandCollection.isDragging()}`)
-            e.preventDefault()
+            // e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
                 return
@@ -397,7 +397,7 @@ class Timeline extends Observable {
 
         this.eventCanvasElement.addEventListener("touchcancel", function(e) {
             console.log(`eventCanvasElement::touchcancel ${self.eventBandCollection.isDragging()}`)
-            e.preventDefault()
+            // e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
                 return
