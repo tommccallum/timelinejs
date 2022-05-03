@@ -49,6 +49,7 @@
             background: yellow;
         }
         .circle {
+            position: absolute;
             width: 25px;
             height: 25px;
             border: 1px solid black;
@@ -63,6 +64,7 @@
         <div id="touchmove" class="action">Touch Move</div>
         <div id="touchend" class="action">Touch End</div>
         <div id="touchcancel" class="action">Touch Cancel</div>
+        <div id="status"></div>
     </div>
     <div class='panel' id="area">
         
@@ -75,6 +77,7 @@
             }
             const btn = document.getElementById(name)
             btn.classList.add("last-action")
+            
         }
         function addHit(el, event, name ) {
             const circle = document.createElement("div")
@@ -83,49 +86,61 @@
                 circle.classList.add(name)
             }
             el.appendChild(circle)
-            el.style.left = event.clientX + "px"
-            el.style.top = event.clientY + "px"
+            circle.style.left = event.clientX + "px"
+            circle.style.top = event.clientY + "px"
+        }
+        function reportStatus(e) {
+            const status = document.getElementById("status")
+            status.innerText = `target=${e.target} X,Y=(${e.clientX},${e.clientY})`
         }
 
         const area = document.getElementById("area")
         if ( isTouchAvailable() ) {
             area.style.backgroundColor = "blue";    
             area.addEventListener("touchstart", function(e) {
+                reportStatus(encodeURIComponent)
                 handleAction("touchstart")
                 area.innerHTML = ""
             })
             area.addEventListener("touchmove", function(e) {
+                reportStatus(e)
                 handleAction("touchmove")
                 addHit(area, e, "touchmove")
             })
             area.addEventListener("touchend", function(e) {
+                reportStatus(e)
                 handleAction("touchend")
                 addHit(area, e, "touchend")
             })
             area.addEventListener("touchcancel", function(e) {
+                reportStatus(e)
                 handleAction("touchcancel")
             })
         } else {
             area.innerText = "No touch available"
             area.classList.add("notouch")
 
-            if ( false ) {
+            if ( true ) {
                 // allow in here to test with mouse.
                 area.innerHTML = ""
                 area.style.backgroundColor = "blue";
                 area.addEventListener("mousedown", function(e) {
+                    reportStatus(e)
                     handleAction("touchstart")
                     area.innerHTML = ""
                 })
                 area.addEventListener("mousemove", function(e) {
+                    reportStatus(e)
                     handleAction("touchmove")
                     addHit(area, e, "touchmove")
                 })
                 area.addEventListener("mouseup", function(e) {
+                    reportStatus(e)
                     handleAction("touchend")
                     addHit(area, e, "touchend")
                 })
                 area.addEventListener("mouseleave", function(e) {
+                    reportStatus(e)
                     handleAction("touchcancel")
                 })
             }
