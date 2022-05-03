@@ -174,7 +174,7 @@ class ScrollBar {
                 clientX =e.touches[0].clientX
             }
         }
-        console.log(`scrollbar:_getRElativeScrollBarMouseX clientX=${clientX}`)
+        // console.log(`scrollbar:_getRElativeScrollBarMouseX clientX=${clientX}`)
         let x = clientX // relative to browser window
         const style = window.getComputedStyle(this.scrollBar)
         const rect = this.scrollBar.getBoundingClientRect()
@@ -267,7 +267,7 @@ class ScrollBar {
     }
 
     _onMouseClick(e) {
-        console.log(`scrollBar::_onMouseClick ${this.isDrag()}`)
+        // console.log(`scrollBar::_onMouseClick ${this.isDrag()}`)
         if ( this.isDrag() ) {
             this._onMouseMove(e)
             this.stopDrag()

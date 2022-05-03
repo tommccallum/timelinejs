@@ -342,7 +342,7 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("mousemove", function(e) {
-            console.log(`eventCanvasElement::mousemove ${self.eventBandCollection.isDragging()} ${self.scrollBar.isDrag()}`)
+            // console.log(`eventCanvasElement::mousemove ${self.eventBandCollection.isDragging()} ${self.scrollBar.isDrag()}`)
             if ( self.eventBandCollection.isDragging()) {
                 // console.log("eventCanvasElement::mousemove eventBandCollection::isDragging")
                 self.eventBandCollection._onMouseMove(e)
@@ -367,7 +367,7 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("click", function(e) {
-            console.log(`eventCanvasElement::click event-bands:${self.eventBandCollection.isDragging()} scrollbar:${self.scrollBar.isDrag()}`)
+            // console.log(`eventCanvasElement::click event-bands:${self.eventBandCollection.isDragging()} scrollbar:${self.scrollBar.isDrag()}`)
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
                 return
@@ -378,7 +378,7 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("touchend", function(e) {
-            console.log(`eventCanvasElement::touchend ${self.eventBandCollection.isDragging()}`)
+            // console.log(`eventCanvasElement::touchend ${self.eventBandCollection.isDragging()}`)
             // e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
@@ -388,16 +388,17 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("mouseleave", function(e) {
-            console.log(`eventCanvasElement::mouseleave ${self.eventBandCollection.isDragging()}`)
+            // console.log(`eventCanvasElement::mouseleave ${self.eventBandCollection.isDragging()}`)
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
-            } else {
+            }
+            if ( self.scrollBar.isDrag() ) {
                 self.scrollBar.stopDrag()
             }
         })
 
         this.eventCanvasElement.addEventListener("touchcancel", function(e) {
-            console.log(`eventCanvasElement::touchcancel ${self.eventBandCollection.isDragging()}`)
+            // console.log(`eventCanvasElement::touchcancel ${self.eventBandCollection.isDragging()}`)
             // e.preventDefault()
             if ( self.eventBandCollection.isDragging()) {
                 self.eventBandCollection.stopDragging()
@@ -586,10 +587,7 @@ class Timeline extends Observable {
 
         
         // draw the events on the bands. this is in front of the axis
-        this.eventBandCollection.draw(viewportRect)
-        
-        // TODO(tom) show a little pincer in the axis selector for the area we are viewing e.g. []
-        
+        this.eventBandCollection.draw(viewportRect)        
     }
 
     getViewportRect() {
