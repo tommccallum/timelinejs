@@ -159,3 +159,7 @@ footer {
 .menu-item-timeband-with-period-container-bottom {
   font-size: 0.7em;
 }
+
+#timeline-title-touch-icon {
+  display: none;
+}

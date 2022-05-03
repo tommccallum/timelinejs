@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="timeline/Touch.js"></script>
     <script src="timeline/text.js"></script>
     <script src="timeline/FullScreen.js"></script>
     <script src="timeline/Observable.js"></script>
@@ -55,7 +56,10 @@
   <body onload="main()">
     <header>
       <h1>Hopeman History Timeline</h1>
-      <div class="timeline-title-buttons"><button onclick="t1.makeFullScreen();"><img src="images/icons_view-fullscreen.png" width="32px" height="32px"></button></div>
+      <div class="timeline-title-buttons">
+        <button onclick="t1.makeFullScreen();"><img src="images/icons_view-fullscreen.png" width="32px" height="32px"></button>
+        <button id="timeline-title-touch-icon"><img src="images/icon_touch.jpg" width="32px" height="32px"></button>
+      </div>
     </header>
     <div class="main-container">
       <nav id="sidebar"></nav>
@@ -178,6 +182,12 @@
       function main() {
         sidebar.build()
         which()
+
+        if ( isTouchAvailable() ) {
+          console.log("touch is available")
+          let icon = document.getElementById("timeline-title-touch-icon")
+          icon.display = null
+        }
       }
     </script>
   </body>
