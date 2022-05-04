@@ -7,7 +7,7 @@ class Statusbar {
     onTimelineEvent(event, timeline, data) {
         const self = this
         if ( event === "mousemove") {
-            console.log("Statusbar::mousemove")
+            // console.log("Statusbar::mousemove")
             let axisLabel = `${data.timeaxis.startAsTimepoint().toString()} to ${data.timeaxis.endAsTimepoint().toString()}`
             if ( data.timeaxis.name ) {
                 axisLabel = `${data.timeaxis.name} from ${axisLabel}`

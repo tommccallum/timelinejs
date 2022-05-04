@@ -536,8 +536,15 @@ class Event extends Observable {
         }
         let w = Math.max(virtualWidth, renderedWidth)
         // console.log(`${this.name} ${start} ${end} ${virtualWidth} ${renderedWidth} ${w}`)
+        
+        // NOTE(04/05/2022) We have remove the padding from the width, otherwise the pointer date won't align.
         if ( !isNaN(w)) {
-            this.element.style.width = w + "px"
+            const padding = parseInt(style.paddingLeft) + parseInt(style.paddingRight)
+            if ( virtualWidth > renderedWidth + padding ) {
+                this.element.style.width = w - padding + "px"
+            } else {
+                this.element.style.width = w + "px"
+            }
         } 
     }
 
@@ -552,6 +559,8 @@ class Event extends Observable {
     }
     
     arrange(viewportRect) {
+        // This is called from timeband.arrange for each event in the timeband.
+
         if ( !this.isVisibleOnScreen(viewportRect) ) return;
         if ( !this.isObservable() ) return; // no need to arrange this as it should be in the background
 
@@ -561,40 +570,62 @@ class Event extends Observable {
         const events = this.getEventsThatIntersectOnScreen(viewportRect)
         // console.log(`event::arrange ${this.name} ${events.length}`)
         if ( events.length == 0 ) {
-            return
-        }
-
-        if ( events.length > 0 ) {
+            // nothing to do here
+        } else {
             // FIX(tom) Is this correct?  We seem to be doing a lot of work here.  We should only be finding a space
             // for ourselves and then returning.
-            
+            console.log(`${this.name} Collisions on screen:`)
+            console.log(events)
             // once we run out of space we don't want to move them to the right
             // what do we do?
             const margin = 5
-            let top = this.getTop() + this.getPaddedHeight() + margin
+            // let top = this.getTop() + this.getPaddedHeight() + margin
             let availableHeight = this.eventband.getHeight() - margin
-            for( let ii=0; ii < events.length; ii++ ) {
-                events[ii].setVisible(true) // need to make visible to get height
-                const style = window.getComputedStyle(events[ii].element)
-                const h = parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
-                if ( availableHeight > h + margin) {
-                    // console.log(`adjusting event ${events[ii].name} to ${top}px`)
-                    events[ii].element.style.top = top + "px"
-                    availableHeight -= h + margin
-                    top += h + margin
-                    events[ii].setVisible(true)
-                } else {
-                    // not enough room so we hide
-                    availableHeight = 0
 
-                    // FIX(tom) when this sets some to visible and the event is AFTER this one then it magically
-                    // appears at the top.  This is not controlled so please fix.
-                    // Ideally when we reach the bottom we should start at the top if possible.
-                    events[ii].setVisible(false)
+            let top = margin
+            let minTop = availableHeight
+            // while( true ) {
+                // I want to know the highest point that I can fit THIS event in to.
+
+                for( let ev of events ) {
+                    const belowEvent = ev.getTop() + ev.getPaddedHeight() + margin
+                    minTop = Math.min(minTop, belowEvent )
+                }
+
+                const newTop = minTop + margin
+                console.log(`${this.name} ${newTop}`)
+                this.element.style.top = newTop + "px"
+            // }
+
+            // for( let ii=0; ii < events.length; ii++ ) {
+            //     events[ii].setVisible(true) // need to make visible to get height
+            //     const style = window.getComputedStyle(events[ii].element)
+            //     const h = parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
+            //     if ( availableHeight > h + margin) {
+            //         // console.log(`adjusting event ${events[ii].name} to ${top}px`)
+            //         events[ii].element.style.top = top + "px"
+            //         availableHeight -= h + margin
+            //         top += h + margin
+            //         events[ii].setVisible(true)
+            //     } else {
+            //         // not enough room so we hide
+            //         availableHeight = 0
+
+            //         // FIX(tom) when this sets some to visible and the event is AFTER this one then it magically
+            //         // appears at the top.  This is not controlled so please fix.
+            //         // Ideally when we reach the bottom we should start at the top if possible.
+            //         events[ii].setVisible(false)
+            //     }
+            // }
+        }
+        
+        if ( this.hasChildren() ) {
+            if ( this.childrenAreVisible ) {
+                for( let child of this.children ) {
+                    child.arrange(viewportRect)
                 }
             }
         }
-        
     }
 
     draw(viewportRect) {

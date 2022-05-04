@@ -2,7 +2,6 @@ class TimeAxis {
     constructor(start=-500, end=500, axisData=null) {
         this.axis = axisData
         this.element = null
-        this.verticals = []
         this.name = null // allows timebands to refer to the relevant axis if they are bound to one
 
         // these bounds are in relative units so BC is < 0 AD > 0
@@ -217,6 +216,8 @@ class TimeAxis {
 
                     // we want to add a wee label on there
                     if ( this.showLabelsOnMajorAxis ) {
+                        // TODO(04/05/2022) If a label crosses a vertical from the previous time axis then we want to hide that as it looks ugly.
+                        
                         const majorLineLabelLower = document.createElement("div")
                         majorLineLabelLower.classList.add("major-vertical-label")
                         majorLineLabelLower.classList.add("major-vertical-label-lower")

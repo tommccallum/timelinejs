@@ -5,7 +5,7 @@
     color: white;
     background: purple;
     border: 1px solid orange;
-    margin: 5px;
+    /* margin: 5px; // removed margin as otherwise they don't line up with the pointer date! */
     padding: 5px;
     z-index: var(--event-zIndex);
     border-radius: 10px;
