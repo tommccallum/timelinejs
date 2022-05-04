@@ -10,6 +10,8 @@ class Timeline extends Observable {
             this.element = element
         }
         
+        this.lastClientX = 0
+        this.lastClientY = 0
         this.showTitle = false
         this.titleHeight = 0
         this.title = "New Timeline"
@@ -52,7 +54,7 @@ class Timeline extends Observable {
         this.firstDrawComplete = false
         this.ready = false
 
-        this.updateEachFrame = false
+        this.updateEachFrame = true
     }
 
     makeFullScreen() {
@@ -89,6 +91,7 @@ class Timeline extends Observable {
         this.scrollBar.setText()
         this.draw()
         this.axisChooser.setPincerPosition(this.currentViewport.timepoint)
+        this._onTrackDate()
         // console.log(`selected new axis ${this.currentScrollAxisIndex} ${this.currentScrollBarButtonFraction} ${tp.relativeValue}`)
     }
 
@@ -347,6 +350,8 @@ class Timeline extends Observable {
         })
 
         this.eventCanvasElement.addEventListener("mousemove", function(e) {
+            self._onTrackDate(e)
+
             // console.log(`eventCanvasElement::mousemove ${self.eventBandCollection.isDragging()} ${self.scrollBar.isDrag()}`)
             if ( self.eventBandCollection.isDragging()) {
                 // console.log("eventCanvasElement::mousemove eventBandCollection::isDragging")
@@ -600,5 +605,52 @@ class Timeline extends Observable {
         return viewportRect
     }
 
+    getTimepointFromX(x) {
+        // x is the coordinate on the mouse within the canvas element
+        const viewportRect = this.getViewportRect()
+        const start = viewportRect.left
+        const end = viewportRect.right
+        const dt = end - start 
+        const style = window.getComputedStyle(this.canvasElement)
+        const canvasWidth = parseInt(style.width)
+        const p = x / canvasWidth
+        const v = start + ( p * dt)
+        const tp = new TimePoint(this.timeAxisCollection.calcTimepointFromVirtualPixel(v))
+        return tp
+    }
+
+    _onTrackDate(e) {
+        let clientX = null
+        let clientY = null
+        if ( typeof(e) === "undefined" ) {
+            this.clientX = this.lastClientX
+            this.clientY = this.lastClientY
+        } else {
+            if ( !!e.touches) {
+                if ( e.touches.length > 0 ) {
+                    clientX = e.touches[0].clientX
+                    clientY = e.touches[0].clientY
+                }
+            }
+            if ( !!e.clientX ) {
+                clientX = e.clientX
+                clientY = e.clientY
+            }
+            const style = window.getComputedStyle(this.canvasElement)
+            const rect = this.canvasElement.getBoundingClientRect()
+            clientX -= (rect.left + parseInt(style.paddingLeft))
+            clientY -= (rect.top + parseInt(style.paddingTop))
+            this.lastClientX = clientX
+            this.lastClientY = clientY
+        }
+        const info = {
+            clientX: clientX,
+            clientY: clientY,
+            timepoint: this.getTimepointFromX(clientX),
+            eventband: this.eventBandCollection.getEventbandFromY(clientY),
+            timeaxis: this.timeAxisCollection.timeaxes[this.currentScrollAxisIndex]
+        }
+        this.sendEvent("mousemove", info)
+    }
 }
 

@@ -103,6 +103,19 @@ class EventBandCollection {
         this.draw(viewportRect)
     }
 
+    getEventbandFromY(y) {
+        // x is the coordinate on the mouse within the canvas element
+        for( let band of this.eventbands ) {
+            const style = window.getComputedStyle(band.element)
+            const top = parseInt(style.top)
+            const bottom = parseInt(style.top) + parseInt(style.height)
+            if ( y >= top && y <= bottom) { 
+                return band
+            }
+        }
+        return null
+    }
+
     draw(viewportRect, modifiedEventbandIndex) {
         // console.log(`EventBandCollection::draw modified:${modifiedEventbandIndex}`)
         // console.log(viewportRect)

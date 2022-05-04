@@ -109,13 +109,25 @@ class TimePoint {
     }
 
     toString() {
-        let value = Math.round(this.value,0)
+        let value = Math.abs(this.relativeValue)
         if ( value >= 1000000000 ) {
-            value = (value / 1000000000).toLocaleString() + " billion"
+            value = Math.round(value/ 1000000000 * Math.pow(10, 1)) / Math.pow(10, 1);
+            value = (value ).toLocaleString() + " billion"
+        } else if ( value >= 10000000 ) {
+            value = Math.round(value/ 1000000 * Math.pow(10, 0)) / Math.pow(10, 0);
+            value = (value ).toLocaleString() + " million"
         } else if ( value >= 1000000 ) {
-            value = (value / 1000000).toLocaleString() + " million"
-        } else if ( value >= 10000) {
+            value = Math.round(value/ 1000000 * Math.pow(10, 1)) / Math.pow(10, 1);
+            value = (value ).toLocaleString() + " million"
+        } else if ( value >= 100000) {
+            // here we can't really get any more precise than 3 significant figures
+            value = Math.round(value / Math.pow(10,3)) * Math.pow(10,3)
             value = value.toLocaleString()
+        } else if ( value >= 10000) {
+            value = Math.round(value)
+            value = value.toLocaleString()
+        } else {
+            value = Math.round(value);
         }
         return value + " " + this.units
     }

@@ -68,10 +68,11 @@ var exampleTimeline = {
             start: -1200,
             end: 500,
             majorEvery: 200,
-            minorEvery: 10,
+            minorEvery: 50,
             gap: 100
         },
         {
+            name: "Middle Ages",
             start: 500,
             end: 1500,
             majorEvery: 100,
@@ -79,6 +80,7 @@ var exampleTimeline = {
             gap: 100
         },
         {
+            name: "Modern Era",
             start: 1500,
             end: 2100,
             majorEvery: 100,

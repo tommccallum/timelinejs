@@ -200,15 +200,13 @@ class ScrollBar {
 
         this.scrollBarButton.addEventListener("touchmove", function(e) {
             //console.log("scrollBarButton::mousemove")
-            let x = self._getRelativeScrollBarMouseX(e)
-            self._onMouseMove(x)
+            self._onMouseMove(e)
             e.preventDefault()
         })
 
         this.scrollBarButton.addEventListener("touchcancel", function(e) {
             // not sure if this is actually ever called
-            let x = self._getRelativeScrollBarMouseX(e)
-            self._onMouseMove(x)
+            self._onMouseMove(e)
             self.stopDrag()
             e.preventDefault()
         })
@@ -230,8 +228,7 @@ class ScrollBar {
         })
 
         this.scrollBar.addEventListener("mouseleave", function(e) {
-            let x = self._getRelativeScrollBarMouseX(e)
-            self._onMouseMove(x)
+            self._onMouseMove(e)
             self.stopDrag()
         })
 
@@ -239,8 +236,7 @@ class ScrollBar {
             // this still receives events for child elements
             // console.log("scrollBar::mousemove")
             if ( self.isDrag() ) {
-                let x = self._getRelativeScrollBarMouseX(e)
-                self._onMouseMove(x)
+                self._onMouseMove(e)
             }
         })
 
@@ -256,8 +252,7 @@ class ScrollBar {
             // console.log("scrollBar::mousemove")
             e.preventDefault()
             if ( self.isDrag() ) {
-                let x = self._getRelativeScrollBarMouseX(e)
-                self._onMouseMove(x)
+                self._onMouseMove(e)
             }
         })
 

@@ -267,7 +267,7 @@ class TimeAxisCollection {
         viewportRect.center = virtualX
         viewportRect.left = virtualLeft
         viewportRect.right = virtualRight
-        viewportRect.centerTimepoint = viewport.timepoint
+        viewportRect.timepointCenter = viewport.timepoint.copy()
         viewportRect.timepointLeft = new TimePoint(leftmostTimepoint)
         viewportRect.timepointRight = new TimePoint(rightmostTimepoint)
         viewportRect.height = majorVerticalLineHeight

@@ -28,7 +28,8 @@
     <script src="timeline/ViewportRect.js"></script>
     <script src="timeline/Timeline.js"></script>
 
-    <script src="sidebar/Sidebar.js"></script>
+    <script src="components/Sidebar.js"></script>
+    <script src="components/Statusbar.js"></script>
     <script src="example-timeline.js"></script>
 
     
@@ -55,8 +56,13 @@
   </head>
   <body onload="main()">
     <header>
-      <h1>Hopeman History Timeline</h1>
-      <div class="timeline-title-buttons">
+      <div class="header-content title">
+        <h1>Hopeman History Timeline</h1>
+      </div>
+      <div id='statusbar' class="header-content timeline-status">
+        Status Panel
+      </div>
+      <div class="header-content timeline-title-buttons">
         <button onclick="t1.makeFullScreen();"><img src="images/icons_view-fullscreen.png" width="32px" height="32px"></button>
         <button id="timeline-title-touch-icon"><img src="images/icon_touch.jpg" width="32px" height="32px"></button>
       </div>
@@ -83,7 +89,7 @@
       var t1 = null;
       var t2 = null;
       var sidebar = new Sidebar(document.getElementById("sidebar"))
-
+      var statusbar = new Statusbar(document.getElementById("statusbar"))
       var which = example_from_javascript_object
 
 
@@ -142,6 +148,7 @@
         let timeline = new Timeline("timeline1")
         t1 = timeline
         timeline.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
+        timeline.addListener(function( a, b, c) { statusbar.onTimelineEvent(a,b,c) })
         let data = exampleTimeline
         timeline.title = data.name
         timeline.zoom = data.zoom
