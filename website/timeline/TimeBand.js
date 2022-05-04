@@ -23,6 +23,7 @@ class TimeBand extends Observable {
         // while the events are here as they are loaded with the data
         // they are shown in the EventBandCollection which controls the timeband
         this.events = []
+        this.hasNewEventsAdded = false
 
         if ( this.data ) {
             if ( this.data.hasOwnProperty("name") ) {
@@ -89,18 +90,45 @@ class TimeBand extends Observable {
 
     setBandOnEvents(eventband) {
         for( let ev of this.events ) {
-            ev.eventband = eventband
+            ev.setBandOnEvent(eventband)
         }
+        this.hasNewEventsAdded = false
     }
 
+    containsEvent(ev) {
+        for( let e of this.events ) {
+            if ( e === ev ) {
+                return true
+            }
+            if ( e.containsEvent(ev) ) {
+                return true
+            }
+        }
+        return false
+    }
+
+    makeEvent(event) {
+        const self = this
+        if ( event.isObservable() ) {
+            event.addListener(function(a,b,c) { 
+                self.forward(a,b,c) 
+            })
+        }
+        this.hasNewEventsAdded = true
+        return event
+    }
 
     addEvent(event) {
         // MUST use this function to add events otherwise we will miss out on listeners
-        const self = this
-        if ( event.isObservable() ) {
-            event.addListener(function(a,b,c) { self.forward(a,b,c) })
+        const eventObject = this.makeEvent(event)
+        this.events.push(eventObject)
+        if ( !!eventObject.data.children ) {
+            for( let childData of eventObject.data.children ) {
+                let child = new Event(childData)
+                child = this.makeEvent(child)
+                eventObject.children.push(child)
+            }
         }
-        this.events.push(event)
     }
 
     setTop(value) {

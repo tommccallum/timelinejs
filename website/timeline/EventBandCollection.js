@@ -17,6 +17,15 @@ class EventBandCollection {
         this.draggingSplitterIndex = null
     }
 
+    containsEvent(ev) {
+        for( let evband of this.eventbands) {
+            if ( evband.containsEvent(ev) ) {
+                return evband
+            }
+        }
+        return null
+    }
+
     getEventbandIndex(timeband) {
         let index = 0
         for( let ev of this.eventbands) {

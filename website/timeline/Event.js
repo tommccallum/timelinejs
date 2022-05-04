@@ -2,6 +2,8 @@ class Event extends Observable {
 
     constructor(data = null) {
         super()
+        this.data = data
+        this.eventband = null // set in TimeBand
         this.element = null;
         this.internalDiv = null;
 
@@ -22,7 +24,12 @@ class Event extends Observable {
         this.zIndex = 50
         this.lastViewportRect = null
         this.moreDetailsDialogElement = null
+        this.children = []
+        this.childrenAreVisible = false
+
         if ( data ) {
+            // NOTE(tm) We cannot add children here as they still need to be created and attached to the valid timeband
+            // so have to go through timeband::addEvent
             if ( data.hasOwnProperty("name")) {
                 this.name = data.name
             }
@@ -95,6 +102,19 @@ class Event extends Observable {
         
     }
 
+    setBandOnEvent(eventband) {
+        this.eventband = eventband
+        if ( this.hasChildren() ) {
+            for( let child of this.children ) {
+                child.setBandOnEvent(eventband)
+            }
+        }
+    }
+
+    hasCanvasElement() {
+        return this.eventband && this.eventband.element !== null
+    }
+
     isObservable() {
         if ( this.style === "event-title" ) {
             return false
@@ -127,6 +147,10 @@ class Event extends Observable {
 
     intersects(start, end ) {
         return !(start.isAfter(this.end) || end.isBefore(this.start))
+    }
+
+    hasChildren() {
+        return !!this.children && this.children.length > 0
     }
 
     createElement() {
@@ -178,6 +202,23 @@ class Event extends Observable {
             }
             textDiv.classList.add("event-image64-and-label-label")
             event.appendChild(textDiv)
+        }
+
+        if ( this.hasChildren() ) {
+            const expandIcon = document.createElement("div")
+            expandIcon.innerHTML = "&#x27F4;"
+            expandIcon.classList.add("event-icon")
+            expandIcon.classList.add("event-children-expand")
+            expandIcon.title = "Click to toggle children"
+            expandIcon.addEventListener("click", function(e) {
+                if ( self.childrenAreVisible ) {
+                    self.childrenAreVisible = false
+                } else {    
+                    self.childrenAreVisible = true
+                }
+                self.sendEvent("events-arrange", self)
+            })
+            textDiv.appendChild(expandIcon)
         }
 
         if ( this.isObservable() ) {
@@ -353,27 +394,56 @@ class Event extends Observable {
         this.sendEvent("show-big-image", imageDetails)
     }
 
+    containsEvent(ev) {
+        if ( !this.children ) return false
+        for( let e of this.children ) {
+            if ( e === ev ) {
+                return true
+            }
+        }
+        return false
+    }
+
+    doesEventIntersectOnScreen(viewportRect, ev) {
+        const thisStyle = window.getComputedStyle(this.element)
+        if ( ev.isVisibleOnScreen(viewportRect) ) {
+            if ( ev.element == null ) {
+                return false
+            }    
+            const style = window.getComputedStyle(ev.element)
+            const thisLeft = parseInt(thisStyle.left)
+            const thisRight = parseInt(thisStyle.left) + parseInt(thisStyle.width) + parseInt(thisStyle.paddingLeft) + parseInt(thisStyle.paddingRight)
+            const thisTop = parseInt(thisStyle.top)
+            const thisBottom = parseInt(thisStyle.top) + parseInt(thisStyle.height) + parseInt(thisStyle.paddingTop) + parseInt(thisStyle.paddingBottom)
+            
+            const thatLeft = parseInt(style.left)
+            const thatRight = parseInt(style.left) + parseInt(style.width) + parseInt(style.paddingLeft) + parseInt(style.paddingRight)
+            const thatTop = parseInt(style.top)
+            const thatBottom = parseInt(style.top) + parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
+            
+            if ( thatRight <= thisLeft || thatLeft >= thisRight || thisBottom <= thatTop || thisTop >= thatBottom ) {
+                // does not intersect
+            } else {
+                return true
+            }
+        }
+        return false
+    }
+
     getEventsThatIntersectOnScreen(viewportRect) {
         let events = []
-        const thisStyle = window.getComputedStyle(this.element)
         for( let ev of this.eventband.timeband.events ) {
+            if ( !ev.isObservable() ) continue;
             if ( ev != this ) {
-                const style = window.getComputedStyle(ev.element)
-                if ( ev.isVisibleOnScreen(viewportRect) ) {
-                    const thisLeft = parseInt(thisStyle.left)
-                    const thisRight = parseInt(thisStyle.left) + parseInt(thisStyle.width) + parseInt(thisStyle.paddingLeft) + parseInt(thisStyle.paddingRight)
-                    const thisTop = parseInt(thisStyle.top)
-                    const thisBottom = parseInt(thisStyle.top) + parseInt(thisStyle.height) + parseInt(thisStyle.paddingTop) + parseInt(thisStyle.paddingBottom)
-                    
-                    const thatLeft = parseInt(style.left)
-                    const thatRight = parseInt(style.left) + parseInt(style.width) + parseInt(style.paddingLeft) + parseInt(style.paddingRight)
-                    const thatTop = parseInt(style.top)
-                    const thatBottom = parseInt(style.top) + parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
-                    
-                    if ( thatRight <= thisLeft || thatLeft >= thisRight || thisBottom <= thatTop || thisTop >= thatBottom ) {
-                        // does not intersect
-                    } else {
-                        events.push(ev)
+                if ( this.doesEventIntersectOnScreen(viewportRect, ev) ) {
+                    events.push(ev)
+                }
+            }
+            if ( ev.childrenAreVisible ) {
+                for( let child of ev.children ) {
+                    // console.log(child)
+                    if ( this.doesEventIntersectOnScreen(viewportRect, child) ) {
+                        events.push(child)
                     }
                 }
             }
@@ -423,12 +493,17 @@ class Event extends Observable {
     }
 
     setVisible(b) {
+        // should we try to correct this?  normally its happening with children
+        if ( !this.element ) return
         if ( b ) {
             this.element.style.visibility = "visible"
             this.element.style.display = ""
         } else {
             this.element.style.visibility = "hidden"
             this.element.style.display = "none"
+            if ( this.element && this.hasCanvasElement() && this.eventband.element.contains(this.element) ) {
+                this.eventband.element.removeChild(this.element)
+            }
         }
     }
 
@@ -444,15 +519,15 @@ class Event extends Observable {
 
         // this gets the width in terms of time but we need to max this with the length of the name
 
-
         const start = viewportRect.timeAxisCollection.getVirtualX(this.start.relativeValue)
         const end = viewportRect.timeAxisCollection.getVirtualX(this.end.relativeValue)
+        
         // assume its shown we don't test for that
         let virtualWidth = end - start
         this.element.style.width = null // we want to refresh this
         this.element.offsetWidth // force recalculate
+        
         const style = window.getComputedStyle(this.element)
-        const internalStyle = window.getComputedStyle(this.internalDiv)
         let renderedWidth = 0;
         if ( style.width === "auto" ) {
             renderedWidth = this.element.offsetWidth
@@ -460,9 +535,10 @@ class Event extends Observable {
             renderedWidth = parseInt(style.width)
         }
         let w = Math.max(virtualWidth, renderedWidth)
+        // console.log(`${this.name} ${start} ${end} ${virtualWidth} ${renderedWidth} ${w}`)
         if ( !isNaN(w)) {
             this.element.style.width = w + "px"
-        }
+        } 
     }
 
     getPaddedHeight() {
@@ -489,6 +565,9 @@ class Event extends Observable {
         }
 
         if ( events.length > 0 ) {
+            // FIX(tom) Is this correct?  We seem to be doing a lot of work here.  We should only be finding a space
+            // for ourselves and then returning.
+            
             // once we run out of space we don't want to move them to the right
             // what do we do?
             const margin = 5
@@ -507,6 +586,10 @@ class Event extends Observable {
                 } else {
                     // not enough room so we hide
                     availableHeight = 0
+
+                    // FIX(tom) when this sets some to visible and the event is AFTER this one then it magically
+                    // appears at the top.  This is not controlled so please fix.
+                    // Ideally when we reach the bottom we should start at the top if possible.
                     events[ii].setVisible(false)
                 }
             }
@@ -516,17 +599,24 @@ class Event extends Observable {
 
     draw(viewportRect) {
         this.lastViewportRect = viewportRect
+        if ( !this.hasCanvasElement() ) {
+            alert("BUG! event has not been added to eventband")
+        }
         // console.log(viewportRect)
         if ( !this.element ) {
             this.createElement()
         }
+        if ( !this.eventband.element.contains(this.element ) ) {
+            this.eventband.element.appendChild(this.element)
+        }
         if ( this.isVisibleOnScreen(viewportRect) ) {
             // if ( this.name === "Lower Paleolithic") console.log("Lower Paleolithic: ON")
             // console.log(`Add event ${this.name}`)
+            this.setVisible(true) // must be before setWidth
             this.setPosition(viewportRect)
             this.setWidth(viewportRect)
-            this.setVisible(true)
-
+            
+            
             // Here we are controlling the position of the event text within a long event period.
             // If the event is long enough we can end with empty partial event bars on left side of
             // screen.  This is annoying when reading as it makes the user scroll back and forth.
@@ -560,11 +650,25 @@ class Event extends Observable {
                 }
             }
 
-            return this.element
+            if ( this.hasChildren() ) {
+                if ( this.childrenAreVisible ) {
+                    for( let child of this.children ) {
+                        child.draw(viewportRect)
+                    }
+                } else {
+                    for( let child of this.children ) {
+                        child.setVisible(false)
+                    }
+                }
+            }
         } else {
             // if ( this.name === "Lower Paleolithic") console.log("Lower Paleolithic: OFF")
             this.setVisible(false)
-            return null
+            if ( this.hasChildren() && this.childrenAreVisible ) {
+                for( let child of this.children ) {
+                    child.setVisible(false)
+                }
+            }
         }
     }
 }

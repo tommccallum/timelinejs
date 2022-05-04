@@ -12,11 +12,17 @@ class EventBand {
         this.parentElement = null
         this.setBandOnEvents()
         this.createElement()
+        
+    }
+
+    containsEvent(ev) {
+        return this.timeband.containsEvent(ev)
     }
 
     setBandOnEvents() {
         this.timeband.setBandOnEvents(this)
     }
+
     setParentElement(el) {
         this.parentElement = el
     }
@@ -34,10 +40,6 @@ class EventBand {
             this.element.style.height = 0 + "px"
             this.timeband.element.style.height = 0 + "px"
         }
-    }
-
-    addEvent(event) {
-        this.timeband.addEvent(event)
     }
 
     getTop() {
@@ -89,20 +91,29 @@ class EventBand {
             ev.arrange(viewportRect)
         }
     }
+
     draw(viewportRect) {
         if ( !this.isVisible() ) {
             return;
         }
+
+        // Ensure this band is attached to the canvasElement
         if ( !this.parentElement.contains(this.element) ) {
             this.parentElement.appendChild(this.element)
             this.timeband.draw()
         }
+
+        // if new events have been added to the underlying timeband then these
+        // will need tieing in to this
+        if ( this.timeband.hasNewEventsAdded ) {
+            this.setBandOnEvents()
+        }
         
         for( let ev of this.timeband.events ) {
-            const eventElement = ev.draw(viewportRect)
-            if ( eventElement && !this.element.contains(eventElement) ) {
-                this.element.appendChild(eventElement)
-            }
+            // FIX(Tom) the widths are wrong here on draw because when the element is not added to the element
+            // we cannot properly render the event to get the width.  We want to pass the parent to the draw method
+            // instead of adding afterwards.
+            ev.draw(viewportRect)
         }
 
         this.arrange(viewportRect)

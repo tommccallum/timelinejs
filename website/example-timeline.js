@@ -254,62 +254,132 @@ var exampleTimeline = {
                     name: "House of Alpin",
                     style: "default",
                     start: "848AD",
-                    end: "1034AD"
-                },
-                {
-                    name: "Kenneth I MacAlpin",
-                    description: "The start of Kenneth's reign is placed 843 or 848AD.",
-                    style: "default",
-                    start: "843AD",
-                    end: "858AD"
-                },
-                {
-                    name: "Donald I MacAlpin",
-                    style: "default",
-                    start: "858AD",
-                    end: "862AD"
-                },
-                {
-                    name: "Constantine I MacAlpin",
-                    style: "default",
-                    start: "862AD",
-                    end: "877AD"
-                },
-                {
-                    name: "&#193;ed I MacAlpin",
-                    style: "default",
-                    start: "877AD",
-                    end: "878AD"
-                },
-                {
-                    name: "Giric",
-                    style: "default",
-                    start: "878AD",
-                    end: "889AD"
-                },
-                {
-                    name: "Eochaid",
-                    style: "default",
-                    start: "878AD",
-                    end: "889AD"
-                },
-                {
-                    name: "Donald II",
-                    style: "default",
-                    start: "889AD",
-                    end: "900AD"
-                },
-                {
-                    name: "Constantine II",
-                    style: "default",
-                    start: "900AD",
-                    end: "943AD"
-                },
-                {
-                    name: "Malcolm I",
-                    style: "default",
-                    start: "943AD",
-                    end: "954AD"
+                    end: "1034AD",
+                    historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)",
+                    children: [
+                        {
+                            name: "Kenneth I MacAlpin",
+                            description: "The start of Kenneth's reign is placed 843 or 848AD.",
+                            style: "default",
+                            start: "843AD",
+                            end: "858AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Donald I MacAlpin",
+                            style: "default",
+                            start: "858AD",
+                            end: "862AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Constantine I MacAlpin",
+                            style: "default",
+                            start: "862AD",
+                            end: "877AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "&#193;ed I MacAlpin",
+                            style: "default",
+                            start: "877AD",
+                            end: "878AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Giric",
+                            style: "default",
+                            start: "878AD",
+                            end: "889AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Eochaid",
+                            style: "default",
+                            start: "878AD",
+                            end: "889AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Donald II",
+                            style: "default",
+                            start: "889AD",
+                            end: "900AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Constantine II",
+                            style: "default",
+                            start: "900AD",
+                            end: "943AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Malcolm I",
+                            style: "default",
+                            start: "943AD",
+                            end: "954AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        // here
+                        {
+                            name: "Indulf",
+                            style: "default",
+                            start: "954AD",
+                            end: "962AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Dub",
+                            style: "default",
+                            start: "962AD",
+                            end: "967AD",
+                            description: "Also known as Dubh or Duff.",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Cuilén",
+                            style: "default",
+                            start: "967AD",
+                            end: "971AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Amlaíb",
+                            style: "default",
+                            start: "973AD",
+                            end: "977AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Kenneth II",
+                            style: "default",
+                            start: "971AD",
+                            end: "995AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Constantine III",
+                            style: "default",
+                            start: "995AD",
+                            end: "997AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Kenneth III",
+                            style: "default",
+                            start: "997AD",
+                            end: "1005AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        },
+                        {
+                            name: "Malcolm II",
+                            style: "default",
+                            start: "1005AD",
+                            end: "1034AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Alpin_(848%E2%80%931034)"
+                        }
+                    ]
                 },
                 {
                     name: "House of Dunkeld",
