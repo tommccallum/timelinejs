@@ -505,10 +505,20 @@ var exampleTimeline = {
                     name: "House of Sverre",
                     style: "default",
                     start: "1286AD",
-                    end: "1290AD"
+                    end: "1290AD",
+                    children: [
+                        {
+                            name: "Margaret",
+                            description: "The maid of Norway",
+                            style: "default",
+                            start: "1286AD",
+                            end: "1290AD",
+                        }
+                    ]
                 },
                 {
                     name: "First Interregnum",
+                    historyCreditLink: "https://en.wikipedia.org/wiki/Guardian_of_Scotland",
                     style: "default",
                     start: "1290AD",
                     end: "1292AD"
@@ -521,6 +531,7 @@ var exampleTimeline = {
                 },
                 {
                     name: "Second Interregnum",
+                    historyCreditLink: "https://en.wikipedia.org/wiki/Guardian_of_Scotland",
                     style: "default",
                     start: "1296AD",
                     end: "1306AD"
@@ -528,7 +539,7 @@ var exampleTimeline = {
                 {
                     name: "House of Bruce",
                     style: "default",
-                    start: "13060AD",
+                    start: "1306AD",
                     end: "1371AD"
                 },
                 {
@@ -545,6 +556,7 @@ var exampleTimeline = {
                 },
                 {
                     name: "Third Interregnum",
+                    historyCreditLink: "https://en.wikipedia.org/wiki/Guardian_of_Scotland",
                     style: "default",
                     start: "1651AD",
                     end: "1660AD"

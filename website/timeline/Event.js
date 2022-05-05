@@ -36,6 +36,7 @@ class Event extends Observable {
         this.expandAnimationOnMouseEnterCallback = null
         this.expandAnimationOnMouseLeaveCallback = null
 
+
         if ( data ) {
             // NOTE(tm) We cannot add children here as they still need to be created and attached to the valid timeband
             // so have to go through timeband::addEvent
@@ -231,10 +232,10 @@ class Event extends Observable {
                     expandIcon.classList.add("event-children-expand-click")
                     
                 }
-                self.sendEvent("events-arrange", self)
                 if ( !self.isSelected() ) {
                     self.selectCurrentEvent()
                 }
+                self.sendEvent("events-arrange", self)
                 e.stopPropagation()
             })
             textDiv.appendChild(expandIcon)
@@ -700,8 +701,7 @@ class Event extends Observable {
         if ( this.expandAnimation.isStopped() ) {
             this.expandAnimation.start()
         }
-        const style = window.getComputedStyle(this.element)
-        this.element.style.zIndex = parseInt(style.zIndex) + 1
+        this.element.classList.add("event-expanded")
         this.internalDiv.style.visibility = 'visible'
     }
 
@@ -711,8 +711,7 @@ class Event extends Observable {
         if ( this.collapseAnimation.isStopped() ) {
             this.collapseAnimation.start()
         }
-        const style = window.getComputedStyle(this.element)
-        this.element.style.zIndex = parseInt(style.zIndex) - 1
+        this.element.classList.remove("event-expanded")
     }
     
     
@@ -805,6 +804,7 @@ class Event extends Observable {
 
     draw(viewportRect) {
         this.lastViewportRect = viewportRect
+        
         if ( !this.hasCanvasElement() ) {
             alert("BUG! event has not been added to eventband")
         }
@@ -821,7 +821,6 @@ class Event extends Observable {
             this.setVisible(true) // must be before setWidth
             this.setPosition(viewportRect)
             this.setWidth(viewportRect)
-            
             
             // Here we are controlling the position of the event text within a long event period.
             // If the event is long enough we can end with empty partial event bars on left side of

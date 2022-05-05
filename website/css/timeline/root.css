@@ -27,6 +27,7 @@
     --eventband-zIndex: 50;
     --eventband-splitter-zIndex: 52;
     --event-zIndex: 50;
+    --event-selected-zIndex: 51;
     --event-title-zIndex: 0;
     --event-canvas-zIndex: 25;
     --event-selected-zIndex: 100;

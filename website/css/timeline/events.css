@@ -14,6 +14,10 @@
     user-select: none;
 }
 
+.event-expanded {
+    z-index: var(--event-selected-zIndex);
+}
+
 .event-internal-container {
     /** this should be the same size as the internal value */
     display: inline;
