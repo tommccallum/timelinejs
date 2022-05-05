@@ -65,9 +65,44 @@
     display: inline-block;
     padding-left: 3px;
     padding-right: 3px;
+    border-radius: 100vw;
+    cursor: pointer;
 }
 
 .event-icon:hover {
-    background: white;
+    background-color: var(--dark-purple);
 }
 
+.event-children-expand-click {
+    animation-name: event-children-expand;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+.event-children-expand-click-backwards {
+    animation-name: event-children-collapse;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes event-children-expand {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes event-children-collapse {
+    0% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}

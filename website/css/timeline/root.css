@@ -35,4 +35,8 @@
 
     --event-details-zIndex: 850;
     --bigimagepanel-container-zIndex: 900;
+
+
+    /** Color Palette */
+    --dark-purple: rgb(175, 1, 175);
 }

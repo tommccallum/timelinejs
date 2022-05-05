@@ -221,12 +221,21 @@ class Event extends Observable {
             expandIcon.classList.add("event-children-expand")
             expandIcon.title = "Click to toggle children"
             expandIcon.addEventListener("click", function(e) {
+                expandIcon.classList.remove("event-children-expand-click")
+                expandIcon.classList.remove("event-children-expand-click-backwards")
                 if ( self.childrenAreVisible ) {
                     self.childrenAreVisible = false
+                    expandIcon.classList.add("event-children-expand-click-backwards")
                 } else {    
                     self.childrenAreVisible = true
+                    expandIcon.classList.add("event-children-expand-click")
+                    
                 }
                 self.sendEvent("events-arrange", self)
+                if ( !self.isSelected() ) {
+                    self.selectCurrentEvent()
+                }
+                e.stopPropagation()
             })
             textDiv.appendChild(expandIcon)
         }
