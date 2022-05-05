@@ -640,9 +640,11 @@ class Event extends Observable {
     disableExpandableAnimation() {
         if ( this.expandAnimationOnMouseEnterCallback ) {
             this.element.removeEventListener("mouseenter", this.expandAnimationOnMouseEnterCallback)
+            this.element.removeEventListener("touchend", this.expandAnimationOnMouseEnterCallback)
         }
         if ( this.expandAnimationOnMouseLeaveCallback ) {
             this.element.removeEventListener("mouseleave", this.expandAnimationOnMouseLeaveCallback)
+            this.element.removeEventListener("touchstart", this.expandAnimationOnMouseEnterCallback)
         }
         this.expandAnimation = null
     }
@@ -679,6 +681,8 @@ class Event extends Observable {
 
         this.element.addEventListener("mouseenter", this.expandAnimationOnMouseEnterCallback)
         this.element.addEventListener("mouseleave", this.expandAnimationOnMouseLeaveCallback)
+        this.element.addEventListener("touchstart", this.expandAnimationOnMouseEnterCallback)
+        this.element.addEventListener("touchend", this.expandAnimationOnMouseLeaveCallback)
     }
 
     onMouseEnterCallback() {
