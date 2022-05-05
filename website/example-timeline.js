@@ -387,7 +387,119 @@ var exampleTimeline = {
                     name: "House of Dunkeld",
                     style: "default",
                     start: "1034AD",
-                    end: "1286AD"
+                    end: "1040AD",
+                    children: [
+                        {
+                            name: "Duncan I",
+                            style: "default",
+                            start: "1034AD",
+                            end: "1040AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                    ]
+                },
+                {
+                    name: "House of Moray",
+                    style: "default",
+                    start: "1040AD",
+                    end: "1058AD",
+                    children: [
+                            {
+                                name: "Macbeth",
+                                style: "default",
+                                start: "1040AD",
+                                end: "1057AD",
+                                description: "Part of the House of Moray",
+                                historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                            },
+                            {
+                                name: "Lulach",
+                                style: "default",
+                                start: "1057AD",
+                                end: "1058AD",
+                                description: "Part of the House of Moray",
+                                historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                            },    
+                    ]
+                },
+                {
+                    name: "House of Dunkeld",
+                    style: "default",
+                    start: "1058AD",
+                    end: "1286AD",
+                    children: [
+                        {
+                            name: "Malcolm III",
+                            style: "default",
+                            start: "1058AD",
+                            end: "1093AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "Donald III",
+                            style: "default",
+                            start: "1093AD",
+                            end: "1097AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "Duncan II",
+                            style: "default",
+                            start: "1094AD",
+                            end: "1094AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "Edgar",
+                            style: "default",
+                            start: "1097AD",
+                            end: "1107AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "Alexander I",
+                            style: "default",
+                            start: "1107AD",
+                            end: "1124AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "David I",
+                            style: "default",
+                            start: "1124AD",
+                            end: "1153AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "Malcolm IV",
+                            style: "default",
+                            start: "1153AD",
+                            end: "1165AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "William I",
+                            style: "default",
+                            start: "1165AD",
+                            end: "1214AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "Alexander II",
+                            style: "default",
+                            start: "1214AD",
+                            end: "1249AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                        {
+                            name: "Alexander III",
+                            style: "default",
+                            start: "1249AD",
+                            end: "1286AD",
+                            historyCreditLink: "https://en.wikipedia.org/wiki/List_of_Scottish_monarchs#House_of_Dunkeld_(1034%E2%80%931286)"
+                        },
+                    ]
+
                 },
                 {
                     name: "House of Sverre",

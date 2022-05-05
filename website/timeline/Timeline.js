@@ -54,7 +54,7 @@ class Timeline extends Observable {
         this.firstDrawComplete = false
         this.ready = false
 
-        this.updateEachFrame = true
+        this.updateEachFrame = false
     }
 
     makeFullScreen() {
@@ -152,6 +152,7 @@ class Timeline extends Observable {
         } else if ( eventName === "events-arrange" ) {
             const eventband = this.eventBandCollection.containsEvent(data)
             if ( eventband ) {
+                eventband.resetEventArrangement()
                 eventband.draw(this.getViewportRect())
             }
         }

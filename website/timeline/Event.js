@@ -28,6 +28,14 @@ class Event extends Observable {
         this.children = []
         this.childrenAreVisible = false
 
+        // these are used to reinstate during selection
+        this.renderedWidth = null
+        this.virtualWidth = null
+        this.expandAnimation = null
+        this.collapseAnimation = null
+        this.expandAnimationOnMouseEnterCallback = null
+        this.expandAnimationOnMouseLeaveCallback = null
+
         if ( data ) {
             // NOTE(tm) We cannot add children here as they still need to be created and attached to the valid timeband
             // so have to go through timeband::addEvent
@@ -103,6 +111,7 @@ class Event extends Observable {
         
     }
 
+    
     setBandOnEvent(eventband) {
         this.eventband = eventband
         if ( this.hasChildren() ) {
@@ -464,15 +473,52 @@ class Event extends Observable {
         return events
     }
 
+    
+
     selectCurrentEvent() {
-        const selectedEvents = document.querySelectorAll(".event-selected")
-        if ( selectedEvents !== null ) {
-            for ( let ev of selectedEvents ) {
-                ev.classList.remove("event-selected")
+        if ( !this.isSelected() ) {
+            this.sendEvent('event-deselect-all', null)
+            if ( this.element ) {
+                this.element.classList.add("event-selected")
+                this.disableExpandableAnimation()
+            }
+        } else {
+            this.sendEvent('event-deselect-all', null)
+        }
+    }
+
+    isSelected() {
+        if ( this.element ) {
+            return this.element.classList.contains("event-selected")
+        } 
+        return false
+    }
+
+    deselect() {
+        if ( this.element ) {
+            let startCollapse = false
+            if ( this.isSelected() ) {
+                startCollapse = true
+            }
+            this.element.classList.remove("event-selected")
+            if ( this.requiresExpandAnimation() ) {
+                this.addExpandableAnimation()
+                if ( startCollapse ) {
+                    this.onMouseLeaveCallback()
+                }
             }
         }
-        this.element.classList.add("event-selected")
     }
+
+    deselectChildren() {
+        if ( this.hasChildren() ) {
+            for( let child of this.children ) {
+                child.deselect()
+                child.deselectChildren()
+            }
+        }
+    }
+
     _onClick(e) {
         // console.log("Event::click")
         this.selectCurrentEvent()
@@ -551,20 +597,112 @@ class Event extends Observable {
         } else {
             renderedWidth = parseInt(style.width)
         }
-        let w = Math.max(virtualWidth, renderedWidth)
-        // console.log(`${this.name} ${start} ${end} ${virtualWidth} ${renderedWidth} ${w}`)
-        
-        // NOTE(04/05/2022) We have remove the padding from the width, otherwise the pointer date won't align.
-        if ( !isNaN(w)) {
-            const padding = parseInt(style.paddingLeft) + parseInt(style.paddingRight)
-            if ( virtualWidth > renderedWidth + padding ) {
-                this.element.style.width = w - padding + "px"
-            } else {
-                this.element.style.width = w + "px"
-            }
-        } 
+
+        this.renderedWidth = renderedWidth
+        this.virtualWidth = virtualWidth
+
+        if ( renderedWidth < virtualWidth || this.childrenAreVisible || this.isSelected() ) {
+            let w = Math.max(virtualWidth, renderedWidth)
+            // console.log(`${this.name} ${start} ${end} ${virtualWidth} ${renderedWidth} ${w}`)
+            
+            // NOTE(04/05/2022) We have remove the padding from the width, otherwise the pointer date won't align.
+            if ( !isNaN(w)) {
+                const padding = parseInt(style.paddingLeft) + parseInt(style.paddingRight)
+                if ( virtualWidth > renderedWidth + padding ) {
+                    this.element.style.width = w - padding + "px"
+                } else {
+                    this.element.style.width = w + "px"
+                }
+            } 
+            this.internalDiv.style.visibility = 'visible'
+            this.disableExpandableAnimation()
+        } else {
+            // console.log(`${this.name} r:${renderedWidth} v: ${virtualWidth} setting animation`)
+            // here we are going to use an expanding version
+            this.internalDiv.style.visibility = 'hidden'
+            this.element.style.width = virtualWidth + "px"
+            this.addExpandableAnimation()
+        }
     }
 
+    requiresExpandAnimation() {
+        if ( this.virtualWidth != null && this.renderedWidth != null ) {
+            if ( this.renderedWidth >= this.virtualWidth ) {
+                if ( this.childrenAreVisible || this.isSelected() ) {
+                    return false
+                }
+                return true
+            }
+        }
+        return false
+    }
+    
+    disableExpandableAnimation() {
+        if ( this.expandAnimationOnMouseEnterCallback ) {
+            this.element.removeEventListener("mouseenter", this.expandAnimationOnMouseEnterCallback)
+        }
+        if ( this.expandAnimationOnMouseLeaveCallback ) {
+            this.element.removeEventListener("mouseleave", this.expandAnimationOnMouseLeaveCallback)
+        }
+        this.expandAnimation = null
+    }
+
+    addExpandableAnimation() {
+        const startWidth = this.virtualWidth
+        const targetWidth = this.renderedWidth
+
+        const self = this
+        if ( this.expandAnimation != null ) {
+            if ( this.expandAnimation.targetWidth === targetWidth && this.expandAnimation.startWidth === startWidth ) {
+                // nothing to do as its the same animation
+                return
+            } else {
+                // reset the callbacks and the animation
+                this.disableExpandableAnimation()
+            }
+        }
+        
+        
+        this.expandAnimation = new ExpandAnimation(this.element, startWidth, targetWidth, 10, 10)
+        this.collapseAnimation = new CollapseAnimation(this.element, targetWidth, startWidth, 10, 10)
+        this.collapseAnimation.onCompletion(function() {
+            self.internalDiv.style.visibility = 'hidden'
+        })
+
+        this.expandAnimationOnMouseEnterCallback = function(e) {
+            self.onMouseEnterCallback()
+        }
+
+        this.expandAnimationOnMouseLeaveCallback = function(e) {
+            self.onMouseLeaveCallback()
+        }
+
+        this.element.addEventListener("mouseenter", this.expandAnimationOnMouseEnterCallback)
+        this.element.addEventListener("mouseleave", this.expandAnimationOnMouseLeaveCallback)
+    }
+
+    onMouseEnterCallback() {
+        this.collapseAnimation.stop()
+        this.expandAnimation.reset()
+        if ( this.expandAnimation.isStopped() ) {
+            this.expandAnimation.start()
+        }
+        const style = window.getComputedStyle(this.element)
+        this.element.style.zIndex = parseInt(style.zIndex) + 1
+        this.internalDiv.style.visibility = 'visible'
+    }
+
+    onMouseLeaveCallback() {
+        this.expandAnimation.stop()
+        this.collapseAnimation.reset()
+        if ( this.collapseAnimation.isStopped() ) {
+            this.collapseAnimation.start()
+        }
+        const style = window.getComputedStyle(this.element)
+        this.element.style.zIndex = parseInt(style.zIndex) - 1
+    }
+    
+    
     getPaddedHeight() {
         const style = window.getComputedStyle(this.element)
         return parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
@@ -636,6 +774,17 @@ class Event extends Observable {
             if ( this.childrenAreVisible ) {
                 for( let child of this.children ) {
                     child.arrange(viewportRect, this.getTop() + this.getPaddedHeight() + this.verticalMarginBetweenEvents)
+                }
+            }
+        }
+    }
+
+    resetEventArrangement() {
+        if ( this.element ) {
+            this.element.style.top = "0px"
+            if ( this.hasChildren() ) {
+                for( let ev of this.children ) {
+                    ev.resetEventArrangement()
                 }
             }
         }

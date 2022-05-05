@@ -111,6 +111,13 @@ class TimeBand extends Observable {
         const self = this
         if ( event.isObservable() ) {
             event.addListener(function(a,b,c) { 
+                if ( a === "event-deselect-all" ) {
+                    // on all events we need to remove all selections
+                    for( let ev of self.events) {
+                        ev.deselect()
+                        ev.deselectChildren()
+                    }
+                }
                 self.forward(a,b,c) 
             })
         }

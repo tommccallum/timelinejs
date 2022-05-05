@@ -72,6 +72,11 @@ class EventBand {
         this.element.classList.add('eventband')
     }
 
+    resetEventArrangement() {
+        for( let ev of this.timeband.events ) {
+            ev.resetEventArrangement()
+        }
+    }
     createEvents() {
         for( let ii=0; ii < 5; ii++ ) {
             const ev = new Event()

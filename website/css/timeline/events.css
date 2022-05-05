@@ -9,6 +9,7 @@
     padding: 5px;
     z-index: var(--event-zIndex);
     border-radius: 10px;
+    overflow: hidden;
     cursor: pointer;
     user-select: none;
 }
