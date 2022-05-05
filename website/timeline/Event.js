@@ -2,6 +2,7 @@ class Event extends Observable {
 
     constructor(data = null) {
         super()
+        this.verticalMarginBetweenEvents = 5
         this.data = data
         this.eventband = null // set in TimeBand
         this.element = null;
@@ -410,20 +411,26 @@ class Event extends Observable {
             if ( ev.element == null ) {
                 return false
             }    
+            // FIX(04/05/2022) When left goes negative the comparison changes from passing to failing for Alpin-Dunkeld
+
             const style = window.getComputedStyle(ev.element)
             const thisLeft = parseInt(thisStyle.left)
-            const thisRight = parseInt(thisStyle.left) + parseInt(thisStyle.width) + parseInt(thisStyle.paddingLeft) + parseInt(thisStyle.paddingRight)
+            const thisTotalWidth = parseInt(thisStyle.width) + parseInt(thisStyle.paddingLeft) + parseInt(thisStyle.paddingRight)
+            const thisRight = parseInt(thisStyle.left) + thisTotalWidth
             const thisTop = parseInt(thisStyle.top)
             const thisBottom = parseInt(thisStyle.top) + parseInt(thisStyle.height) + parseInt(thisStyle.paddingTop) + parseInt(thisStyle.paddingBottom)
             
             const thatLeft = parseInt(style.left)
-            const thatRight = parseInt(style.left) + parseInt(style.width) + parseInt(style.paddingLeft) + parseInt(style.paddingRight)
+            const thatTotalWidth = parseInt(style.width) + parseInt(style.paddingLeft) + parseInt(style.paddingRight)
+            const thatRight = parseInt(style.left) + thatTotalWidth
             const thatTop = parseInt(style.top)
             const thatBottom = parseInt(style.top) + parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
             
             if ( thatRight <= thisLeft || thatLeft >= thisRight || thisBottom <= thatTop || thisTop >= thatBottom ) {
                 // does not intersect
+                // console.log(`THIS: ${this.name} ${thisTotalWidth} THAT: ${ev.name} ${thatTotalWidth} R${thatRight} <= L${thisLeft} ${parseInt(thisStyle.width)} ${parseInt(style.width)} NO INTERSECT`)
             } else {
+                // console.log(`THIS:${this.name} ${thisTotalWidth} THAT: ${ev.name} ${thatTotalWidth}  R${thatRight} <= L${thisLeft} ${parseInt(thisStyle.width)} ${parseInt(style.width)} INTERSECT`)
                 return true
             }
         }
@@ -510,8 +517,13 @@ class Event extends Observable {
     setPosition(viewportRect) {
         const virtualPixels = viewportRect.timeAxisCollection.calcRelativeTimepointInVirtualPixels(this.start.relativeValue)
         const x = virtualPixels - viewportRect.left
-        // console.log(`Event position: ${virtualPixels} ${viewportRect.left} ${x}`)
-        this.element.style.left = x + "px"
+        
+        // NOTE(05/05/2022) We had an issue where an event would fail the intersection seemingly at random
+        // it turned out this was because x was floating point and the conversion to int was a truncation.
+        // Rounding here gives a deterministic value for the left value which seems to stop the random behaviour.
+        this.element.style.left = Math.round(x) + "px"
+
+        // console.log(`${this.name} Event position: ${virtualPixels} ${viewportRect.left} ${x} ${Math.round(x)}`)
     }
 
     setWidth(viewportRect) {
@@ -558,7 +570,17 @@ class Event extends Observable {
         return parseInt(style.top)
     }
     
-    arrange(viewportRect) {
+    getLeft() {
+        const style = window.getComputedStyle(this.element)
+        return parseInt(style.left)
+    }
+
+    getPaddedWidth() {
+        const style = window.getComputedStyle(this.element)
+        return parseInt(style.width) + parseInt(style.paddingLeft) + parseInt(style.paddingRight)
+    }
+
+    arrange(viewportRect, minimumTopValue = null) {
         // This is called from timeband.arrange for each event in the timeband.
 
         if ( !this.isVisibleOnScreen(viewportRect) ) return;
@@ -571,29 +593,50 @@ class Event extends Observable {
         // console.log(`event::arrange ${this.name} ${events.length}`)
         if ( events.length == 0 ) {
             // nothing to do here
+            console.log(`NO CLASHES ${this.name} ${this.getLeft()}`)
         } else {
+            // filter events for only those that have a left BEFORE our left in virtual space
+            const filteredEvents = []
+            const thisLeft = this.getLeft()
+            for( let ev of events) {
+                console.log(`${ev.name} ${ev.getLeft()} thisLeft: ${thisLeft}`)
+                if ( ev.getLeft() < thisLeft ) {
+                    filteredEvents.push(ev)
+                }
+            }
+
             // FIX(tom) Is this correct?  We seem to be doing a lot of work here.  We should only be finding a space
             // for ourselves and then returning.
             console.log(`${this.name} Collisions on screen:`)
             console.log(events)
+            console.log(filteredEvents)
             // once we run out of space we don't want to move them to the right
             // what do we do?
-            const margin = 5
+            const margin = this.verticalMarginBetweenEvents
             // let top = this.getTop() + this.getPaddedHeight() + margin
             let availableHeight = this.eventband.getHeight() - margin
 
             let top = margin
-            let minTop = availableHeight
+            if ( minimumTopValue !== null ) {
+                top = minimumTopValue 
+            }
+            let minTop = top
             // while( true ) {
                 // I want to know the highest point that I can fit THIS event in to.
 
-                for( let ev of events ) {
-                    const belowEvent = ev.getTop() + ev.getPaddedHeight() + margin
-                    minTop = Math.min(minTop, belowEvent )
+                // All these events START before our current event start
+                for( let ev of filteredEvents ) {
+                    const evRight = ev.getLeft() + ev.getPaddedWidth()
+                    console.log(`${this.name} ${evRight} <= ${thisLeft}`)
+                    if ( evRight <= thisLeft ) {
+                        minTop = Math.min(ev.getTop(), minTop )
+                    } else {
+                        minTop = ev.getTop() + ev.getPaddedHeight() + margin
+                    }
                 }
 
                 const newTop = minTop + margin
-                console.log(`${this.name} ${newTop}`)
+                console.log(`${this.name} newTop: ${newTop}`)
                 this.element.style.top = newTop + "px"
             // }
 
@@ -622,7 +665,10 @@ class Event extends Observable {
         if ( this.hasChildren() ) {
             if ( this.childrenAreVisible ) {
                 for( let child of this.children ) {
-                    child.arrange(viewportRect)
+                    console.log(`CHILD ${child.name} TOP: ${child.getTop()} LEFT: ${child.getLeft()}`)
+                }
+                for( let child of this.children ) {
+                    child.arrange(viewportRect, this.getTop() + this.getPaddedHeight() + this.verticalMarginBetweenEvents)
                 }
             }
         }
