@@ -54,7 +54,7 @@ class Timeline extends Observable {
         this.firstDrawComplete = false
         this.ready = false
 
-        this.updateEachFrame = false
+        this.updateEachFrame = true
     }
 
     makeFullScreen() {
@@ -188,12 +188,12 @@ class Timeline extends Observable {
         }
     }
 
-    onElementResize() {
+    onElementResize(hasWindowHasChangedSize) {
         // This is called every AnimationFrame in the browser
         // console.log("onElementResize")
         this.currentViewport.updateViewportWidth()
         this.axisChooser.onResize()
-        this.draw()
+        if ( hasWindowHasChangedSize ) this.draw()
         this.resizeEventDetailsPanel()
         if ( this.bigImagePanel) this.bigImagePanel.onResize()
         this.axisChooser.setPincerPosition(this.currentViewport.timepoint)
@@ -432,11 +432,9 @@ class Timeline extends Observable {
         const style = window.getComputedStyle(this.element)
         const w = parseInt(style.width)
         const h = parseInt(style.height)
-        //if ( w != this.lastKnownWidth && h != this.lastKnownHeight ) {
-            this.onElementResize()
-            this.lastKnownHeight = h 
-            this.lastKnownWidth = w
-        //}
+        this.onElementResize(h != this.lastKnownHeight || w != this.lastKnownWidth)
+        this.lastKnownHeight = h 
+        this.lastKnownWidth = w
         if ( this.updateEachFrame ) {
             window.requestAnimationFrame(function(t) { self._onNextAnimationFrame(t) })
         }
