@@ -54,7 +54,7 @@ class Timeline extends Observable {
         this.firstDrawComplete = false
         this.ready = false
 
-        this.updateEachFrame = false
+        this.updateEachFrame = true
     }
 
     makeFullScreen() {

@@ -389,60 +389,60 @@ var exampleTimeline = {
                     start: "1034AD",
                     end: "1286AD"
                 },
-                // {
-                //     name: "House of Sverre",
-                //     style: "default",
-                //     start: "1286AD",
-                //     end: "1290AD"
-                // },
-                // {
-                //     name: "First Interregnum",
-                //     style: "default",
-                //     start: "1290AD",
-                //     end: "1292AD"
-                // },
-                // {
-                //     name: "House of Balliol",
-                //     style: "default",
-                //     start: "1292AD",
-                //     end: "1296AD"
-                // },
-                // {
-                //     name: "Second Interregnum",
-                //     style: "default",
-                //     start: "1296AD",
-                //     end: "1306AD"
-                // },
-                // {
-                //     name: "House of Bruce",
-                //     style: "default",
-                //     start: "13060AD",
-                //     end: "1371AD"
-                // },
-                // {
-                //     name: "House of Balliol",
-                //     style: "default",
-                //     start: "1332AD",
-                //     end: "1356AD"
-                // },
-                // {
-                //     name: "House of Stewart/Stuart",
-                //     style: "default",
-                //     start: "1371AD",
-                //     end: "1651AD"
-                // },
-                // {
-                //     name: "Third Interregnum",
-                //     style: "default",
-                //     start: "1651AD",
-                //     end: "1660AD"
-                // },
-                // {
-                //     name: "House of Stuart",
-                //     style: "default",
-                //     start: "1660AD",
-                //     end: "1707AD"
-                // },
+                {
+                    name: "House of Sverre",
+                    style: "default",
+                    start: "1286AD",
+                    end: "1290AD"
+                },
+                {
+                    name: "First Interregnum",
+                    style: "default",
+                    start: "1290AD",
+                    end: "1292AD"
+                },
+                {
+                    name: "House of Balliol",
+                    style: "default",
+                    start: "1292AD",
+                    end: "1296AD"
+                },
+                {
+                    name: "Second Interregnum",
+                    style: "default",
+                    start: "1296AD",
+                    end: "1306AD"
+                },
+                {
+                    name: "House of Bruce",
+                    style: "default",
+                    start: "13060AD",
+                    end: "1371AD"
+                },
+                {
+                    name: "House of Balliol",
+                    style: "default",
+                    start: "1332AD",
+                    end: "1356AD"
+                },
+                {
+                    name: "House of Stewart/Stuart",
+                    style: "default",
+                    start: "1371AD",
+                    end: "1651AD"
+                },
+                {
+                    name: "Third Interregnum",
+                    style: "default",
+                    start: "1651AD",
+                    end: "1660AD"
+                },
+                {
+                    name: "House of Stuart",
+                    style: "default",
+                    start: "1660AD",
+                    end: "1707AD"
+                },
             ]
         },
         {

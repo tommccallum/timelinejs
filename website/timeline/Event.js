@@ -426,7 +426,7 @@ class Event extends Observable {
             const thatTop = parseInt(style.top)
             const thatBottom = parseInt(style.top) + parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
             
-            if ( thatRight <= thisLeft || thatLeft >= thisRight || thisBottom <= thatTop || thisTop >= thatBottom ) {
+            if ( thisLeft >= thatRight || thisRight <= thatLeft || thisBottom <= thatTop || thisTop >= thatBottom ) {
                 // does not intersect
                 // console.log(`THIS: ${this.name} ${thisTotalWidth} THAT: ${ev.name} ${thatTotalWidth} R${thatRight} <= L${thisLeft} ${parseInt(thisStyle.width)} ${parseInt(style.width)} NO INTERSECT`)
             } else {
@@ -437,7 +437,7 @@ class Event extends Observable {
         return false
     }
 
-    getEventsThatIntersectOnScreen(viewportRect) {
+    getEventsThatIntersectOnScreen(viewportRect, checkThisEventsChildren = true) {
         let events = []
         for( let ev of this.eventband.timeband.events ) {
             if ( !ev.isObservable() ) continue;
@@ -446,11 +446,16 @@ class Event extends Observable {
                     events.push(ev)
                 }
             }
-            if ( ev.childrenAreVisible ) {
-                for( let child of ev.children ) {
-                    // console.log(child)
-                    if ( this.doesEventIntersectOnScreen(viewportRect, child) ) {
-                        events.push(child)
+            // we only want to ignore our own children, we don't want to ignore others already laid out.
+            if ( this != ev || checkThisEventsChildren  ) {
+                if ( ev.childrenAreVisible ) {
+                    for( let child of ev.children ) {
+                        if ( child != this ) {
+                            // console.log(child)
+                            if ( this.doesEventIntersectOnScreen(viewportRect, child) ) {
+                                events.push(child)
+                            }
+                        }
                     }
                 }
             }
@@ -575,12 +580,26 @@ class Event extends Observable {
         return parseInt(style.left)
     }
 
+    getRight() {
+        return this.getLeft() + this.getPaddedWidth()
+    }
+
     getPaddedWidth() {
         const style = window.getComputedStyle(this.element)
         return parseInt(style.width) + parseInt(style.paddingLeft) + parseInt(style.paddingRight)
     }
 
-    arrange(viewportRect, minimumTopValue = null) {
+    isChild(ev) {
+        if ( !this.hasChildren() ) return false
+        for( let e of this.children ) {
+            if ( e === ev ) {
+                return true
+            }
+        }
+        return false
+    }
+
+    arrange(viewportRect, minimumTopValue = 0) {
         // This is called from timeband.arrange for each event in the timeband.
 
         if ( !this.isVisibleOnScreen(viewportRect) ) return;
@@ -589,84 +608,32 @@ class Event extends Observable {
         // how many events cover us
         // strategy 1 we have vertical space, we can move the covering events down
         // const events = this.eventband.timeband.getEventsThatIntersect(this.start, this.end)
-        const events = this.getEventsThatIntersectOnScreen(viewportRect)
-        // console.log(`event::arrange ${this.name} ${events.length}`)
+        const checkThisEventsChildren  = false
+        const events = this.getEventsThatIntersectOnScreen(viewportRect, checkThisEventsChildren )
         if ( events.length == 0 ) {
-            // nothing to do here
-            console.log(`NO CLASHES ${this.name} ${this.getLeft()}`)
+            // NOTE(05/05/2022) We need to accomodate for the fact that this might be a child and we always
+            // want to show children UNDER the parent event for readability.
+            let top = Math.max(this.getTop(), minimumTopValue)
+            this.element.style.top = top + "px"
         } else {
-            // filter events for only those that have a left BEFORE our left in virtual space
-            const filteredEvents = []
-            const thisLeft = this.getLeft()
-            for( let ev of events) {
-                console.log(`${ev.name} ${ev.getLeft()} thisLeft: ${thisLeft}`)
-                if ( ev.getLeft() < thisLeft ) {
-                    filteredEvents.push(ev)
-                }
-            }
-
-            // FIX(tom) Is this correct?  We seem to be doing a lot of work here.  We should only be finding a space
-            // for ourselves and then returning.
-            console.log(`${this.name} Collisions on screen:`)
-            console.log(events)
-            console.log(filteredEvents)
-            // once we run out of space we don't want to move them to the right
-            // what do we do?
-            const margin = this.verticalMarginBetweenEvents
-            // let top = this.getTop() + this.getPaddedHeight() + margin
-            let availableHeight = this.eventband.getHeight() - margin
-
-            let top = margin
-            if ( minimumTopValue !== null ) {
-                top = minimumTopValue 
-            }
-            let minTop = top
-            // while( true ) {
-                // I want to know the highest point that I can fit THIS event in to.
-
-                // All these events START before our current event start
-                for( let ev of filteredEvents ) {
-                    const evRight = ev.getLeft() + ev.getPaddedWidth()
-                    console.log(`${this.name} ${evRight} <= ${thisLeft}`)
-                    if ( evRight <= thisLeft ) {
-                        minTop = Math.min(ev.getTop(), minTop )
-                    } else {
-                        minTop = ev.getTop() + ev.getPaddedHeight() + margin
+            let availableHeight = this.eventband.getHeight() - this.verticalMarginBetweenEvents
+            let top = Math.max(0, minimumTopValue)
+            while ( top < availableHeight ) {
+                this.element.style.top = top + "px"
+                const overlappingEvents = this.getEventsThatIntersectOnScreen(viewportRect, checkThisEventsChildren )
+                if ( overlappingEvents.length == 0) {
+                    break
+                } else {
+                    for( let e of overlappingEvents ) {
+                        top = Math.max(top, e.getTop() + e.getPaddedHeight() + this.verticalMarginBetweenEvents)
                     }
                 }
-
-                const newTop = minTop + margin
-                console.log(`${this.name} newTop: ${newTop}`)
-                this.element.style.top = newTop + "px"
-            // }
-
-            // for( let ii=0; ii < events.length; ii++ ) {
-            //     events[ii].setVisible(true) // need to make visible to get height
-            //     const style = window.getComputedStyle(events[ii].element)
-            //     const h = parseInt(style.height) + parseInt(style.paddingTop) + parseInt(style.paddingBottom)
-            //     if ( availableHeight > h + margin) {
-            //         // console.log(`adjusting event ${events[ii].name} to ${top}px`)
-            //         events[ii].element.style.top = top + "px"
-            //         availableHeight -= h + margin
-            //         top += h + margin
-            //         events[ii].setVisible(true)
-            //     } else {
-            //         // not enough room so we hide
-            //         availableHeight = 0
-
-            //         // FIX(tom) when this sets some to visible and the event is AFTER this one then it magically
-            //         // appears at the top.  This is not controlled so please fix.
-            //         // Ideally when we reach the bottom we should start at the top if possible.
-            //         events[ii].setVisible(false)
-            //     }
-            // }
+            }
+            this.element.style.top = top + "px"
         }
         
         if ( this.hasChildren() ) {
             if ( this.childrenAreVisible ) {
-                for( let child of this.children ) {
-                    console.log(`CHILD ${child.name} TOP: ${child.getTop()} LEFT: ${child.getLeft()}`)
-                }
                 for( let child of this.children ) {
                     child.arrange(viewportRect, this.getTop() + this.getPaddedHeight() + this.verticalMarginBetweenEvents)
                 }
