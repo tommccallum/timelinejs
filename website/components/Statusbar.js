@@ -7,12 +7,24 @@ class Statusbar {
     onTimelineEvent(event, timeline, data) {
         const self = this
         if ( event === "mousemove") {
-            // console.log("Statusbar::mousemove")
-            let axisLabel = `${data.timeaxis.startAsTimepoint().toString()} to ${data.timeaxis.endAsTimepoint().toString()}`
-            if ( data.timeaxis.name ) {
-                axisLabel = `${data.timeaxis.name} from ${axisLabel}`
+            let axisLabel = ""
+            if ( data.timeaxis ) {
+                axisLabel = `${data.timeaxis.startAsTimepoint().toString()} to ${data.timeaxis.endAsTimepoint().toString()}`
+                if ( data.timeaxis.name ) {
+                    axisLabel = `<br/>${data.timeaxis.name} from ${axisLabel}`
+                } else {
+                    axisLabel = "<br/>"+axisLabel
+                }
             }
-            this.element.innerHTML = `${data.eventband.timeband.name}<br/>${axisLabel}<br/>${data.timepoint.toString()}`
+            let currentTimepoint = ""
+            if ( data.timepoint ) {
+                currentTimepoint = `<br/>${data.timepoint.toString()}`
+            }
+            let eventbandName = ""
+            if ( data.eventband ) {
+                eventbandName = `${data.eventband.timeband.name}`
+            }
+            this.element.innerHTML = `${eventbandName}${axisLabel}${currentTimepoint}`
         }
     }
 }

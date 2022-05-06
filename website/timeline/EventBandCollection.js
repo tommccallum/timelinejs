@@ -15,6 +15,7 @@ class EventBandCollection {
         this.splitters = null
         
         this.draggingSplitterIndex = null
+        this.mouseOverLastEventband = null // this is used to cache the last event band we were over when sending mouseover signals
     }
 
     containsEvent(ev) {
@@ -110,10 +111,16 @@ class EventBandCollection {
             const top = parseInt(style.top)
             const bottom = parseInt(style.top) + parseInt(style.height)
             if ( y >= top && y <= bottom) { 
+                this.mouseOverLastEventband = band
                 return band
             }
         }
-        return null
+        // if we are here then either none of the eventbands are visible
+        // or we are over a splitter in which case we want to send back our previous one.
+        if ( this.getVisibleBandCount() == 0 ) {
+            return null
+        }
+        return this.mouseOverLastEventband
     }
 
     draw(viewportRect, modifiedEventbandIndex) {
