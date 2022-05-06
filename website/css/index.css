@@ -144,9 +144,24 @@ main {
 }
 
 footer {
-  flex: 0 0 32px;
-  height: 32px;
-  padding: 10px;
+  flex: 0 0 16px;
+  padding: 5px;
+  font-size: 0.6em;
+  color: #afafaf;
+  background: #04284a;
+}
+
+footer a {
+  color: #afafaf;
+}
+
+footer div {
+  display: inline;
+}
+
+.footer-right {
+  position: absolute;
+  right: 25px;
 }
 
 .timeline_container {
@@ -191,4 +206,8 @@ footer {
 .menu-item-timeband-image {
   width: 32px;
   height: 32px;
+}
+
+.menu-item-timeband-selected {
+  background: #074c8d;
 }

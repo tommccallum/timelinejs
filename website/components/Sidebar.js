@@ -9,7 +9,7 @@ class Sidebar {
         this.menuItemsElement = document.createElement("ul")
         this.element.appendChild(this.menuItemsElement)
         this.addMenuItem("☰", "Collapse menu", function (e) { self.toggle(e) })
-        this.addMenuItem("&#x2648", "Timelines")
+        // this.addMenuItem("&#x2648", "Timelines")
     }
 
     addMenuItem(icon, label, callback) {
@@ -46,22 +46,37 @@ class Sidebar {
         container.appendChild(left)
         container.appendChild(right)
 
-        const a = document.createElement("a")
-        left.appendChild(a)
-        a.classList.add("nav-expand")
-        a.classList.add("nav-item")
+        const iconDiv = document.createElement("div")
+        left.appendChild(iconDiv)
+        iconDiv.classList.add("nav-expand")
+        iconDiv.classList.add("nav-item")
         if ( timeband.image !== null ) {
             const img = document.createElement("img")
             img.classList.add("menu-item-timeband-image")
             img.src = timeband.image
             img.alt = timeband.name
-            a.appendChild(img)
+            iconDiv.appendChild(img)
         } else {
-            a.innerHTML = "T"
+            iconDiv.innerHTML = "T"
         }
-        a.title = timeband.name
+        iconDiv.title = timeband.name
+        
         // a.innerHTML = timeband.image
-        // a.addEventListener("click", callback)
+        container.classList.add("sidebar-menu-item-visible")
+        container.dataset.for = timeband.name
+        container.dataset.value = timeband.visible
+        const tb = timeband
+        container.addEventListener("click", function (e) { 
+            let b = container.dataset.value === 'true'
+            console.log(`icon::click value=${b}`)
+            if ( b ) {
+                container.dataset.value = false
+                tb.setVisible(false)
+            } else {
+                container.dataset.value = true
+                tb.setVisible(true)
+            }
+        })
 
 
         const period = timeband.getPeriodAsString()
@@ -87,23 +102,23 @@ class Sidebar {
             topDiv.title= timeband.name + ": " + timeband.description
         }
 
-        const visibility = document.createElement("span")
-        visibility.classList.add("sidebar-menu-item-visible")
-        visibility.dataset.for = timeband.name
-        visibility.dataset.value = true
-        visibility.innerHTML = "&#128065"
-        const tb = timeband
-        visibility.addEventListener("click", function (e) { 
-            let b = visibility.dataset.value === 'true'
-            if ( b ) {
-                visibility.dataset.value = false
-                tb.setVisible(false)
-            } else {
-                visibility.dataset.value = true
-                tb.setVisible(true)
-            }
-         })
-        topDiv.appendChild(visibility)
+        // const visibility = document.createElement("span")
+        // visibility.classList.add("sidebar-menu-item-visible")
+        // visibility.dataset.for = timeband.name
+        // visibility.dataset.value = true
+        // visibility.innerHTML = "&#128065"
+        // const tb = timeband
+        // visibility.addEventListener("click", function (e) { 
+        //     let b = visibility.dataset.value === 'true'
+        //     if ( b ) {
+        //         visibility.dataset.value = false
+        //         tb.setVisible(false)
+        //     } else {
+        //         visibility.dataset.value = true
+        //         tb.setVisible(true)
+        //     }
+        //  })
+        // topDiv.appendChild(visibility)
     }
 
 
@@ -132,7 +147,8 @@ class Sidebar {
 
     onTimelineEvent(event, timeline, data) {
         const self = this
-        
+        if ( event === "mousemove" ) return
+        console.log(`sidebar::onTimelineEvent ${event}`)
         if (event === "add-timeband") {
             const thisTimeband = data
             thisTimeband.addListener(function(a,b,c) { self.onTimelineEvent(a,b,c) })
@@ -140,9 +156,11 @@ class Sidebar {
         } else if ( event === "timeband-visible") {
             const item = document.querySelector(`.sidebar-menu-item-visible[data-for='${data.name}'`)
             if ( data.visible ) {
-                item.innerHTML = "&#128065"
+                // item.innerHTML = "&#128065"
+                item.parentElement.classList.add("menu-item-timeband-selected")
             } else {
-                item.innerHTML = "&#128683"
+                // item.innerHTML = "&#128683"
+                item.parentElement.classList.remove("menu-item-timeband-selected")
             }
         } else if ( event === "timeband-change") {
             // this is called when something about the timeband has changed and we need to update our label
