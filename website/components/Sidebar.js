@@ -50,7 +50,16 @@ class Sidebar {
         left.appendChild(a)
         a.classList.add("nav-expand")
         a.classList.add("nav-item")
-        a.innerHTML = "T"
+        if ( timeband.image !== null ) {
+            const img = document.createElement("img")
+            img.classList.add("menu-item-timeband-image")
+            img.src = timeband.image
+            img.alt = timeband.name
+            a.appendChild(img)
+        } else {
+            a.innerHTML = "T"
+        }
+        a.title = timeband.name
         // a.innerHTML = timeband.image
         // a.addEventListener("click", callback)
 

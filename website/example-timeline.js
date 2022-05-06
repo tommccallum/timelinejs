@@ -92,10 +92,10 @@ var exampleTimeline = {
     timebands: [
         {
             index: 0,
-            name: "Early Solar System",
+            name: "Astronomy",
             style: "title",
             backgroundColor: '#000000',
-            image: null,
+            image: "images/solar-system_64x64.png",
             axis: "prehistory",
             description: "Early Solar System",
             events: [
@@ -123,28 +123,214 @@ var exampleTimeline = {
             ]
         },
         {
-            index: 1,
-            name: "Ages",
+            name: "Earth History",
+            backgroundColor: '#999999',
+            image: "images/green_earth_icon_64x64.png",
+            events: [
+                {
+                    name: "Precambrian Eon",
+                    style: "default",
+                    start: "4600000000BC",
+                    end: "541000000BC",
+                    showChildren: true,
+                    children: [
+                        {
+                            name: "Edicaran Period",
+                            style: "default",
+                            start: "635000000BC",
+                            end: "541000000BC"
+                        },
+                        {
+                            name: "Proterozoic Era",
+                            style: "default",
+                            start: "2500000000BC",
+                            end: "541000000BC"
+                        },
+                        {
+                            name: "Archaean Era",
+                            style: "default",
+                            start: "4000000000BC",
+                            end: "2500000000BC"
+                        },
+                        {
+                            name: "Hadean Era",
+                            style: "default",
+                            start: "4600000000BC",
+                            end: "4000000000BC"
+                        }
+                    ]
+                },
+                
+                {
+                    name: "Phanerozoic Eon",
+                    style: "default",
+                    start: "541000000BC",
+                    end: "today"
+                },
+                
+            ]
+        },
+        {
+            name: "Ages of Man",
             style: "title",
-            backgroundColor: '#222222',
-            image: null,
+            backgroundColor: '#444444',
+            image: "images/Human_Evolution_Icon_64x64.png",
             events: [
                 {
                     name: "Stone Age",
                     start: "2500000BC",
-                    end: "3301BC",
-                    style: "title"
+                    end: "3300BC",
+                    style: "default",
+                    children: [
+                        {
+                            name: "Lower Paleolithic",
+                            style: "default",
+                            start: "2500000BC",
+                            end: "300000BC"
+                        },     
+                        {
+                            // note that the middle paleolithic seems to overlap the upper paleolithic period
+                            name: "Middle Paleolithic",
+                            style: "default",
+                            start: "300000BC",
+                            end: "36000BC"
+                        },   
+                        {
+                            name: "Upper Paleolithic",
+                            style: "default",
+                            start: "36000BC",
+                            end: "25000BC"
+                        },
+                        {
+                            name: "Mesolithic",
+                            style: "default",
+                            start: "25000BC",
+                            end: "11500BC"
+                        },
+                        {
+                            name: "Neolithic (Pre-pottery)",
+                            style: "default",
+                            start: "11500BC",
+                            end: "8000BC"
+                        },
+                        {
+                            name: "Neolithic (Late)",
+                            style: "default",
+                            start: "8000BC",
+                            end: "6500BC"
+                        },
+                        {
+                            name: "Chalcolithic",
+                            style: "default",
+                            start: "6500BC",
+                            end: "4500BC"
+                        },
+                        
+                    ]
                 },
                 {
-                    name: "Ancient History",
+                    name: "Homo Sapiens",
+                    style: "default",
+                    start: "200000BC"
+                },
+                {
+                    name: "Bronze Age",
+                    style: "default",
                     start: "3300BC",
-                    end: "499AD",
-                    style: "title"
+                    end: "1200BC",
+                    children: [
+                        {
+                            name: "Early Bronze Age",
+                            style: "default",
+                            start: "3300BC",
+                            end: "2100BC"
+                        },
+                        {
+                            name: "Middle Bronze Age",
+                            style: "default",
+                            start: "2100BC",
+                            end: "1550BC"
+                        },
+                        {
+                            name: "Late Bronze Age",
+                            style: "default",
+                            start: "1550BC",
+                            end: "1220BC"
+                        }
+                    ]
+                },
+                {
+                    name: "Iron Age",
+                    style: "default",
+                    start: "1200BC",
+                    end: "500AD",
+                    children: [
+                        {
+                            name: "Early Iron Age",
+                            style: "default",
+                            start: "1220BC",
+                            end: "460BC"
+                        },
+                        {
+                            name: "Middle Iron Age",
+                            style: "default",
+                            start: "460BC",
+                            end: "250BC"
+                        },
+                        {
+                            name: "Late Iron Age",
+                            style: "default",
+                            start: "250BC",
+                            end: "500AD"
+                        }
+                    ]
+                },
+                {
+                    name: "Sumer",
+                    style: "default",
+                    start: "3300BC",
+                    end: "2100BC"
+                },
+                {
+                    name: "Old Kingdom Egypt",
+                    style: "default",
+                    start: "3300BC",
+                    end: "2100BC"
+                },
+                {
+                    name: "Middle Kingdom Egypt",
+                    style: "default",
+                    start: "2100BC",
+                    end: "1550BC"
+                },
+                {
+                    name: "Babylonian Civilisation",
+                    style: "default",
+                    start: "2100BC",
+                    end: "1550BC"
+                },
+                {
+                    name: "New Kingdom Egypt",
+                    style: "default",
+                    start: "1550BC",
+                    end: "1200BC"
+                },
+                {
+                    name: "Ancient Greece",
+                    style: "default",
+                    start: "1550BC",
+                    end: "460BC"
+                },
+                {
+                    name: "Roman Empire",
+                    style: "default",
+                    start: "460BC",
+                    end: "500AD"
                 },
                 {
                     name: "Middle Ages",
                     start: "500AD",
-                    end: "1499AD",
+                    end: "1500AD",
                     style: "title"
                 },
                 {
@@ -153,104 +339,15 @@ var exampleTimeline = {
                     start: "1500AD",
                     end: "today"
                 },
-            ]
-        },
-        {
-            name: "Band",
-            style: "title",
-            backgroundColor: '#444444',
-            image: null,
-            events: [
-                {
-                    name: "Lower Paleolithic",
-                    style: "title",
-                    start: "2500000BC",
-                    end: "300001BC"
-                },
-                {
-                    // note that the middle paleolithic seems to overlap the upper paleolithic period
-                    name: "Middle Paleolithic",
-                    style: "title",
-                    start: "300000BC",
-                    end: "36001BC"
-                },
-                {
-                    name: "Upper Paleolithic",
-                    style: "title",
-                    start: "36000BC",
-                    end: "3301BC"
-                },
-                {
-                    name: "Bronze Age",
-                    style: "title",
-                    start: "3300BC",
-                    end: "1201BC"
-                },
-                {
-                    name: "Iron Age",
-                    style: "title",
-                    start: "1200BC",
-                    end: "500AD"
-                }
                 // this will be interesting as this is covered by
                 // the upper level title.  Do we leave this blank?
-            ]
-        },
-        {
-            "name": "Subband",
-            backgroundColor: '#999999',
-            "events": [
-                {
-                    name: "Baradostian"
-                },
-                {
-                    name: "Chatelperronian"
-                },
-                {
-                    name: "Aurignacian"
-                },
-                {
-                    name: "Gravettian"
-                },
-                {
-                    name: "Solutrean"
-                },
-                {
-                    name: "Magdalenian"
-                },
-                {
-                    name: "Hamburg"
-                },
-                {
-                    name: "Ahrensberg"
-                },
-                {
-                    name: "Swiderian"
-                },
-                {
-                    name: "Early Bronze Age"
-                },
-                {
-                    name: "Middle Bronze Age"
-                },
-                {
-                    name: "Late Bronze Age"
-                },
-                {
-                    name: "Early Iron Age"
-                },
-                {
-                    name: "Middle Iron Age"
-                },
-                {
-                    name: "Late Iron Age"
-                },
             ]
         },
         {
             name: "Scottish Kings",
             backgroundColor: 'transparent',
             visible: true,
+            image: "images/royal_arms_scotland_64x64.png",
             events: [
                 {
                     name: "House of Alpin",
@@ -527,7 +624,15 @@ var exampleTimeline = {
                     name: "House of Balliol",
                     style: "default",
                     start: "1292AD",
-                    end: "1296AD"
+                    end: "1296AD",
+                    children: [
+                        {
+                            name: "John Balliol",
+                            style: "default",
+                            start: "1292AD",
+                            end: "1296AD",
+                        }
+                    ]
                 },
                 {
                     name: "Second Interregnum",
@@ -540,19 +645,109 @@ var exampleTimeline = {
                     name: "House of Bruce",
                     style: "default",
                     start: "1306AD",
-                    end: "1371AD"
+                    end: "1371AD",
+                    children: [
+                        {
+                            name: "Robert the Bruce",
+                            style: "default",
+                            start: "1306AD",
+                            end: "1329AD",
+                        },
+                        {
+                            name: "David II",
+                            style: "default",
+                            start: "1329AD",
+                            end: "1371AD",
+                        }
+                    ]
                 },
                 {
                     name: "House of Balliol",
                     style: "default",
                     start: "1332AD",
-                    end: "1356AD"
+                    end: "1356AD",
+                    children: [
+                        {
+                            name: "Edward Balliol",
+                            style: "default",
+                            start: "1332AD",
+                            end: "1356AD",
+                        }
+                    ]
                 },
                 {
                     name: "House of Stewart/Stuart",
                     style: "default",
                     start: "1371AD",
-                    end: "1651AD"
+                    end: "1651AD",
+                    children: [
+                        {
+                            name: "Robert II",
+                            style: "default",
+                            start: "1371AD",
+                            end: "1390AD",
+                        },
+                        {
+                            name: "Robert III",
+                            style: "default",
+                            start: "1390AD",
+                            end: "1406AD",
+                        },
+                        {
+                            name: "James I",
+                            style: "default",
+                            start: "1406AD",
+                            end: "1437AD",
+                        },
+                        {
+                            name: "James II",
+                            style: "default",
+                            start: "1437AD",
+                            end: "1460AD",
+                        },
+                        {
+                            name: "James III",
+                            style: "default",
+                            start: "1460AD",
+                            end: "1488AD",
+                        },
+                        {
+                            name: "James IV",
+                            style: "default",
+                            start: "1488AD",
+                            end: "1513AD",
+                        },
+                        {
+                            name: "James V",
+                            style: "default",
+                            start: "1513AD",
+                            end: "1542AD",
+                        },
+                        {
+                            name: "Mary I",
+                            style: "default",
+                            start: "1542AD",
+                            end: "1567AD",
+                        },
+                        {
+                            name: "James VI",
+                            style: "default",
+                            start: "1567AD",
+                            end: "1625AD",
+                        },
+                        {
+                            name: "Charles I",
+                            style: "default",
+                            start: "1625AD",
+                            end: "1649AD",
+                        },
+                        {
+                            name: "Charles II",
+                            style: "default",
+                            start: "1649AD",
+                            end: "1651AD",
+                        }
+                    ]
                 },
                 {
                     name: "Third Interregnum",
@@ -565,7 +760,39 @@ var exampleTimeline = {
                     name: "House of Stuart",
                     style: "default",
                     start: "1660AD",
-                    end: "1707AD"
+                    end: "1707AD",
+                    children: [
+                        {
+                            name: "Charles II",
+                            style: "default",
+                            start: "1660AD",
+                            end: "1685AD",
+                        },
+                        {
+                            name: "James VII",
+                            style: "default",
+                            start: "1685AD",
+                            end: "1688AD",
+                        },
+                        {
+                            name: "Mary II",
+                            style: "default",
+                            start: "1689AD",
+                            end: "1694AD",
+                        },
+                        {
+                            name: "William II",
+                            style: "default",
+                            start: "1689AD",
+                            end: "1702AD",
+                        },
+                        {
+                            name: "Anne",
+                            style: "default",
+                            start: "1702AD",
+                            end: "1707AD",
+                        }
+                    ]
                 },
             ]
         },
@@ -573,7 +800,7 @@ var exampleTimeline = {
             name: "Hopeman History",
             backgroundColor: '#cccccc',
             style: "dots",
-            image: null,
+            image: "images/Hopemancrest_64x64.png",
             events: [
                 {
                     name: "Lands owned by Lord Duffus",

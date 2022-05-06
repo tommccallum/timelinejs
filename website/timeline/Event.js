@@ -43,6 +43,9 @@ class Event extends Observable {
             if ( data.hasOwnProperty("name")) {
                 this.name = data.name
             }
+            if ( data.hasOwnProperty("showChildren")) {
+                this.childrenAreVisible = data.showChildren
+            }
             if ( data.hasOwnProperty("image")) {
                 this.image = data.image
             }
@@ -230,7 +233,6 @@ class Event extends Observable {
                 } else {    
                     self.childrenAreVisible = true
                     expandIcon.classList.add("event-children-expand-click")
-                    
                 }
                 if ( !self.isSelected() ) {
                     self.selectCurrentEvent()
@@ -239,6 +241,9 @@ class Event extends Observable {
                 e.stopPropagation()
             })
             textDiv.appendChild(expandIcon)
+            if ( this.childrenAreVisible ) {
+                expandIcon.classList.add("event-children-expand-click")
+            }
         }
 
         if ( this.isObservable() ) {

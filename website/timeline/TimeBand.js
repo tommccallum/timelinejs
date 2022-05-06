@@ -29,6 +29,9 @@ class TimeBand extends Observable {
             if ( this.data.hasOwnProperty("name") ) {
                 this.name = this.data.name
             }
+            if ( this.data.hasOwnProperty("image") ) {
+                this.image = this.data.image
+            }
             if ( this.data.hasOwnProperty("visible") ) {
                 this.visible = this.data.visible
             }

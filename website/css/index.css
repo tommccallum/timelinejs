@@ -188,3 +188,7 @@ footer {
   display: none;
 }
 
+.menu-item-timeband-image {
+  width: 32px;
+  height: 32px;
+}
