@@ -68,7 +68,6 @@ class Sidebar {
         const tb = timeband
         container.addEventListener("click", function (e) { 
             let b = container.dataset.value === 'true'
-            console.log(`icon::click value=${b}`)
             if ( b ) {
                 container.dataset.value = false
                 tb.setVisible(false)
@@ -148,7 +147,7 @@ class Sidebar {
     onTimelineEvent(event, timeline, data) {
         const self = this
         if ( event === "mousemove" ) return
-        console.log(`sidebar::onTimelineEvent ${event}`)
+        // console.log(`sidebar::onTimelineEvent ${event}`)
         if (event === "add-timeband") {
             const thisTimeband = data
             thisTimeband.addListener(function(a,b,c) { self.onTimelineEvent(a,b,c) })
