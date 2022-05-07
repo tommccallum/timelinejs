@@ -9,10 +9,16 @@ class EventBandCollection {
         const self = this
         for( let timeband of this.timeBandCollection.timebands) {
             const ev = new EventBand(timeband)
-            timeband.addListener(function(a,b,c) { if ( a === "timeband-visible" ) { const index = self.getEventbandIndex(c); self.draw(null, index); }} )
+            timeband.addListener(function(a,b,c) { 
+                if ( a === "timeband-visible" ) { 
+                    // console.log("eventbandcollection::listener"); 
+                    const index = self.getEventbandIndex(c);
+                    self.draw(null, index)
+                }
+            })
             this.eventbands.push(ev)
         }
-        this.splitters = null
+        this.splitters = []
         
         this.draggingSplitterIndex = null
         this.mouseOverLastEventband = null // this is used to cache the last event band we were over when sending mouseover signals
@@ -68,23 +74,21 @@ class EventBandCollection {
     }
 
     createSplitters() {
-        if ( this.splitters === null ) {
-            const splitters = []
-            const self = this
-            for( let ii=0; ii < this.eventbands.length-1; ii++ ) {
-                const splitter = new Splitter(this.canvasElement)
-                splitter.setIndex(ii)
-                splitter.addEventListener("mousedown", function(e) {
-                    self._onMouseDown(e)
-                })
-                this.canvasElement.addEventListener("mousemove", function(e) {
-                    self._onMouseMove(e)
-                })
-                splitters.push(splitter)
-            }
-            if ( splitters.length > 0 ) {
-                this.splitters = splitters
-            }
+        const splitters = []
+        const self = this
+        for( let ii=0; ii < this.eventbands.length-1; ii++ ) {
+            const splitter = new Splitter(this.canvasElement)
+            splitter.setIndex(ii)
+            splitter.addEventListener("mousedown", function(e) {
+                self._onMouseDown(e)
+            })
+            this.canvasElement.addEventListener("mousemove", function(e) {
+                self._onMouseMove(e)
+            })
+            splitters.push(splitter)
+        }
+        if ( splitters.length > 0 ) {
+            this.splitters = splitters
         }
     }
 
@@ -123,7 +127,199 @@ class EventBandCollection {
         return this.mouseOverLastEventband
     }
 
+    getSplitterHeight() {
+        if ( isValueAvailable(this.splitters) && this.splitters.length > 0 ) return this.splitters[0].getHeight()
+        return 0
+    }
+
+    getAvailableHeightForEventbands() {
+        const canvasStyle  = window.getComputedStyle(this.canvasElement)
+        const availableHeight = parseInt(canvasStyle.height)
+        const visibleBandCount = this.getVisibleBandCount()
+        const splitterHeight = this.getSplitterHeight()
+        const totalSplitterHeight = Math.max(0,(visibleBandCount-1)) * splitterHeight
+        return availableHeight - totalSplitterHeight
+    }
+
+    getEqualEvenbandSize() {
+        return this.getAvailableHeightForEventbands() / this.getVisibleBandCount()
+    }
+
+    getHeightsOfEventbandsIfWeAddedOrRemovedBandX(eventband, changeType) {
+        // changeType = 1 is an add
+        // changeType = -1 is a remove
+        let eventbandIndex = 0
+        if ( isValueAvailable(eventband) ) {
+            if ( typeof(eventband) === "number") {
+                eventbandIndex = eventband
+                eventband = this.eventbands[eventband]
+            } else {
+                eventbandIndex = this.getEventbandIndex(eventband)
+            }
+        } else {
+            // there has been no change so
+            eventband = null
+            eventbandIndex = -1
+        }
+
+        const visibleBandCount = this.getVisibleBandCount()
+        const availableHeight = this.getAvailableHeightForEventbands()
+        const equalHeight = this.getEqualEvenbandSize() 
+
+        const newHeights = new Array(this.eventbands.length)
+        const proportions = new Array(this.eventbands.length)
+        let remainingHeight = availableHeight
+        newHeights.fill(0)
+        proportions.fill(0)
+        
+        let index = 0
+        if ( visibleBandCount == 0 ) {
+            return newHeights
+        } else if ( visibleBandCount == 1 ) {
+            // make it 100%
+            index = 0
+            for( let ev of this.eventbands ) {
+                if ( ev.isVisible() ) {
+                    newHeights[index] = availableHeight
+                }
+                index++
+            }
+            return newHeights
+        } else {
+            let oldTotalHeight = 0
+            let totalNewHeight = 0
+
+            // Get the total height of all the panels WITHOUT the one we are wanting to add or remove.
+            index = 0
+            for( let ev of this.eventbands ) {
+                if ( changeType == 0 || index != eventbandIndex ) {
+                    if ( ev.isVisible() ) {
+                        if ( ev.getHeight() >= 0 ) {
+                            oldTotalHeight += ev.getHeight()
+                        }
+                    }
+                }
+                index++
+            }
+            
+            // Calculate the proportion of space that each of the remaining takes up.
+            // Want to save the minimum proportion found for later
+            let minProportion = 2
+            index = 0
+            for( let ev of this.eventbands ) {
+                if ( changeType == 0 || index != eventbandIndex ) {
+                    if ( ev.isVisible() ) {
+                        if ( ev.getHeight() >= 0 ) {
+                            proportions[index] = ev.getHeight() / oldTotalHeight
+                            minProportion = Math.min(minProportion, proportions[index])
+                        }
+                    }
+                }
+                index++
+            }
+
+            if ( changeType == 1 ) {
+                // NOTE(07/05/2022) Don't use minimum height as otherwise the rounding will get us and its quite small.
+                let suggestedHeight = this.minimumBandHeight * 2
+                let previousHeight = eventband.getHeight()
+                if ( previousHeight <= 0 ) {
+                    suggestedHeight = availableHeight / visibleBandCount
+                }
+                newHeights[eventbandIndex] = Math.max(suggestedHeight, previousHeight)
+                remainingHeight -= newHeights[eventbandIndex]
+
+                if ( remainingHeight * minProportion <= this.minimumBandHeight ) {
+                    // We need to rescale the new item.
+                    // We assume the smallest proportion is of size minimumBandHeight and then 
+                    // scale the proportions accordingly.  The new panel will then get the remaining space.
+                    totalNewHeight = 0
+                    for ( let ii=0; ii < proportions.length; ii++ ) {
+                        if ( ii != eventbandIndex ) {
+                            newHeights[ii] = Math.floor(proportions[ii] / minProportion * this.minimumBandHeight)
+                            totalNewHeight += newHeights[ii]
+                        }
+                    }
+                    let newSuggestedHeight = availableHeight - totalNewHeight
+                    if ( newSuggestedHeight <= this.minimumBandHeight ) {
+                        // this happens when the smallest item was already the minimumBandHeight
+                        // in this case we are just going to set them all to equal size and be done with it.
+                        for ( let ii=0; ii < proportions.length; ii++ ) {
+                            if ( proportions[ii] > 0 ) {
+                                proportions[ii] = 1/visibleBandCount
+                                newHeights[ii] = equalHeight
+                            }
+                        }
+                        newHeights[eventbandIndex] = equalHeight
+                    } else {
+                        // We are going to adjust the new panel to be the remaining space, this should
+                        // mean we always have enough space for the existing panels.
+                        newHeights[eventbandIndex] = availableHeight - totalNewHeight
+                    }
+                }
+            }
+
+            // assign the newHeights to our array
+            index = 0
+            for( let ev of this.eventbands ) {
+                if ( eventbandIndex != index ) {
+                    // only do this if the new height is not set
+                    if ( ev.isVisible() && newHeights[index] == 0) {
+                        if ( ev.getHeight() >= 0 ) {
+                            const potentialNewHeight = remainingHeight * proportions[index]
+                            if ( potentialNewHeight < this.minimumBandHeight ) {
+                                // we cannot fit another eventband on so don't change anything
+                                console.debug(`[BUG] not enough space for eventband ${index} ${potentialNewHeight} < ${this.minimumBandHeight}`)
+                                return false
+                            }
+                            newHeights[index] = Math.floor(potentialNewHeight)
+                        } 
+                    }
+                }
+                index++
+            }
+
+            // There may be rounding errors so we need to make sure we tidy up and all the canvas is filled
+            totalNewHeight = 0
+            let lastEventIndex = 0
+            for( let ii=0; ii < newHeights.length; ii++ ) {
+                totalNewHeight += newHeights[ii]
+                if ( newHeights[ii] > 0 ) {
+                    lastEventIndex = ii
+                }
+            }
+            // we have purposefully UNDER estimated the height and we should only be off by 1/2 pixels
+            // here we make everything align
+            if ( totalNewHeight < availableHeight ) {
+                newHeights[lastEventIndex] += availableHeight - totalNewHeight
+                totalNewHeight += availableHeight - totalNewHeight
+            }
+            if ( totalNewHeight != availableHeight ) {
+                // alert(`new height does not equal available height ${totalNewHeight} != ${availableHeight}`)
+                console.debug(`[BUG] new height (${totalNewHeight}) != available height (${availableHeight})`)
+                console.debug(newHeights)
+                console.debug(proportions)
+                return false
+            }
+            if ( totalNewHeight > availableHeight ) {
+                console.debug(`[BUG] ${totalNewHeight} > ${availableHeight}`)
+                return false
+            }
+        }
+        return newHeights
+    }
+
+    resetSplitters() {
+        for( let s of this.splitters ) {
+            s.above = null
+            s.below = null
+        }
+    }
     draw(viewportRect, modifiedEventbandIndex) {
+        // FIX(07/05/2022) It would be nice to split this into a function that we could run
+        // to determine if a new band would fit BEFORE the setVisible sends the associated event.
+        // That way the original function would know it had failed.
+
+
         // console.log(`EventBandCollection::draw modified:${modifiedEventbandIndex}`)
         // console.log(viewportRect)
 
@@ -134,214 +330,47 @@ class EventBandCollection {
         }
         if ( viewportRect === null ) return
 
-        
-        // console.log("EventBandCollection::draw")
-        // draw the bands that group events together
-        const self = this
-        
-        let totalSplitterHeight = 0
-        let splitterHeight = 0
-        if ( this.splitters !== null ) splitterHeight = this.splitters[0].getHeight()
-        
-        const canvasStyle  = window.getComputedStyle(this.canvasElement)
-        let availableHeight = parseInt(canvasStyle.height)
-        const visibleBandCount = this.getVisibleBandCount()
-        totalSplitterHeight = Math.max(0,(visibleBandCount-1)) * splitterHeight
-        const equalHeight = (availableHeight - totalSplitterHeight) / visibleBandCount
 
+        const changeType = isValueAvailable(modifiedEventbandIndex) 
+                                ? (this.eventbands[modifiedEventbandIndex].isVisible() ? 1 : -1)
+                                : 0 
+        const newHeights = this.getHeightsOfEventbandsIfWeAddedOrRemovedBandX(modifiedEventbandIndex, changeType)
+        if ( newHeights === false ) return false
 
-        // if the availableHeight < expectedBandHeight then 
-        // 
-
-        // console.log(`EventBandCollection ${totalSplitterHeight} ${availableHeight} ${equalHeight}`)
-
-        if ( this.splitters !== null ) {
-            // clear the splitters so we don't have wrong pointers to visible bands
-            for( let s of this.splitters ) {
-                s.above = null
-                s.below = null
-            }
-        }
-
-        let lowerBandCount = visibleBandCount
+        this.resetSplitters()
+        const splitterHeight = this.getSplitterHeight()
+        let index = 0
         let splitterIndex = 0
-        let top = 0
-        let eventIndex = 0
-        let carry = 0
-
+        let lastVisibleBand = null
+        let lastHeight = 0
+        let lastTop = 0
+        let newTop = 0
         for( let ev of this.eventbands ) {
-            // console.log(`eventband ${eventIndex} ${splitterIndex}`)
             if ( ev.isVisible() ) {
-                if ( this.splitters != null 
-                    && this.splitters[splitterIndex].above !== null 
-                    && this.splitters[splitterIndex].below == null ) {
+                if ( lastVisibleBand ) {
+                    this.splitters[splitterIndex].above = lastVisibleBand
                     this.splitters[splitterIndex].below = ev
+                    this.splitters[splitterIndex].setTop(lastTop + lastHeight)
+                    newTop = lastTop + lastHeight + splitterHeight
                     splitterIndex++
                 }
+                lastVisibleBand = ev
+
+                ev.setHeight(newHeights[index])
+                ev.setTop(newTop)
+                ev.draw(viewportRect)
+
+                lastHeight = newHeights[index]
+                lastTop = newTop
             }
-
-            
-            if ( typeof(modifiedEventbandIndex) !== "undefined" && modifiedEventbandIndex !== null && eventIndex === modifiedEventbandIndex ) {
-                // If the user removes a timeline then the next timeband should fill the space leaving the rest of the 
-                // timebands alone. If they remove the last one then the first visible one above will fill the space.
-                const bandAboveIndex = this._getBandAbove(modifiedEventbandIndex) 
-                const bandBelowIndex = this._getBandBelow(modifiedEventbandIndex)
-                let bandAbove = null
-                let bandBelow = null
-                let isLowestVisibleBand = this.getLastVisibleBand() == eventIndex
-                if ( bandAboveIndex >= 0 ) {
-                    bandAbove = this.eventbands[bandAboveIndex]
-                }
-                if ( bandBelowIndex >= 0 ) {
-                    bandBelow = this.eventbands[bandBelowIndex]
-                }
-                
-                // console.log(`mutated m:${modifiedEventbandIndex} ei:${eventIndex} v:${ev.isVisible()} ${isLowestVisibleBand} ${splitterIndex}`)
-                if ( ev.isVisible() ) {
-
-                    // we have been made visible
-                    if ( bandBelow === null ) {
-                        if ( bandAbove === null ) {
-                            // this is the only one 
-                            // console.log("bandBelow == null, bandAbove == null")
-                            ev.setHeight( availableHeight)
-                            availableHeight -= ev.getHeight()
-                            top += ev.getHeight()
-                        } else {
-                            // console.log("bandBelow == null, bandAbove != null")
-                            const splitter = this.splitters[splitterIndex-1]
-                            const newHeight = bandAbove.getHeight() - ev.getHeight()
-                            bandAbove.setHeight(newHeight)
-                            
-                            // top is overestimated here if we were previously invisible so adjust
-                            top -= ev.getHeight() + splitterHeight
-                            
-                            this.splitters[splitterIndex-1].setTop(top)
-                            top += splitter.getHeight()
-                            availableHeight -= splitter.getHeight()
-
-                            ev.setTop(top)
-                            top += ev.getHeight()
-                            availableHeight -= ev.getHeight()
-                        }
-                    } else {
-                        // console.log("bandBelow != null, bandAbove == null")
-                        ev.setTop(top)
-                        
-                        if( bandBelow.getHeight() < ev.getHeight() ) {
-                            // take height from bandAbove 
-                            if ( bandAbove === null )  {
-                                // then this is the top one 
-                                ev.setTop(top)
-                                availableHeight -= ev.getHeight()
-                                top += ev.getHeight()
-                                carry += ev.getHeight() + splitterHeight
-                            } else if ( bandAbove.getHeight() > ev.getHeight() ) {
-                                bandAbove.setHeight(bandAbove.getHeight() - ev.getHeight())
-                                ev.setTop(top - ev.getHeight() )
-                                availableHeight -= ev.getHeight()
-                                // we don't need to adjust top as that has already been accounted for
-                                // we do need to adjust the previous splitter though which was placed in the original position
-                                this.splitters[splitterIndex-1].setTop(top - ev.getHeight() - splitterHeight)
-                            }
-                        } else {
-                            bandBelow.setHeight(bandBelow.getHeight() - ev.getHeight() - splitterHeight)
-                            availableHeight -= ev.getHeight()
-                            top += ev.getHeight()
-                        }
-
-                        this.splitters[splitterIndex].setTop(top)
-                        this.splitters[splitterIndex].above = ev
-                        availableHeight -= splitterHeight
-                        top += splitterHeight
-                        bandBelow.setTop(top)
-                    }
-                } else {
-                    // We have been made invisible so we give our height to the next one.
-                    // If we are the last one then we expand the one above us instead.
-                    if ( bandBelow == null ) {
-                        if ( bandAbove == null ) {
-                            // nothing is visible
-                        } else {
-                            // console.log("hiding bottom band")
-                            const newHeight = bandAbove.getHeight() + ev.getHeight() + splitterHeight
-                            bandAbove.setHeight(newHeight)
-                        }
-                        // don't touch splitter so it will disappear
-                    } else {
-                        const newHeight = bandBelow.getHeight() + ev.getHeight() + splitterHeight
-                        bandBelow.setHeight(newHeight)
-                        bandBelow.setTop(top)
-                        // we should not need to change the splitter as this will be modified when we 
-                        // handle the next event band.
-                    }
-                }
-                
-            } else {
-                // if we are not the mutated band then 
-                if ( ev.isVisible() ) {
-                    // console.log(`Nonmutated visible ${eventIndex} ${splitterIndex} ${ev.isVisible()} ${modifiedEventbandIndex ? this.eventbands[modifiedEventbandIndex].isVisible() : "NA"}`)
-                    
-                    if ( carry > 0 ) {
-                        if ( carry + this.minimumBandHeight < ev.getHeight() ) {
-                            // console.log(`Adjusting height with carry ${carry} ${eventIndex} ${ev.getHeight()}`)
-                            ev.setHeight(ev.getHeight() - carry)
-                            carry = 0
-                        }
-                    }
-                
-                    // assign an initial top and height, these if statements should only be true on the first pass
-                    if ( ev.getTop() == - 1 ) {
-                        ev.setTop(top)
-                    }
-                    if ( ev.getHeight() == -1 ) {
-                        ev.setHeight(equalHeight)
-                    }
-                    if ( top != ev.getTop() ) {
-                        ev.setTop(top)
-                    }
-                    const bandBelow = this._getBandBelow(eventIndex)
-                    if ( bandBelow === null ) {
-                        // console.log(`fill up gap with last visible band ${eventIndex}`)
-                        ev.setHeight(availableHeight)
-                    }
-
-                    ev.draw(viewportRect)
-                    let h = ev.getHeight()
-                    availableHeight -= h
-                    lowerBandCount--
-                    top += h
-
-                    if ( this.splitters != null && this.splitters.length > splitterIndex ) {
-                        if ( this.getLastVisibleBand() == eventIndex ) {
-                            // NOTE(tm) Hide the rest of the splitters by not incrementing the splitterIndex 
-                            // and letting the loop at the end hide the rest of them
-                        } else {
-                            this.splitters[splitterIndex].setTop(top)
-                            this.splitters[splitterIndex].above = ev
-                            const splitterHeight = this.splitters[splitterIndex].getHeight()
-                            availableHeight -= splitterHeight
-                            top += splitterHeight
-                        }
-                    }
-
-                    // console.log(`EventBandCollection::loop ${availableHeight} ${lowerBandCount} ${top}`)
-                } else {
-                    // this is not the mutated band, but it is invisible.
-                    // should be nothing to do here
-                }
-            }
-            eventIndex++;
+            index++
         }
-
         if ( this.splitters != null ) {
             for( let s of this.splitters ) {
                 s.setAppropriateVisibility()
             }
         }
     }
-
-   
 
     _onMouseDown(e) {
         const index = e.target.dataset.index

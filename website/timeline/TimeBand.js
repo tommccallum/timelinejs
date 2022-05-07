@@ -15,10 +15,13 @@ class TimeBand extends Observable {
         this.style= "title"
         this.backgroundColor= null
         this.image= null
-        this.height = -1
-        this.top = -1
+
         this.element = null
         this.visible = false
+        this.fullsize = false       // true if the band is the only one and should take up the whole screen
+        this.height = -1
+        this.top = 0
+        
         
         // while the events are here as they are loaded with the data
         // they are shown in the EventBandCollection which controls the timeband
@@ -72,6 +75,7 @@ class TimeBand extends Observable {
     }
 
     setVisible(b) {
+        // this could fail if there is no room so we need to know that there is
         this.visible = b
         this.sendEvent('timeband-visible', this)
     }

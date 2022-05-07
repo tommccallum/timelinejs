@@ -8,11 +8,15 @@ class EventBand {
         this.element = null
         this.timeband = timeband
         const self = this
-        this.timeband.addListener(function(a,b,c) { if ( a === "timeband-visible" ) { self._setVisible(c.visible) } })
+        this.timeband.addListener(function(a,b,c) { 
+            if ( a === "timeband-visible" ) { 
+                // console.log("eventband::listener"); 
+                self._setVisible(c.visible) 
+            } 
+        })
         this.parentElement = null
         this.setBandOnEvents()
         this.createElement()
-        
     }
 
     containsEvent(ev) {
@@ -32,7 +36,7 @@ class EventBand {
     }
 
     _setVisible(b) {
-        // this should only be called by timeband
+        // initially this is set to -1
         if ( b ) {
             this.element.style.height = this.timeband.height + "px"
             this.timeband.element.style.height = this.timeband.height + "px"
