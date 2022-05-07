@@ -331,16 +331,42 @@ var exampleTimeline = {
                     name: "Middle Ages",
                     start: "500AD",
                     end: "1500AD",
-                    style: "title"
+                    style: "default"
                 },
                 {
                     name: "Modern History",
-                    style: "title",
+                    style: "default",
                     start: "1500AD",
-                    end: "today"
+                    end: "today",
+                    showChildren: true,
+                    children: [
+                        {
+                            name: "World War I",
+                            start: "1914",
+                            end: "1918"
+                        },
+                        {
+                            name: "World War II",
+                            start: "1939",
+                            end: "1945"
+                        }
+                    ]
                 },
                 // this will be interesting as this is covered by
                 // the upper level title.  Do we leave this blank?
+            ]
+        },
+        {
+            name: "British History",
+            backgroundColor: 'transparent',
+            visible: false,
+            image: null,
+            events: [
+                {
+                    name: "Battle of Hastings",
+                    start: "1066AD",
+                    mapLink: "https://www.google.com/maps/place/Hastings/@50.8678494,0.5097455,12z/data=!3m1!4b1!4m5!3m4!1s0x47df107433235113:0x6d17a64660baced7!8m2!3d50.854259!4d0.573453"
+                }
             ]
         },
         {
@@ -801,6 +827,7 @@ var exampleTimeline = {
             backgroundColor: '#cccccc',
             style: "dots",
             image: "images/Hopemancrest_64x64.png",
+            visible: true,
             events: [
                 {
                     name: "Lands owned by Lord Duffus",
@@ -882,7 +909,54 @@ var exampleTimeline = {
                     historyCredit: "Hopeman History Website",
                     historyCreditLink: "https://hopemanhistory.org/timeline",
                     start: "1820"
+                },
+                {
+                    name: "Hopeman Golf Club Founded",
+                    start: "1909AD"
+                },
+                {
+                    name: "Hopeman railway closed to passengers",
+                    start: "1923AD"
+                },
+                {
+                    name: "Keam school closed",
+                    start: "1969AD"
+                },
+                {
+                    name: "Hopeman railway closed to freight",
+                    start: "1957AD"
+                },
+                {
+                    name: "Bishop Bricias mentions salt works on banks of Loch Spynie",
+                    start: "1203AD"
+                },
+                {
+                    name: "William De Moravia dies",
+                    start: "1203AD"
+                },
+                {
+                    name: "King Duff 'murdered' at Forres",
+                    description: "This is supposedly the inspiration for Macbeth as King Duff (Dub) was supposedly killed by 3 local witches.",
+                    start: "967AD"
+                },
+                {
+                    name: "Duffus Castle built",
+                    description: "Build by Freskin De Moravia, a flemish mercenary."
+                },
+                {
+                    name: "King David stays at Duffus Castle",
+                    start: "1151AD"
+                },
+                {
+                    name: "Freskin de Moravia died",
+                    start: "1171AD"
+                },
+                {
+                    name: "St Peters Church built",
+                    description: "Built by William De Moravia",
+                    start: "1190AD"
                 }
+
             ]
         }
     ]

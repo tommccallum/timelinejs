@@ -188,6 +188,7 @@ class EventBandCollection {
         } else {
             let oldTotalHeight = 0
             let totalNewHeight = 0
+            let minProportion = 2
 
             // Get the total height of all the panels WITHOUT the one we are wanting to add or remove.
             index = 0
@@ -201,21 +202,31 @@ class EventBandCollection {
                 }
                 index++
             }
-            
-            // Calculate the proportion of space that each of the remaining takes up.
-            // Want to save the minimum proportion found for later
-            let minProportion = 2
-            index = 0
-            for( let ev of this.eventbands ) {
-                if ( changeType == 0 || index != eventbandIndex ) {
+            if ( oldTotalHeight === 0 ) {
+                // nothing was visible
+                index =0
+                for( let ev of this.eventbands ) {
                     if ( ev.isVisible() ) {
-                        if ( ev.getHeight() >= 0 ) {
-                            proportions[index] = ev.getHeight() / oldTotalHeight
-                            minProportion = Math.min(minProportion, proportions[index])
+                        newHeights[index] = equalHeight
+                    }
+                    index ++
+                }
+                return newHeights
+            } else {
+                // Calculate the proportion of space that each of the remaining takes up.
+                // Want to save the minimum proportion found for later
+                index = 0
+                for( let ev of this.eventbands ) {
+                    if ( changeType == 0 || index != eventbandIndex ) {
+                        if ( ev.isVisible() ) {
+                            if ( ev.getHeight() >= 0 ) {
+                                proportions[index] = ev.getHeight() / oldTotalHeight
+                                minProportion = Math.min(minProportion, proportions[index])
+                            }
                         }
                     }
+                    index++
                 }
-                index++
             }
 
             if ( changeType == 1 ) {

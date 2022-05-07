@@ -110,3 +110,8 @@
         transform: rotate(0deg);
     }
 }
+
+.event-map-icon-image {
+    width: 16px; 
+    height: 16px;
+}

@@ -15,6 +15,7 @@ class Event extends Observable {
         this.imageCredit = null
         this.imageCreditLink = null
         this.imageBackgroundColor = null
+        this.mapLink = null
 
         this.description = null
         this.gallery = null       // multiple images to show in the detail box
@@ -42,6 +43,9 @@ class Event extends Observable {
             // so have to go through timeband::addEvent
             if ( data.hasOwnProperty("name")) {
                 this.name = data.name
+            }
+            if ( data.hasOwnProperty("mapLink")) {
+                this.mapLink = data.mapLink
             }
             if ( data.hasOwnProperty("showChildren")) {
                 this.childrenAreVisible = data.showChildren
@@ -260,6 +264,23 @@ class Event extends Observable {
                 })
                 textDiv.appendChild(moreDiv)
             }
+
+            if ( this.mapLink != null ) {
+                let linkDiv = document.createElement("a")
+                linkDiv.classList.add("event-icon")
+                linkDiv.classList.add("event-map-icon")
+                linkDiv.alt = "Click here to go to map"
+                linkDiv.title = "Click here to go to map"
+                linkDiv.target = "_blank"
+                linkDiv.href = this.mapLink
+                // let icon = document.createElement("img")
+                // icon.classList.add("event-map-icon-image")
+                // icon.src = "images/map_icon_64x64.png"
+                // linkDiv.appendChild(icon)
+                linkDiv.innerHTML = "&#128506;"
+                textDiv.appendChild(linkDiv)
+            }
+
             if ( this.historyCredit != null && this.historyCreditLink === null ) {
                 let linkDiv = document.createElement("div")
                 linkDiv.classList.add("event-icon")
@@ -267,28 +288,26 @@ class Event extends Observable {
                 linkDiv.innerHTML = "&#128591;"
                 linkDiv.title = this.historyCredit
                 textDiv.appendChild(linkDiv)
-            } else {
-                if ( this.historyCredit ) {
-                    let a = document.createElement("a")
-                    a.title = this.historyCredit
-                    a.href = this.historyCreditLink
-                    a.classList.add("event-external-link")
-                    a.classList.add("event-icon")
-                    a.classList.add("event-link-icon")
-                    a.innerHTML = "&#128279;"
-                    a.target = "_blank"
-                    textDiv.appendChild(a)
-                } else {
-                    let a = document.createElement("a")
-                    a.title = this.historyCreditLink
-                    a.href = this.historyCreditLink
-                    a.classList.add("event-external-link")
-                    a.classList.add("event-icon")
-                    a.classList.add("event-link-icon")
-                    a.innerHTML = "&#128279;"
-                    a.target = "_blank"
-                    textDiv.appendChild(a)
-                }
+            } else if ( this.historyCredit != null && this.historyCreditLink != null ) {
+                let a = document.createElement("a")
+                a.title = this.historyCredit
+                a.href = this.historyCreditLink
+                a.classList.add("event-external-link")
+                a.classList.add("event-icon")
+                a.classList.add("event-link-icon")
+                a.innerHTML = "&#128279;"
+                a.target = "_blank"
+                textDiv.appendChild(a)
+            } else if ( this.historyCredit == null && this.historyCreditLink != null ) {
+                let a = document.createElement("a")
+                a.title = this.historyCreditLink
+                a.href = this.historyCreditLink
+                a.classList.add("event-external-link")
+                a.classList.add("event-icon")
+                a.classList.add("event-link-icon")
+                a.innerHTML = "&#128279;"
+                a.target = "_blank"
+                textDiv.appendChild(a)
             }
             event.addEventListener("mousedown", function(e) { self._onMouseDown(e) })
             event.addEventListener("mousemove", function(e) { self._onMouseMove(e) })
