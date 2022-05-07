@@ -360,7 +360,7 @@ var exampleTimeline = {
             name: "British History",
             backgroundColor: 'transparent',
             visible: false,
-            image: null,
+            image: "images/royal_arms_britain_64x64.png",
             events: [
                 {
                     name: "Battle of Hastings",
