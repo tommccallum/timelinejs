@@ -16,6 +16,9 @@ date=$(date "+%A %d %B %Y %H:%M")
 cd "$script_dir"
 /usr/bin/git pull
 [ ! -d "build" ] && mkdir build
+
+# TODO compile all the javascript into a single import called timeline.js
+
 cp -R website/* build/
 sed -i "s/{{LAST_UPDATED}}/$date/g" build/index.html
 
