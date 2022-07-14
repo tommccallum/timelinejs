@@ -1,0 +1,32 @@
+{
+    "routes": [
+        {
+            "route": "/profile*",
+            "allowedRoles": [
+                "authenticated"
+            ]
+        },
+        {
+            "route": "/admin*",
+            "allowedRoles": [
+                "administrator"
+            ]
+        }
+    ],
+    "responseOverrides": {
+        "401": {
+            "statusCode": 302,
+            "redirect": "/.auth/login/aad"
+        }
+    },
+    "navigationFallback": {
+        "rewrite": "/index.html",
+        "exclude": [
+            "/images/*.{png,jpg,gif}",
+            "/css/*"
+        ]
+    },
+    "mimeTypes": {
+        ".json": "text/json"
+    }
+}
