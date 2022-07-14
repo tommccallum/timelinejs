@@ -36,26 +36,27 @@
     <script src="components/Statusbar.js"></script>
     <script src="example-timeline.js"></script>
 
-    
-
     <link rel="stylesheet" href="css/index.css" />
-    <link rel='stylesheet' href='css/timeline/layers.css'>
-    <link rel='stylesheet' href='css/timeline/timeline-title.css'>
-    <link rel='stylesheet' href='css/timeline/event-details.css'>
-    <link rel='stylesheet' href='css/timeline/bigimagepanel.css'>
-    <link rel='stylesheet' href='css/timeline/scrollbar.css'>
-    <link rel='stylesheet' href='css/timeline/events.css'>
-    <link rel='stylesheet' href='css/timeline/timeband.css'>
-    <link rel='stylesheet' href='css/timeline/axis-picker.css'>
-    <link rel='stylesheet' href='css/timeline/modal-dialog.css'>
-    <link rel='stylesheet' href='css/timeline/timeaxis.css'>
-    <link rel='stylesheet' href='css/timeline/root.css'>
-    <link rel='stylesheet' href='css/timeline/eventband.css'>
-    <link rel='stylesheet' href='css/timeline/timeline.css'>
+    <link rel="stylesheet" href="css/timeline/layers.css" />
+    <link rel="stylesheet" href="css/timeline/timeline-title.css" />
+    <link rel="stylesheet" href="css/timeline/event-details.css" />
+    <link rel="stylesheet" href="css/timeline/bigimagepanel.css" />
+    <link rel="stylesheet" href="css/timeline/scrollbar.css" />
+    <link rel="stylesheet" href="css/timeline/events.css" />
+    <link rel="stylesheet" href="css/timeline/timeband.css" />
+    <link rel="stylesheet" href="css/timeline/axis-picker.css" />
+    <link rel="stylesheet" href="css/timeline/modal-dialog.css" />
+    <link rel="stylesheet" href="css/timeline/timeaxis.css" />
+    <link rel="stylesheet" href="css/timeline/root.css" />
+    <link rel="stylesheet" href="css/timeline/eventband.css" />
+    <link rel="stylesheet" href="css/timeline/timeline.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap" rel="stylesheet"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
     <title>Timeline Demo</title>
   </head>
   <body onload="main()">
@@ -63,12 +64,20 @@
       <div class="header-content title">
         <h1>Hopeman History Timeline</h1>
       </div>
-      <div id='statusbar' class="header-content timeline-status">
+      <div id="statusbar" class="header-content timeline-status">
         Status Panel
       </div>
       <div class="header-content timeline-title-buttons">
-        <button onclick="t1.makeFullScreen();"><img src="images/icons_view-fullscreen.png" width="32px" height="32px"></button>
-        <button id="timeline-title-touch-icon"><img src="images/icon_touch.jpg" width="32px" height="32px"></button>
+        <button onclick="t1.makeFullScreen();">
+          <img
+            src="images/icons_view-fullscreen.png"
+            width="32px"
+            height="32px"
+          />
+        </button>
+        <button id="timeline-title-touch-icon">
+          <img src="images/icon_touch.jpg" width="32px" height="32px" />
+        </button>
       </div>
     </header>
     <div class="main-container">
@@ -80,113 +89,126 @@
       </main>
     </div>
     <footer>
-      <div class='footer-left'>&copy; 2022 Tom McCallum - This is a hobby project for educational value only.
-        Code can be found at <a alt="Github repository for code" href='https://github.com/tommccallum/timelinejs'>https://github.com/tommccallum/timelinejs</a>
+      <div class="footer-left">
+        &copy; 2022 Tom McCallum - This is a hobby project for educational value
+        only. Code can be found at
+        <a
+          alt="Github repository for code"
+          href="https://github.com/tommccallum/timelinejs"
+          >https://github.com/tommccallum/timelinejs</a
+        >
       </div>
-      <div class="footer-right">
-        Last updated: {{LAST_UPDATED}}
-      </div>
+      <div class="footer-right">Last updated: {{LAST_UPDATED}}</div>
     </footer>
-    <script>
-      
-      
-    </script>
+    <script></script>
     <script>
       // These need to be global otherwise the onClicks won't find the objects
       var t1 = null;
       var t2 = null;
-      var sidebar = new Sidebar(document.getElementById("sidebar"))
-      var statusbar = new Statusbar(document.getElementById("statusbar"))
-      var which = example_from_javascript_object
-
+      var sidebar = new Sidebar(document.getElementById("sidebar"));
+      var statusbar = new Statusbar(document.getElementById("statusbar"));
+      var which = example_from_javascript_object;
 
       function example_blank() {
-        t1 = new Timeline()
-        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
-        t1.draw()
+        t1 = new Timeline();
+        t1.addListener(function (a, b, c) {
+          sidebar.onTimelineEvent(a, b, c);
+        });
+        t1.draw();
       }
 
       function example_single_band() {
         t1 = new Timeline("timeline1");
-        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
-        let timeBandCollection = TimeBandCollection.createRandom(1)
-        t1.setTimeBandCollection(timeBandCollection)
-        let timeAxisCollection = new TimeAxisCollection()
-        timeAxisCollection.add( new TimeAxis(-500,500) )
-        t1.setTimeAxisCollection(timeAxisCollection)
-        t1.draw()
+        t1.addListener(function (a, b, c) {
+          sidebar.onTimelineEvent(a, b, c);
+        });
+        let timeBandCollection = TimeBandCollection.createRandom(1);
+        t1.setTimeBandCollection(timeBandCollection);
+        let timeAxisCollection = new TimeAxisCollection();
+        timeAxisCollection.add(new TimeAxis(-500, 500));
+        t1.setTimeAxisCollection(timeAxisCollection);
+        t1.draw();
       }
 
       function example_two_bands() {
         t1 = new Timeline("timeline1");
-        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
-        let timeBandCollection = TimeBandCollection.createRandom(2)
-        t1.setTimeBandCollection(timeBandCollection)
-        let timeAxisCollection = new TimeAxisCollection()
-        timeAxisCollection.add( new TimeAxis(-500,500) )
-        t1.setTimeAxisCollection(timeAxisCollection)
-        t1.draw()
+        t1.addListener(function (a, b, c) {
+          sidebar.onTimelineEvent(a, b, c);
+        });
+        let timeBandCollection = TimeBandCollection.createRandom(2);
+        t1.setTimeBandCollection(timeBandCollection);
+        let timeAxisCollection = new TimeAxisCollection();
+        timeAxisCollection.add(new TimeAxis(-500, 500));
+        t1.setTimeAxisCollection(timeAxisCollection);
+        t1.draw();
       }
 
       function example_three_bands() {
         t1 = new Timeline("timeline1");
-        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
-        let timeBandCollection = TimeBandCollection.createRandom(3)
-        t1.setTimeBandCollection(timeBandCollection)
-        let timeAxisCollection = new TimeAxisCollection()
-        timeAxisCollection.add( new TimeAxis(-500,500) )
-        t1.setTimeAxisCollection(timeAxisCollection)
-        t1.draw()
+        t1.addListener(function (a, b, c) {
+          sidebar.onTimelineEvent(a, b, c);
+        });
+        let timeBandCollection = TimeBandCollection.createRandom(3);
+        t1.setTimeBandCollection(timeBandCollection);
+        let timeAxisCollection = new TimeAxisCollection();
+        timeAxisCollection.add(new TimeAxis(-500, 500));
+        t1.setTimeAxisCollection(timeAxisCollection);
+        t1.draw();
       }
 
       function example_four_bands() {
         t1 = new Timeline("timeline1");
-        t1.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
-        let timeBandCollection = TimeBandCollection.createRandom(4)
-        t1.setTimeBandCollection(timeBandCollection)
-        let timeAxisCollection = new TimeAxisCollection()
-        timeAxisCollection.add( new TimeAxis(-500,500) )
-        t1.setTimeAxisCollection(timeAxisCollection)
-        t1.draw()
+        t1.addListener(function (a, b, c) {
+          sidebar.onTimelineEvent(a, b, c);
+        });
+        let timeBandCollection = TimeBandCollection.createRandom(4);
+        t1.setTimeBandCollection(timeBandCollection);
+        let timeAxisCollection = new TimeAxisCollection();
+        timeAxisCollection.add(new TimeAxis(-500, 500));
+        t1.setTimeAxisCollection(timeAxisCollection);
+        t1.draw();
       }
 
       function example_from_javascript_object() {
-        
-        let timeline = new Timeline("timeline1")
-        t1 = timeline
-        timeline.addListener(function( a, b, c) { sidebar.onTimelineEvent(a,b,c) })
-        timeline.addListener(function( a, b, c) { statusbar.onTimelineEvent(a,b,c) })
-        let data = exampleTimeline
-        timeline.title = data.name
-        timeline.zoom = data.zoom
-        timeline.initialTimePoint = data.start
+        let timeline = new Timeline("timeline1");
+        t1 = timeline;
+        timeline.addListener(function (a, b, c) {
+          sidebar.onTimelineEvent(a, b, c);
+        });
+        timeline.addListener(function (a, b, c) {
+          statusbar.onTimelineEvent(a, b, c);
+        });
+        let data = exampleTimeline;
+        timeline.title = data.name;
+        timeline.zoom = data.zoom;
+        timeline.initialTimePoint = data.start;
 
-        let axisShades = null
-        if ( data.hasOwnProperty("axisScrollBackgroundShades") ) {
-            axisShades = createColorRange(data.axes.length)
+        let axisShades = null;
+        if (data.hasOwnProperty("axisScrollBackgroundShades")) {
+          axisShades = createColorRange(data.axes.length);
         }
 
-        const timeAxisCollection = new TimeAxisCollection()
-        let index = 0
-        for( let axisData of data.axes) {
-            const axis = new TimeAxis(0,0,axisData)
-            if ( axisShades && !axisData.hasOwnProperty("scrollBackgroundColor") ) {
-                axis.scrollBackgroundColor = axisShades[index]
-            }
-            if ( !timeAxisCollection.add(axis) ) {
-                alert(`An axis was not added ${axisData.start}-${axisData.end}`)
-            }
-            index++
+        const timeAxisCollection = new TimeAxisCollection();
+        let index = 0;
+        for (let axisData of data.axes) {
+          const axis = new TimeAxis(0, 0, axisData);
+          if (axisShades && !axisData.hasOwnProperty("scrollBackgroundColor")) {
+            axis.scrollBackgroundColor = axisShades[index];
+          }
+          if (!timeAxisCollection.add(axis)) {
+            alert(`An axis was not added ${axisData.start}-${axisData.end}`);
+          }
+          index++;
         }
-        timeline.setTimeAxisCollection(timeAxisCollection)
+        timeline.setTimeAxisCollection(timeAxisCollection);
 
-        timeBandCollection = new TimeBandCollection()
-        for( let tbdata of data.timebands ) {
-            const tb = new TimeBand(tbdata)
-            timeBandCollection.add(tb)
+        timeBandCollection = new TimeBandCollection();
+        for (let tbdata of data.timebands) {
+          const tb = new TimeBand(tbdata);
+          timeBandCollection.add(tb);
         }
-        timeline.setTimeBandCollection(timeBandCollection)
-        
+        timeline.setTimeBandCollection(timeBandCollection);
+
         // timeline.timeAxisCollection.log()
 
         timeline.draw();
@@ -194,16 +216,22 @@
 
       // called when loaded
       function main() {
-        sidebar.build()
-        which()
+        sidebar.build();
+        which();
 
-        if ( isTouchAvailable() ) {
-          console.log("touch is available")
-          let icon = document.getElementById("timeline-title-touch-icon")
-          icon.display = null
+        if (isTouchAvailable()) {
+          console.log("touch is available");
+          let icon = document.getElementById("timeline-title-touch-icon");
+          icon.display = null;
         }
       }
     </script>
+    <p>Loading content from the API: <b id="name">...</b></p>
+    <script>
+      (async function () {
+        const { text } = await (await fetch(`/api/message`)).json();
+        document.querySelector("#name").textContent = text;
+      })();
+    </script>
   </body>
 </html>
-
