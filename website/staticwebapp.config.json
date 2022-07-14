@@ -3,7 +3,7 @@
         {
             "route": "/registered*",
             "allowedRoles": [
-                "authenticated,registeredusers"
+                "authenticated", "registeredusers"
             ],
             "headers": {
                 "Cache-Control": "no-store"
