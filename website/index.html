@@ -227,7 +227,9 @@
       }
     </script>
     <p>Loading content from the API: <b id="name">...</b></p>
-    <p><a href="/.auth/login/github">Login</a></p>
+    <p><a href="/.auth/login/github">Login through GitHub</a></p>
+    <p><a href="/.auth/login/aad">Login through Active Directory</a></p>
+    
     <script>
       (async function () {
         const { text } = await (await fetch(`/api/message`)).json();
