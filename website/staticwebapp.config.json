@@ -1,19 +1,13 @@
 {
     "routes": [
         {
-            "route": "/members",
+            "route": "/registered*",
             "allowedRoles": [
-                "authenticated, members"
+                "authenticated,registeredusers"
             ],
             "headers": {
                 "Cache-Control": "no-store"
             }
-        },
-        {
-            "route": "/profile*",
-            "allowedRoles": [
-                "authenticated"
-            ]
         },
         {
             "route": "/admin*",
