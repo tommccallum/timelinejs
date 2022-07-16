@@ -27,7 +27,7 @@
                 "GET"
             ],
             "allowedRoles": [
-                "registeredusers"
+                "anonymous", "registeredusers"
             ]
         },
         {
@@ -45,7 +45,7 @@
         {
             "route": "/api/*",
             "allowedRoles": [
-                "authenticated"
+                "anonymous", "authenticated"
             ]
         }
     ],
