@@ -26,3 +26,22 @@ sudo npm install -g azure-functions-core-tools@3
 # format is: swa start <local_website_directory> --api-location <api_directory>
 swa start website --api-location api
 ```
+
+Followed [https://stackoverflow.com/questions/67580229/azure-functions-deploying-fail-from-vs-code](https://stackoverflow.com/questions/67580229/azure-functions-deploying-fail-from-vs-code) to find out how to set the AzureWebJobsStorage variable so I could deploy my functions to Azure.  I needed to add a Storage Account first.
+
+Followed [https://docs.microsoft.com/en-us/azure/azure-functions/functions-add-output-binding-cosmos-db-vs-code?tabs=in-process&pivots=programming-language-javascript](https://docs.microsoft.com/en-us/azure/azure-functions/functions-add-output-binding-cosmos-db-vs-code?tabs=in-process&pivots=programming-language-javascript) to work out how to link a Cosmos DB Account to my functions.  Due to Capacity issues in Europe I had to create my database instance in the US - not ideal but to get something up and running I have opted for this.
+
+Note that the host.json file it talks about in the root directory of your project - actually means the api directory.
+
+When testing the function binding I got an error:
+
+```
+The 'HttpExample' function is in error: Unable to configure binding 'outputDocument' of type 'cosmosDB'. This may indicate invalid function.json properties. Input string was not in a correct format.
+```
+
+To resolve I needed to remove the following lines:
+
+```
+"partitionKey": "",
+"collectionThroughput": ""
+```
