@@ -6,8 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get",
-        "post"
+        "get"
       ]
     },
     {
@@ -17,12 +16,13 @@
     },
     {
       "type": "cosmosDB",
-      "direction": "out",
-      "name": "outputDocument",
+      "direction": "in",
+      "name": "inputDocument",
       "databaseName": "timelines",
       "collectionName": "timeline-container",
-      "createIfNotExists": false,
-      "connectionStringSetting": "CosmosDbConnectionString"
+      "Id": "{Query.id}",
+      "connectionStringSetting": "CosmosDbConnectionString",
+      "PartitionKey": "{Query.id}"
     }
   ]
 }
