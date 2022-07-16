@@ -234,10 +234,11 @@
       (async function () {
         const { text } = await (await fetch(`/api/message`)).json();
         document.querySelector("#name").textContent = text;
+        console.log(text)
       })();
 
       (async function () {
-        const { text } = await (await fetch(`/api/GetDataForId?id=__public`));
+        const { text } = await (await fetch(`/api/GetDataForId?id=__public`)).json();
         console.log(text)
       })();
     </script>
