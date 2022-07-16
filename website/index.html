@@ -237,7 +237,7 @@
       })();
 
       (async function () {
-        const { text } = await (await fetch(`/api/GetDataForId?id=__public`)).json();
+        const { text } = await (await fetch(`/api/GetDataForId?id=__public`));
         console.log(text)
       })();
     </script>
